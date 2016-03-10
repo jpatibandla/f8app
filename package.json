@@ -1,0 +1,41 @@
+{
+  "name": "F8v2",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "test": "NODE_ENV=test jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "art": "^0.10.1",
+    "immutable": "^3.7.6",
+    "moment": "^2.11.2",
+    "parse": "^1.7.0",
+    "react-native": "^0.19.0",
+    "react-native-code-push": "^1.7.3-beta",
+    "react-native-fbsdk2": "./react-native-fbsdk2",
+    "react-native-fbsdkcore": "0.0.8",
+    "react-native-fbsdklogin": "0.0.8",
+    "react-native-fbsdkshare": "0.0.8",
+    "react-native-linear-gradient": "^1.5.0",
+    "react-native-push-notification": "frantic/react-native-push-notification#7142da7",
+    "react-redux": "^4.3.0",
+    "react-timer-mixin": "^0.13.3",
+    "redux": "^3.2.1",
+    "redux-logger": "^2.5.0",
+    "redux-persist": "^1.5.0",
+    "redux-thunk": "^1.0.3",
+    "reselect": "^2.0.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^4.1.8",
+    "eslint": "^1.10.3",
+    "eslint-plugin-react": "^3.16.1",
+    "jest-cli": "^0.8.2"
+  },
+  "jest": {
+    "scriptPreprocessor": "jest/preprocessor.js",
+    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js"
+  }
+}

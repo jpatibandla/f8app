@@ -1,0 +1,20 @@
+{
+  "name": "react-native-fbsdk2",
+  "version": "1.0.0",
+  "description": "Use the Facebook SDK in React Native",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "rnfbsdk-release.aar"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "pushd android && gradle build && popd && cp android/build/outputs/aar/rnfbsdk-release.aar .",
+    "postpublish": "rm rnfbsdk-release.aar"
+  },
+  "keywords": [
+    "facebook",
+    "facebook-sdk",
+    "react-native"
+  ]
+}
