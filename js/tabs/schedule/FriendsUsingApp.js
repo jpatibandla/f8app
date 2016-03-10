@@ -49,7 +49,7 @@ class FriendsUsingApp extends React.Component {
         style={styles.profilePic}
       />
     ));
-    let text = `${friends.length} friends are sharing their schedule.`;
+    let text = `${friends.length} friends are sharing their schedules.`;
     if (friends.length === 1) {
       text = `${friends[0].name.split(' ')[0]} is sharing their schedule.`;
     }
