@@ -70,20 +70,20 @@ class SharingSettingsScreen extends React.Component {
           </Text>
         </View>
         <FriendsUsingApp />
-        <F8Button
-          style={styles.button}
-          onPress={() => this.props.dispatch(logOutWithPrompt())}
-          icon={require('./img/logout.png')}
-          type="secondary"
-          caption="Log out"
-        />
         <F8Header
           style={styles.header}
+          foreground="dark"
+          title="Settings"
           leftItem={{
             icon: require('../../common/img/back.png'),
-            title: 'close',
+            title: 'Close',
             layout: 'icon',
             onPress: () => this.props.navigator.pop(),
+          }}
+          rightItem={{
+            icon: require('./img/logout.png'),
+            title: 'Logout',
+            onPress: () => this.props.dispatch(logOutWithPrompt()),
           }}
         />
       </View>
@@ -97,6 +97,7 @@ var styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingBottom: 49,
   },
   header: {
     position: 'absolute',
@@ -114,11 +115,6 @@ var styles = StyleSheet.create({
   option: {
     fontSize: 12,
     color: F8Colors.lightText,
-  },
-  button: {
-    alignSelf: 'stretch',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
   },
 });
 

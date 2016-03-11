@@ -40,6 +40,8 @@ export type Layout =
   | 'icon'         // Always use icon
   | 'title';       // Always use title
 
+export type Foreground = 'light' | 'dark';
+
 export type Item = {
   title?: string;
   icon?: number;
@@ -52,6 +54,7 @@ export type Props = {
   leftItem?: Item;
   rightItem?: Item;
   extraItems?: Array<Item>;
+  foreground?: Foreground;
   style: any;
   children: any;
 };
@@ -77,13 +80,17 @@ class F8HeaderAndroid extends React.Component {
       })));
     }
 
+    const textColor = this.props.foreground === 'dark'
+      ? F8Colors.darkText
+      : 'white';
+
     return (
       <ToolbarAndroid
         navIcon={leftItem && leftItem.icon}
         onIconClicked={leftItem && leftItem.onPress}
         title={title}
-        titleColor="white"
-        subtitleColor="white"
+        titleColor={textColor}
+        subtitleColor={textColor}
         actions={actions}
         onActionSelected={this.handleActionSelected.bind(this)}
         style={[styles.toolbar, this.props.style]}>
@@ -107,23 +114,25 @@ class F8HeaderIOS extends React.Component {
   props: Props;
 
   render() {
-    const {leftItem, title, rightItem} = this.props;
+    const {leftItem, title, rightItem, foreground} = this.props;
+    const titleColor = foreground === 'dark' ? F8Colors.darkText : 'white';
+    const itemsColor = foreground === 'dark' ? F8Colors.lightText : 'white';
 
     const content = React.Children.count(this.props.children) === 0
-      ? <Text style={[styles.titleText, this.props.titleStyle]}>
+      ? <Text style={[styles.titleText, {color: titleColor}]}>
           {title}
         </Text>
       : this.props.children;
     return (
       <View style={[styles.header, this.props.style]}>
         <View style={styles.leftItem}>
-          <ItemWrapperIOS item={leftItem} />
+          <ItemWrapperIOS color={itemsColor} item={leftItem} />
         </View>
         <View style={styles.centerItem}>
           {content}
         </View>
         <View style={styles.rightItem}>
-          <ItemWrapperIOS item={rightItem} />
+          <ItemWrapperIOS color={itemsColor} item={rightItem} />
         </View>
       </View>
     );
@@ -134,10 +143,11 @@ class F8HeaderIOS extends React.Component {
 class ItemWrapperIOS extends React.Component {
   props: {
     item: Item;
+    color: string;
   };
 
   render() {
-    const {item} = this.props;
+    const {item, color} = this.props;
     if (!item) {
       return null;
     }
@@ -147,7 +157,7 @@ class ItemWrapperIOS extends React.Component {
 
     if (layout !== 'icon' && title) {
       content = (
-        <Text style={styles.itemText}>
+        <Text style={[styles.itemText, {color}]}>
           {title.toUpperCase()}
         </Text>
       );
@@ -259,6 +269,15 @@ module.exports.__cards__ = (define) => {
       leftItem={{...menuItem, layout: 'title'}}
       rightItem={{...filterItem, layout: 'title'}}
       style={{backgroundColor: '#224488'}}
+    />
+  ));
+  define('With light background', () => (
+    <Header
+      title="Light Background"
+      leftItem={{...menuItem, layout: 'title'}}
+      rightItem={{...filterItem, layout: 'title'}}
+      style={{backgroundColor: 'white'}}
+      foreground="dark"
     />
   ));
 };
