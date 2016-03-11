@@ -78,7 +78,7 @@ class Row extends React.Component {
         <TouchableHighlight onPress={() => this.toggle()}>
           <View style={styles.question} >
             <Text style={styles.symbol}>
-              {this.state.expanded ? '-' : '+'}
+              {this.state.expanded ? '\u2212' : '+'}
             </Text>
             <Text style={styles.text}>
               {this.props.question}
@@ -116,7 +116,7 @@ var styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 21,
     padding: 14,
-    paddingLeft: 22,
+    paddingLeft: 20 + 22,
   },
   text: {
     fontSize: 15,
