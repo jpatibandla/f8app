@@ -30,6 +30,7 @@ const F8SessionDetails = require('F8SessionDetails');
 const F8PageControl = require('F8PageControl');
 const F8Header = require('F8Header');
 const Platform = require('Platform');
+const formatTime = require('./formatTime');
 const Carousel = require('../../common/Carousel');
 
 const {connect} = require('react-redux');
@@ -52,7 +53,7 @@ type Context = {
 };
 
 type Props = {
-  allSessions: {[sectionID: string]: {[sessionID: string]: Session}};
+  allSessions?: {[sectionID: string]: {[sessionID: string]: Session}};
   session: Session;
   navigator: Navigator;
 };
@@ -65,7 +66,13 @@ class SessionsCarusel extends React.Component {
 
     var flatSessionsList = [];
     var contexts: Array<Context> = [];
-    const allSessions = this.props.allSessions;
+    let allSessions = this.props.allSessions;
+    if (!allSessions) {
+      const {session} = this.props;
+      allSessions = {
+        [formatTime(session.startTime)]: {[session.id]: session}
+      }
+    }
 
     // TODO: Add test
     for (let sectionID in allSessions) {

@@ -124,7 +124,6 @@ var F8Navigator = React.createClass({
     if (route.session) {
       return (
         <SessionsCarousel
-          allSessions={{'': {[route.session.id]: route.session}}}
           session={route.session}
           navigator={navigator}
         />
