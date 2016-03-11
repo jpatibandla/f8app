@@ -55,7 +55,7 @@ async function queryFacebookAPI(path, ...args): Promise {
   });
 }
 
-async function logInWithFacebook(): Promise<Array<Action>> {
+async function _logInWithFacebook(): Promise<Array<Action>> {
   await ParseFacebookLogin('public_profile,email,user_friends');
   const profile = await queryFacebookAPI('/me', {fields: 'name,email'});
 
@@ -78,8 +78,22 @@ async function logInWithFacebook(): Promise<Array<Action>> {
   return Promise.all([
     Promise.resolve(action),
     restoreSchedule(),
-    loadFriendsSchedules(), // TODO: We should be able to postpone this one
   ]);
+}
+
+function logInWithFacebook(): ThunkAction {
+  return (dispatch) => {
+    const login = _logInWithFacebook();
+
+    // Loading friends schedules shouldn't block the login process
+    login.then(
+      (result) => {
+        dispatch(result);
+        dispatch(loadFriendsSchedules());
+      }
+    );
+    return login;
+  };
 }
 
 function skipLogin(): Action {

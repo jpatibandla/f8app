@@ -54,7 +54,7 @@ export type Action =
   | { type: 'RESET_NUXES' }
   ;
 
-export type Dispatch = (action: Action | ThunkAction | PromiseAction) => any;
+export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
 export type GetState = () => Object;
-export type ThunkAction = (dispatch: Dispatch, getState: GetState) => void;
+export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
 export type PromiseAction = Promise<Action>;
