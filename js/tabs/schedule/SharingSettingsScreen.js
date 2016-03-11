@@ -29,7 +29,6 @@ var Image = require('Image');
 var React = require('React');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
-var BackButton = require('../../common/BackButton');
 var FriendsUsingApp = require('./FriendsUsingApp');
 var Navigator = require('Navigator');
 var ProfilePicture = require('../../common/ProfilePicture');

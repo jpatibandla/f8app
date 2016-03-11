@@ -111,7 +111,7 @@ class SessionsCarusel extends React.Component {
           leftItem={{
             layout: 'icon',
             title: 'Close',
-            icon: require('../../common/img/x-white.png'),
+            icon: require('../../common/BackButtonIcon'),
             onPress: this.dismiss,
           }}>
           <View style={styles.headerContent}>

@@ -21,40 +21,13 @@
  *
  * @flow
  */
+
 'use strict';
 
-var Image = require('Image');
-var React = require('React');
-var StyleSheet = require('StyleSheet');
-var TouchableOpacity = require('TouchableOpacity');
-var Navigator = require('Navigator');
+var Platform = require('Platform');
 
-class BackButton extends React.Component {
-  props: {
-    navigator: Navigator;
-  };
-
-  render() {
-    return (
-      <TouchableOpacity style={styles.container} onPress={() => this.props.navigator.pop()}>
-        <Image source={require('./img/back.png')} />
-      </TouchableOpacity>
-    );
-  }
+if (Platform.OS === 'ios') {
+  module.exports = require('./img/x-white.png');
+} else {
+  module.exports = require('./img/back_white.png');
 }
-
-var styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    paddingTop: 30,
-    paddingHorizontal: 10,
-  },
-  image: {
-    height: 250,
-    backgroundColor: 'grey',
-  },
-});
-
-module.exports = BackButton;
