@@ -35,13 +35,23 @@ var TouchableOpacity = require('TouchableOpacity');
 var View = require('View');
 var F8Colors = require('F8Colors');
 
+type Props = {
+  network: string;
+  password: string;
+};
+
 class WiFiDetails extends React.Component {
-  props: {
-    network: string;
-    password: string;
-  };
+  props: Props;
+
+  constructor(props: Props) {
+    super(props);
+    this.state = { copied: false };
+  }
 
   render() {
+    const caption = this.state.copied
+      ? 'Copied!'
+      : 'Copy password';
     return (
       <Section title="WiFi" style={styles.container}>
         <ItemsWithSeparator>
@@ -51,7 +61,7 @@ class WiFiDetails extends React.Component {
         <F8Button
           style={styles.button}
           onPress={this.handleCopy.bind(this)}
-          caption="Copy Password"
+          caption={caption}
         />
       </Section>
     );
@@ -59,6 +69,8 @@ class WiFiDetails extends React.Component {
 
   handleCopy() {
     Clipboard.setString(this.props.password);
+    this.setState({copied: true});
+    setTimeout(() => this.setState({copied: false}), 800);
   }
 }
 
@@ -102,7 +114,7 @@ var styles = StyleSheet.create({
   },
   button: {
     marginTop: 25,
-    alignSelf: 'center',
+    marginHorizontal: 20,
   },
 });
 module.exports = WiFiDetails;
