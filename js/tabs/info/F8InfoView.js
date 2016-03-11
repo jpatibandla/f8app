@@ -38,6 +38,9 @@ const POLICIES_LINKS = [{
 }, {
   title: 'Data Policy',
   url: 'https://m.facebook.com/policies?_rdr',
+}, {
+  title: 'Code of Conduct',
+  url: 'https://www.fbf8.com/code-of-conduct',
 }]
 
 class F8InfoView extends React.Component {
