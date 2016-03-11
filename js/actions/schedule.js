@@ -65,7 +65,6 @@ function removeFromScheduleWithPrompt(session: Session): ThunkAction {
   return (dispatch) => {
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions({
-        title: session.title,
         options: ['Remove From Schedule', 'Cancel'],
         destructiveButtonIndex: 0,
         cancelButtonIndex: 1,
