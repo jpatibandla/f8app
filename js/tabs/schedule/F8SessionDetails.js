@@ -95,11 +95,12 @@ var F8SessionDetails = React.createClass({
     }
 
     var locationColor = F8Colors.colorForLocation(this.props.session.location);
+    var locationTitle = this.props.session.location && this.props.session.location.toUpperCase()
     var location = (
       <Text style={[styles.location, {color: locationColor}]}>
-        {this.props.session.location && this.props.session.location.toUpperCase()}
+        {locationTitle}
         <Text style={styles.time}>
-          {' - '}
+          {locationTitle && ' - '}
           {formatDuration(this.props.session.startTime, this.props.session.endTime)}
         </Text>
       </Text>
