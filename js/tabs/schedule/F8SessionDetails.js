@@ -133,7 +133,7 @@ var F8SessionDetails = React.createClass({
           <TouchableOpacity
             onPress={this.handleShare}
             style={styles.shareButton}>
-            <Image source={require('./img/export.png')} />
+            <Image source={require('./img/share.png')} />
           </TouchableOpacity>
         </ScrollView>
         <View style={styles.actions}>

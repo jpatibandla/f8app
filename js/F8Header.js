@@ -84,6 +84,15 @@ class F8HeaderAndroid extends React.Component {
       ? F8Colors.darkText
       : 'white';
 
+    let content;
+    if (React.Children.count(this.props.children) > 0) {
+      content = (
+        <View collapsable={false} style={{flex: 1}}>
+          {this.props.children}
+        </View>
+      )
+    }
+
     return (
       <ToolbarAndroid
         navIcon={leftItem && leftItem.icon}
@@ -94,7 +103,7 @@ class F8HeaderAndroid extends React.Component {
         actions={actions}
         onActionSelected={this.handleActionSelected.bind(this)}
         style={[styles.toolbar, this.props.style]}>
-        {this.props.children}
+        {content}
       </ToolbarAndroid>
     );
   }

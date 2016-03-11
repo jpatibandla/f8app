@@ -60,8 +60,8 @@ class Playground extends React.Component {
     const define = (name: string, render: Function) => {
       content.push(<Example key={name} render={render} />);
     };
-    var Module = require('F8PageControl');
-    // var Module = require('F8Header');
+    // var Module = require('F8PageControl');
+    var Module = require('F8Header');
     // var Module = require('./tabs/schedule/AddToScheduleButton');
     // var Module = require('./rating/Header');
     Module.__cards__(define);

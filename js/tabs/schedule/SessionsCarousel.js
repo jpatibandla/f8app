@@ -29,6 +29,7 @@ const React = require('react-native');
 const F8SessionDetails = require('F8SessionDetails');
 const F8PageControl = require('F8PageControl');
 const F8Header = require('F8Header');
+const StyleSheet = require('F8StyleSheet');
 const Platform = require('Platform');
 const formatTime = require('./formatTime');
 const Carousel = require('../../common/Carousel');
@@ -40,7 +41,6 @@ const {
   Text,
   View,
   TouchableOpacity,
-  StyleSheet,
   Navigator,
 } = React;
 
@@ -100,10 +100,19 @@ class SessionsCarusel extends React.Component {
     this.dismiss = this.dismiss.bind(this);
     this.handleIndexChange = this.handleIndexChange.bind(this);
     this.renderCard = this.renderCard.bind(this);
+    this.shareCurrentSession = this.shareCurrentSession.bind(this);
   }
 
   render() {
     var {rowIndex, sectionLength, sectionTitle} = this.state.contexts[this.state.selectedIndex];
+    var rightItem;
+    if (Platform.OS === 'android') {
+      rightItem = {
+        title: 'Share',
+        icon: require('./img/share.png'),
+        onPress: this.shareCurrentSession,
+      };
+    }
     return (
       <View style={styles.container}>
         <F8Header
@@ -113,12 +122,13 @@ class SessionsCarusel extends React.Component {
             title: 'Close',
             icon: require('../../common/BackButtonIcon'),
             onPress: this.dismiss,
-          }}>
+          }}
+          rightItem={rightItem}>
           <View style={styles.headerContent}>
             <Text style={styles.title}>
               <Text style={styles.day}>DAY {this.state.day}</Text>
               {'\n'}
-              {sectionTitle}
+              <Text style={styles.time}>{sectionTitle}</Text>
             </Text>
             <F8PageControl
               count={sectionLength}
@@ -146,6 +156,11 @@ class SessionsCarusel extends React.Component {
     );
   }
 
+  shareCurrentSession() {
+    const session = this.state.flatSessionsList[this.state.selectedIndex];
+    console.log('TODO: Share', session);
+  }
+
   componentDidMount() {
     this.track(this.state.selectedIndex);
     this.props.dispatch(loadFriendsSchedules())
@@ -167,51 +182,52 @@ class SessionsCarusel extends React.Component {
   }
 }
 
-const platformStyles = {
-  header: {
-    android: {
-      backgroundColor: '#5597B8',
-    },
-    ios: {},
-  },
-  headerContent: {
-    android: {
-      flex: 1,
-    },
-    ios: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    }
-  },
-  card: {
-    android: {},
-    ios: {
-      borderRadius: 2,
-    }
-  }
-};
-
 var styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   header: {
-    ...platformStyles.header[Platform.OS],
+    android: {
+      backgroundColor: '#5597B8',
+    },
   },
   headerContent: {
-    height: 65,
-    ...platformStyles.headerContent[Platform.OS],
+    android: {
+      flex: 1,
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+    },
+    ios: {
+      height: 65,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   },
   title: {
     color: 'white',
     fontSize: 12,
-    textAlign: 'center',
+    ios: {
+      textAlign: 'center',
+    },
   },
   day: {
-    fontWeight: 'bold',
+    ios: {
+      fontWeight: 'bold',
+    },
+    android: {
+      fontSize: 9,
+    },
+  },
+  time: {
+    android: {
+      fontWeight: 'bold',
+      fontSize: 17,
+    }
   },
   card: {
-    ...platformStyles.card[Platform.OS],
+    ios: {
+      borderRadius: 2,
+    },
   },
   scrollview: {
     flex: 1,
