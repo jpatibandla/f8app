@@ -27,6 +27,7 @@
 
 var React = require('React');
 var AppState = require('AppState');
+var Platform = require('Platform');
 var BackAndroid = require('BackAndroid');
 var F8TabsView = require('F8TabsView');
 var FriendsScheduleView = require('./tabs/schedule/FriendsScheduleView');
@@ -99,6 +100,9 @@ var F8Navigator = React.createClass({
         ref="navigator"
         style={styles.container}
         configureScene={(route) => {
+          if (Platform.OS === 'android') {
+            return Navigator.SceneConfigs.FloatFromBottomAndroid
+          }
           // TODO: Proper scene support
           if (route.shareSettings || route.friend) {
             return Navigator.SceneConfigs.FloatFromRight;
