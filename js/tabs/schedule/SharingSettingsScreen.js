@@ -35,6 +35,7 @@ var ProfilePicture = require('../../common/ProfilePicture');
 var Switch = require('Switch');
 var View = require('View');
 var F8Header = require('F8Header');
+var StatusBar = require('StatusBar');
 var SharingSettingsCommon = require('./SharingSettingsCommon');
 
 var { setSharingEnabled, logOutWithPrompt } = require('../../actions');
@@ -53,6 +54,11 @@ class SharingSettingsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar
+          translucent={true}
+          backgroundColor="rgba(0, 0, 0, 0.2)"
+          barStyle="default"
+         />
         <SharingSettingsCommon />
         <View style={styles.switchWrapper}>
           <Text style={styles.option}>

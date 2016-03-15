@@ -94,17 +94,19 @@ class F8HeaderAndroid extends React.Component {
     }
 
     return (
-      <ToolbarAndroid
-        navIcon={leftItem && leftItem.icon}
-        onIconClicked={leftItem && leftItem.onPress}
-        title={title}
-        titleColor={textColor}
-        subtitleColor={textColor}
-        actions={actions}
-        onActionSelected={this.handleActionSelected.bind(this)}
-        style={[styles.toolbar, this.props.style]}>
-        {content}
-      </ToolbarAndroid>
+      <View style={[styles.toolbarContainer, this.props.style]}>
+        <ToolbarAndroid
+          navIcon={leftItem && leftItem.icon}
+          onIconClicked={leftItem && leftItem.onPress}
+          title={title}
+          titleColor={textColor}
+          subtitleColor={textColor}
+          actions={actions}
+          onActionSelected={this.handleActionSelected.bind(this)}
+          style={styles.toolbar}>
+          {content}
+        </ToolbarAndroid>
+      </View>
     );
   }
 
@@ -183,12 +185,15 @@ class ItemWrapperIOS extends React.Component {
 }
 
 
-var STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
-var HEADER_HEIGHT = Platform.OS === 'ios' ? 44 + STATUS_BAR_HEIGHT : 56;
+var STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
+var HEADER_HEIGHT = Platform.OS === 'ios' ? 44 + STATUS_BAR_HEIGHT : 56 + STATUS_BAR_HEIGHT;
 
 var styles = StyleSheet.create({
+  toolbarContainer: {
+    paddingTop: STATUS_BAR_HEIGHT,
+  },
   toolbar: {
-    height: 56,
+    height: HEADER_HEIGHT - STATUS_BAR_HEIGHT,
   },
   header: {
     backgroundColor: 'transparent',

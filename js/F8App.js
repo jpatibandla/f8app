@@ -45,6 +45,7 @@ var StyleSheet = require('StyleSheet');
 var F8Navigator = require('F8Navigator');
 var CodePush = require('react-native-code-push');
 var View = require('View');
+var StatusBar = require('StatusBar');
 var {
   loadConfig,
   loadMaps,
@@ -97,6 +98,11 @@ var F8App = React.createClass({
     }
     return (
       <View style={styles.container}>
+        <StatusBar
+          translucent={true}
+          backgroundColor="rgba(0, 0, 0, 0.2)"
+          barStyle="light-content"
+         />
         <F8Navigator />
         <PushNotificationsController />
       </View>
