@@ -59,7 +59,7 @@ async function _logInWithFacebook(): Promise<Array<Action>> {
   await ParseFacebookLogin('public_profile,email,user_friends');
   const profile = await queryFacebookAPI('/me', {fields: 'name,email'});
 
-  const user = Parse.User.current();
+  const user = await Parse.User.currentAsync();
   user.set('facebook_id', profile.id);
   user.set('name', profile.name);
   user.set('email', profile.email);
