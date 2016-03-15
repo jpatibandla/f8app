@@ -73,11 +73,11 @@ class PureListView extends React.Component {
   }
 
   render() {
+    // contentContainerStyle={{minHeight: SCREEN_HEIGHT}}
     return (
       <ListView
         {...this.props}
         ref="listview"
-        contentContainerStyle={{minHeight: SCREEN_HEIGHT}}
         dataSource={this.state.dataSource}
         renderFooter={this.renderFooter}
       />
