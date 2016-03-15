@@ -150,7 +150,7 @@ class F8TabsView extends React.Component {
         />
         {myF8Item}
         <MenuItem
-          title="Map"
+          title="Maps"
           selected={this.props.tab === 'map'}
           onPress={this.onTabSelect.bind(this, 'map')}
           icon={require('./maps/img/maps-icon.png')}
