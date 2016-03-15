@@ -82,8 +82,8 @@ android {
         applicationId "com.f8v2"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 9
-        versionName "1.8.0"
+        versionCode 300
+        versionName "3.0.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
