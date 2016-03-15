@@ -111,7 +111,11 @@ class FilterScreen extends React.Component {
       leftItem = {title: 'Cancel', onPress: this.close};
     }
     if (selectedAnyTopics) {
-      rightItem = {title: 'Clear', onPress: this.clearFilter};
+      rightItem = {
+        title: 'Clear',
+        icon: require('../common/img/x-white.png'),
+        onPress: this.clearFilter,
+      };
     }
     return (
       <View style={styles.container}>
