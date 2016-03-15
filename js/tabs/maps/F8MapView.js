@@ -27,11 +27,12 @@
 var ActionSheetIOS = require('ActionSheetIOS');
 var F8Button = require('F8Button');
 var F8SegmentedControl = require('F8SegmentedControl');
-var LinkingManager = require('NativeModules').LinkingManager;
+var Linking = require('Linking');
+var Platform = require('Platform');
 var ListContainer = require('ListContainer');
 var MapView = require('../../common/MapView');
 var React = require('React');
-var StyleSheet = require('StyleSheet');
+var StyleSheet = require('F8StyleSheet');
 var View = require('View');
 var { connect } = require('react-redux');
 
@@ -102,33 +103,37 @@ class F8MapView extends React.Component {
   }
 
   handleGetDirections() {
-    // TODO: Android
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        title: VENUE_ADDRESS,
-        options: ['Open in Apple Maps', 'Open in Google Maps', 'Cancel'],
-        destructiveButtonIndex: -1,
-        cancelButtonIndex: 2,
-      },
-      this.openMaps
-    );
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          title: VENUE_ADDRESS,
+          options: ['Open in Apple Maps', 'Open in Google Maps', 'Cancel'],
+          destructiveButtonIndex: -1,
+          cancelButtonIndex: 2,
+        },
+        this.openMaps
+      );
+    } else if (Platform.OS === 'android') {
+      var address = encodeURIComponent(VENUE_ADDRESS);
+      Linking.openURL('http://maps.google.com/maps?&q=' + address);
+    }
   }
 
   openMaps(option) {
     var address = encodeURIComponent(VENUE_ADDRESS);
     switch (option) {
       case 0:
-        LinkingManager.openURL('http://maps.apple.com/?q=' + address);
+        Linking.openURL('http://maps.apple.com/?q=' + address);
         break;
 
       case 1:
         var nativeGoogleUrl = 'comgooglemaps-x-callback://?q=' +
           address + '&x-success=f8://&x-source=F8';
-        LinkingManager.canOpenURL(
+        Linking.canOpenURL(
           nativeGoogleUrl,
           (supported) => {
             var url = supported ? nativeGoogleUrl : 'http://maps.google.com/?q=' + address;
-            LinkingManager.openURL(url);
+            Linking.openURL(url);
           }
         );
         break;
@@ -144,11 +149,16 @@ var styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#eee',
     position: 'absolute',
-    bottom: 49,
     left: 0,
     right: 0,
     backgroundColor: 'white',
-  }
+    ios: {
+      bottom: 49,
+    },
+    android: {
+      bottom: 0,
+    },
+  },
 });
 
 module.exports = connect(select)(F8MapView);
