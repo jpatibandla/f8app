@@ -257,7 +257,11 @@ function actions(dispatch) {
 
 function groupFriends(friends) {
   const data = {};
-  friends.forEach((friend) => { data[friend.id] = friend; });
+  friends.forEach((friend) => {
+    if (Object.keys(friend.schedule).length > 0) {
+      data[friend.id] = friend;
+    }
+  });
   if (friends.length > 0) {
     data['invite'] = 'invite';
   }
