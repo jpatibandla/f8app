@@ -97,7 +97,7 @@ var styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: 'white',
-    minHeight: 60,
+    height: 60,
   },
   picture: {
     width: IMAGE_SIZE,

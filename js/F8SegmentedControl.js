@@ -106,7 +106,7 @@ const platformStyles = {
       paddingHorizontal: 20,
       borderRadius: HEIGHT / 2,
       borderWidth: 1,
-      minWidth: 100,
+      // minWidth: 100,
     },
     android: {
       paddingBottom: 6,
