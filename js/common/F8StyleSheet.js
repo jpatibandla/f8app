@@ -39,6 +39,5 @@ export function create(styles: Object): {[name: string]: number} {
     }
     platformStyles[name] = style;
   });
-  console.log(platformStyles);
   return StyleSheet.create(platformStyles);
 }
