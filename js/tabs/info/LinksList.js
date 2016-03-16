@@ -26,13 +26,12 @@
 var F8Colors = require('F8Colors');
 var Image = require('Image');
 var ItemsWithSeparator = require('../../common/ItemsWithSeparator');
-var Linking = require('LinkingIOS'); // TODO: Android, upgrade React
+var Linking = require('Linking');
 var React = require('React');
 var Section = require('./Section');
 var StyleSheet = require('StyleSheet');
-var TouchableHighlight = require('TouchableHighlight');
+var F8Touchable = require('F8Touchable');
 var { Text } = require('F8Text');
-var TouchableOpacity = require('TouchableOpacity');
 var View = require('View');
 
 class LinksList extends React.Component {
@@ -72,7 +71,7 @@ class Row extends React.Component {
     var {icon, title, url} = this.props.link;
     var image = icon && <Image style={styles.picture} source={{uri: icon}} />
     return (
-      <TouchableHighlight onPress={() => Linking.openURL(url)}>
+      <F8Touchable onPress={() => Linking.openURL(url)}>
         <View style={styles.row}>
           {image}
           <Text style={styles.title} numberOfLines={2}>
@@ -80,7 +79,7 @@ class Row extends React.Component {
           </Text>
           <Image source={require('../../common/img/disclosure.png')} />
         </View>
-      </TouchableHighlight>
+      </F8Touchable>
     );
   }
 }

@@ -28,7 +28,7 @@ var F8Colors = require('F8Colors');
 var React = require('React');
 var View = require('View');
 var { Text } = require('F8Text');
-var TouchableNativeFeedback = require('TouchableNativeFeedback');
+var F8Touchable = require('F8Touchable');
 var Image = require('Image');
 var StyleSheet = require('StyleSheet');
 
@@ -57,7 +57,7 @@ class MenuItem extends React.Component {
       )
     }
     return (
-      <TouchableNativeFeedback onPress={this.props.onPress}>
+      <F8Touchable onPress={this.props.onPress}>
         <View style={styles.container}>
           <Image style={styles.icon} source={icon} />
           <Text style={[styles.title, selectedTitleStyle]}>
@@ -65,7 +65,7 @@ class MenuItem extends React.Component {
           </Text>
           {badge}
         </View>
-      </TouchableNativeFeedback>
+      </F8Touchable>
     );
   }
 }

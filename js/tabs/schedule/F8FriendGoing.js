@@ -30,7 +30,7 @@ var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
 var View = require('View');
 var Image = require('Image');
-var TouchableHighlight = require('TouchableHighlight');
+var F8Touchable = require('F8Touchable');
 
 import type {FriendsSchedule} from '../../reducers/friendsSchedules';
 
@@ -42,7 +42,7 @@ class F8FriendGoing extends React.Component {
 
   render() {
     return (
-      <TouchableHighlight onPress={this.props.onPress}>
+      <F8Touchable onPress={this.props.onPress}>
         <View style={styles.container}>
           <ProfilePicture userID={this.props.friend.id} size={18} />
           <Text style={styles.name}>
@@ -50,7 +50,7 @@ class F8FriendGoing extends React.Component {
           </Text>
           <Image source={require('../../common/img/disclosure.png')} />
         </View>
-      </TouchableHighlight>
+      </F8Touchable>
     );
   }
 }

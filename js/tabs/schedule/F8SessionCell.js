@@ -30,7 +30,7 @@ var Image = require('Image');
 var React = require('React');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
-var TouchableHighlight = require('TouchableHighlight');
+var F8Touchable = require('F8Touchable');
 var View = require('View');
 var formatDuration = require('./formatDuration');
 var formatTime = require('./formatTime');
@@ -82,9 +82,9 @@ class F8SessionCell extends React.Component {
 
     if (this.props.onPress) {
       cell =
-        <TouchableHighlight underlayColor="#3C5EAE" onPress={this.props.onPress}>
+        <F8Touchable onPress={this.props.onPress}>
           {cell}
-        </TouchableHighlight>;
+        </F8Touchable>;
     }
 
     return cell;

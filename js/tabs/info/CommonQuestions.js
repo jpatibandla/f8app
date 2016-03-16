@@ -29,7 +29,7 @@ var React = require('React');
 var Section = require('./Section');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
-var TouchableHighlight = require('TouchableHighlight');
+var F8Touchable = require('F8Touchable');
 var View = require('View');
 
 class CommonQuestions extends React.Component {
@@ -75,7 +75,7 @@ class Row extends React.Component {
     }
     return (
       <View style={styles.row}>
-        <TouchableHighlight onPress={() => this.toggle()}>
+        <F8Touchable onPress={() => this.toggle()}>
           <View style={styles.question} >
             <Text style={styles.symbol}>
               {this.state.expanded ? '\u2212' : '+'}
@@ -84,7 +84,7 @@ class Row extends React.Component {
               {this.props.question}
             </Text>
           </View>
-        </TouchableHighlight>
+        </F8Touchable>
         {answer}
       </View>
     );
