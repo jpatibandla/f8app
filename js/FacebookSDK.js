@@ -32,8 +32,8 @@ var {FBSDKAccessToken, FBSDKGraphRequest} = require('react-native-fbsdkcore');
 const FBSDK = require('react-native-fbsdk2');
 const Platform = require('Platform');
 
-var emptyFunction = require('emptyFunction');
-var mapObject = require('mapObject');
+var emptyFunction = () => {};
+var mapObject = require('fbjs/lib/mapObject');
 
 
 type AuthResponse = {

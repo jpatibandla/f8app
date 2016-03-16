@@ -29,7 +29,6 @@ const F8Colors = require('F8Colors');
 const TopicItem = require('./TopicItem');
 const F8Button = require('F8Button');
 var ItemsWithSeparator = require('../common/ItemsWithSeparator');
-const requestAnimationFrame = require('requestAnimationFrame');
 
 const {
   Animated,
@@ -38,7 +37,7 @@ const {
   ScrollView,
 } = React;
 
-const shallowEqual = require('shallowEqual');
+const shallowEqual = require('fbjs/lib/shallowEqual');
 const {
   applyTopicsFilter,
   clearFilter,

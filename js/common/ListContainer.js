@@ -38,7 +38,7 @@ var Platform = require('Platform');
 var PureListView = require('./PureListView');
 var Image = require('Image');
 var TouchableOpacity = require('TouchableOpacity');
-var shallowEqual = require('shallowEqual');
+var shallowEqual = require('fbjs/lib/shallowEqual');
 
 import type {Data} from './PureListView';
 import type {Props as HeaderProps, Item as HeaderItem} from 'F8Header';

@@ -27,7 +27,7 @@ var ListView = require('ListView');
 var Dimensions = require('Dimensions');
 var React = require('React');
 var View = require('View');
-var shallowEqual = require('shallowEqual');
+var shallowEqual = require('fbjs/lib/shallowEqual');
 
 type Rows = Array<Object>;
 type RowsAndSections = {
