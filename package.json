@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-native start",
-    "test": "NODE_ENV=test jest",
+    "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -31,12 +31,22 @@
   },
   "devDependencies": {
     "babel-eslint": "^4.1.8",
+    "babel-jest": "^9.0.3",
+    "babel-polyfill": "^6.7.2",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.16.1",
-    "jest-cli": "^0.8.2"
+    "jest-cli": "^0.9.2"
   },
   "jest": {
-    "scriptPreprocessor": "jest/preprocessor.js",
-    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js"
+    "haste": {
+      "defaultPlatform": "ios",
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "providesModuleNodeModules": [
+        "react-native"
+      ]
+    }
   }
 }
