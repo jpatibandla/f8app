@@ -35,7 +35,7 @@ function naivePlural(text: string, count: number): string {
 function formatDuration(startMs: number, endMs: number): string {
   let ms = endMs - startMs;
   let minutes = ms / 1000 / 60;
-  let hours = minutes / 60 - minutes % 60;
+  let hours = Math.floor(minutes / 60);
 
   if (hours > 2) {
     return 'Until ' + formatTime(endMs).toLowerCase();
@@ -48,10 +48,10 @@ function formatDuration(startMs: number, endMs: number): string {
   }
 
   if (minutes > 0) {
-    durationText = `${minutes} min`;
+    durationText = `${durationText}${Math.ceil(minutes)} min`;
   }
 
-  return durationText;
+  return durationText.trim();
 }
 
 module.exports = formatDuration;
