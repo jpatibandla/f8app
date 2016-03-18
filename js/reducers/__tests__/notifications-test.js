@@ -50,13 +50,11 @@ describe('notifications reducer', () => {
       text: 'hello',
       url: 'https://fbf8.com',
       time: jasmine.any(Number),
-      seen: false,
     }, {
       id: jasmine.any(String),
       text: 'bye',
       url: null,
       time: jasmine.any(Number),
-      seen: false,
     }]);
   });
 

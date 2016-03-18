@@ -37,20 +37,22 @@ describe('maps reducer', () => {
 
   it('populates maps from server', () => {
     let list = [
-      new Parse.Object({mapTitle: 'Day 1', mapImage: new Parse.File('1.png')}),
-      new Parse.Object({mapTitle: 'Day 2', mapImage: new Parse.File('2.png')}),
+      new Parse.Object({
+        name: 'Day 1',
+        x1: new Parse.File('x1.png'),
+        x2: new Parse.File('x2.png'),
+        x3: new Parse.File('x3.png'),
+      }),
     ];
 
     expect(
       maps([], {type: 'LOADED_MAPS', list})
     ).toEqual([{
       id: jasmine.any(String),
-      title: 'Day 1',
-      url: '1.png',
-    }, {
-      id: jasmine.any(String),
-      title: 'Day 2',
-      url: '2.png',
+      name: 'Day 1',
+      x1url: 'x1.png',
+      x2url: 'x2.png',
+      x3url: 'x3.png',
     }]);
   });
 
