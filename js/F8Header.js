@@ -68,7 +68,7 @@ class F8HeaderAndroid extends React.Component {
     if (rightItem) {
       const {title, icon, layout} = rightItem;
       actions.push({
-        icon: layout !== 'title' ? icon : null,
+        icon: layout !== 'title' ? icon : undefined,
         title: title,
         show: 'always',
       });
