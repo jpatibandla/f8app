@@ -68,6 +68,7 @@ class SessionsCarusel extends React.Component {
     var flatSessionsList = [];
     var contexts: Array<Context> = [];
     let allSessions = this.props.allSessions;
+    console.log(allSessions.length);
     if (!allSessions) {
       const {session} = this.props;
       allSessions = {
@@ -91,10 +92,16 @@ class SessionsCarusel extends React.Component {
       }
     }
 
+    const selectedIndex = flatSessionsList.findIndex((s) => s.id === this.props.session.id);
+    if (selectedIndex === -1) {
+      console.log(this.props.session);
+      console.log(flatSessionsList);
+    }
+
     this.state = {
       day: this.props.session.day,
       count: flatSessionsList.length,
-      selectedIndex: flatSessionsList.indexOf(this.props.session),
+      selectedIndex,
       flatSessionsList,
       contexts,
     };
@@ -105,6 +112,7 @@ class SessionsCarusel extends React.Component {
   }
 
   render() {
+    console.log(this.state.selectedIndex);
     var {rowIndex, sectionLength, sectionTitle} = this.state.contexts[this.state.selectedIndex];
     var rightItem;
     if (Platform.OS === 'android') {
@@ -138,6 +146,7 @@ class SessionsCarusel extends React.Component {
           </View>
         </F8Header>
         <Carousel
+          style={styles.carousel}
           count={this.state.count}
           selectedIndex={this.state.selectedIndex}
           onSelectedIndexChange={this.handleIndexChange}
@@ -229,13 +238,14 @@ var styles = StyleSheet.create({
   card: {
     ios: {
       borderRadius: 2,
+      marginHorizontal: 3,
     },
   },
-  scrollview: {
+  carousel: {
     flex: 1,
     margin: 10,
     overflow: 'visible',
-    backgroundColor: 'transparent',
+    backgroundColor: 'black',
   },
 });
 

@@ -28,15 +28,17 @@
 var Animated = require('Animated');
 var Dimensions = require('Dimensions');
 var F8BigHeader = require('F8BigHeader');
-var ParallaxBackground = require('ParallaxBackground');
 var F8Header = require('F8Header');
+var F8SegmentedControl = require('F8SegmentedControl');
+var ParallaxBackground = require('ParallaxBackground');
 var React = require('React');
 var StyleSheet = require('F8StyleSheet');
 var View = require('View');
 var { Text } = require('F8Text');
+var Carousel = require('./Carousel');
+var Image = require('Image');
 var Platform = require('Platform');
 var PureListView = require('./PureListView');
-var Image = require('Image');
 var TouchableOpacity = require('TouchableOpacity');
 var shallowEqual = require('fbjs/lib/shallowEqual');
 
@@ -77,20 +79,33 @@ class ListContainer extends React.Component {
     super(props);
 
     this.state = {
+      idx: 0,
       anim: new Animated.Value(0),
       stickyHeaderHeight: 0,
     };
 
     this.renderFakeHeader = this.renderFakeHeader.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
-    this.handleScroll = this.handleScroll.bind(this);
+    // this.handleScroll = this.handleScroll.bind(this);
     this.handleStickyHeaderLayout = this.handleStickyHeaderLayout.bind(this);
     this.handleShowMenu = this.handleShowMenu.bind(this);
+    this._refs = [];
   }
 
   render() {
     var stickyHeader = this.props.renderStickyHeader
       && this.props.renderStickyHeader();
+    stickyHeader = (
+      <View>
+        <F8SegmentedControl
+          values={['Day 1', 'Day 2']}
+          selectedIndex={this.state.idx}
+          selectionColor="#51CDDA"
+          onChange={(idx) => this.setState({idx})}
+        />
+        {stickyHeader}
+      </View>
+    );
     var leftItem = this.props.leftItem;
     if (!leftItem && Platform.OS === 'android') {
       leftItem = {
@@ -124,20 +139,30 @@ class ListContainer extends React.Component {
               : stickyHeader
             }
         </View>
-        <PureListView
-          data={this.props.data}
-          renderEmptyList={this.props.renderEmptyList}
-          style={styles.listView}
-          onScroll={this.handleScroll}
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-          contentInset={{bottom: 49, top: 0}}
-          automaticallyAdjustContentInsets={false}
-          renderRow={this.props.renderRow}
-          renderSectionHeader={this.props.renderSectionHeader}
-          renderSeparator={this.props.renderSeparator}
-          renderHeader={this.renderFakeHeader}
-          renderFooter={this.renderFooter}
+        <Carousel
+          count={2}
+          selectedIndex={this.state.idx}
+          onSelectedIndexChange={(idx) => {
+            this.setState({idx});
+          }}
+          renderCard={(idx) => (
+            <PureListView
+              ref={(ref) => this._refs[idx] = ref}
+              data={this.props.data[idx]}
+              renderEmptyList={this.props.renderEmptyList}
+              style={styles.listView}
+              onScroll={(e) => this.handleScroll(idx, e)}
+              showsVerticalScrollIndicator={false}
+              scrollEventThrottle={16}
+              contentInset={{bottom: 49, top: 0}}
+              automaticallyAdjustContentInsets={false}
+              renderRow={this.props.renderRow}
+              renderSectionHeader={this.props.renderSectionHeader}
+              renderSeparator={this.props.renderSeparator}
+              renderHeader={this.renderFakeHeader}
+              renderFooter={this.renderFooter}
+            />
+          )}
         />
         {Platform.OS === 'ios' && this.renderStickyHeader(stickyHeader)}
       </View>
@@ -180,10 +205,20 @@ class ListContainer extends React.Component {
     );
   }
 
-  handleScroll(e: any) {
+  handleScroll(idx: number, e: any) {
+    if (idx !== this.state.idx) {
+      return;
+    }
     if (Platform.OS === 'ios') {
       this.state.anim.setValue(e.nativeEvent.contentOffset.y);
     }
+    console.log(e.nativeEvent);
+    var otherScollviewIdx = idx === 0 ? 1 : 0;
+    const height = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
+    this._refs[otherScollviewIdx].scrollTo({
+      y: Math.min(e.nativeEvent.contentOffset.y, height),
+      animated: false,
+    });
   }
 
   renderFakeHeader() {

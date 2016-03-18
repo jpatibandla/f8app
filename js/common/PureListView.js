@@ -84,6 +84,10 @@ class PureListView extends React.Component {
     );
   }
 
+  scrollTo(...args) {
+    this.refs.listview.scrollTo(...args);
+  }
+
   renderFooter() {
     const footer = this.props.renderFooter && this.props.renderFooter();
 

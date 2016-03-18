@@ -37,7 +37,7 @@ const {
 type Props = {
   count: number;
   selectedIndex: number;
-  onSelectedIndexChange: (index: number) => void;
+  onSelectedIndexChange?: (index: number) => void;
   renderCard: (index: number) => ReactElement;
 };
 
@@ -72,9 +72,10 @@ class Carousel extends React.Component {
           x: this.state.width * this.state.initialSelectedIndex,
           y: 0,
         }}
-        style={styles.scrollview}
+        style={[styles.scrollview, this.props.style]}
         horizontal={true}
         pagingEnabled={true}
+        bounces={false}
         scrollsToTop={false}
         onScroll={this.handleHorizontalScroll}
         scrollEventThrottle={100}
@@ -155,7 +156,8 @@ class Carousel extends React.Component {
     }
     if (this.props.selectedIndex !== selectedIndex) {
       this.setState({selectedIndex});
-      this.props.onSelectedIndexChange(selectedIndex)
+      const {onSelectedIndexChange} = this.props;
+      onSelectedIndexChange && onSelectedIndexChange(selectedIndex);
     }
   }
 }
@@ -182,12 +184,9 @@ var styles = StyleSheet.create({
   },
   scrollview: {
     flex: 1,
-    margin: 10,
-    overflow: 'visible',
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
   },
   card: {
-    paddingHorizontal: 3,
     backgroundColor: 'transparent',
   }
 });
