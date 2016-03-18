@@ -57,6 +57,20 @@ describe('schedule reducer', () => {
     });
   });
 
+  it('restores schedule when logging in', () => {
+    expect(
+      schedule({
+        one: true,
+      }, {
+        type: 'RESTORED_SCHEDULE',
+        list: [{id: 'two'}, {id: 'three'}],
+      })
+    ).toEqual({
+      two: true,
+      three: true,
+    });
+  });
+
   it('clears schedule when logging out', () => {
     expect(
       schedule({
