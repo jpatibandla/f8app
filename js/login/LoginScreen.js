@@ -23,22 +23,43 @@
  */
 'use strict';
 
+var Animated = require('Animated');
+var Dimensions = require('Dimensions');
 var F8Button = require('F8Button');
 var F8Colors = require('F8Colors');
-var StatusBarIOS = require('StatusBarIOS');
 var Image = require('Image');
-var View = require('View');
 var React = require('React');
-var Dimensions = require('Dimensions');
+var StatusBarIOS = require('StatusBarIOS');
 var StyleSheet = require('StyleSheet');
+var View = require('View');
 var { Text } = require('F8Text');
-var TouchableOpacity = require('TouchableOpacity');
 var LoginButton = require('../common/LoginButton');
+var TouchableOpacity = require('TouchableOpacity');
 
 var { skipLogin } = require('../actions');
 var { connect } = require('react-redux');
 
+function Section({anim, shift, children}) {
+  return (
+    <Animated.View style={[styes.section]}>
+      {children}
+    </Animated.View>
+  );
+}
+
 class LoginScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      anim: new Animated.Value(0.0),
+    };
+  }
+
+  componentDidMount() {
+    StatusBarIOS && StatusBarIOS.setStyle('default');
+    Animated.timing(this.state.anim, {toValue: 1.0, duration: 2000}).start();
+  }
+
   render() {
     return (
       <Image
@@ -47,37 +68,57 @@ class LoginScreen extends React.Component {
         <TouchableOpacity
           style={styles.skip}
           onPress={() => this.props.dispatch(skipLogin())}>
-          <Image source={require('./img/x.png')} />
+          <Animated.Image
+            style={this.fadeIn(0.8)}
+            source={require('./img/x.png')}
+          />
         </TouchableOpacity>
         <View style={styles.section}>
-          <Image
-            style={styles.devconf}
+          <Animated.Image
+            style={this.fadeIn(0)}
             source={require('./img/devconf-logo.png')}
           />
         </View>
         <View style={styles.section}>
-          <Text style={styles.h1}>
-            code to connect
-          </Text>
-          <Text style={styles.h2}>
+          <Animated.Text style={[styles.h1, this.fadeIn(0.2, -10)]}>
+            code to
+          </Animated.Text>
+          <Animated.Text style={[styles.h1, {marginTop: -30}, this.fadeIn(0.2, 10)]}>
+            connect
+          </Animated.Text>
+          <Animated.Text style={[styles.h2, this.fadeIn(0.3, 10)]}>
             April 12 + 13 / Fort Mason Center
-          </Text>
-          <Text style={styles.h3}>
+          </Animated.Text>
+          <Animated.Text style={[styles.h3, this.fadeIn(0.35, 10)]}>
             SAN FRANCISCO, CALIFORNIA
-          </Text>
+          </Animated.Text>
         </View>
-        <View style={[styles.section, styles.last]}>
+        <Animated.View style={[styles.section, styles.last, this.fadeIn(0.6, 20)]}>
           <Text style={styles.loginComment}>
             Use Facebook to find your friends at F8.
           </Text>
           <LoginButton />
-        </View>
+        </Animated.View>
       </Image>
     );
   }
 
-  componentDidMount() {
-    StatusBarIOS && StatusBarIOS.setStyle('default');
+  fadeIn(delay, from = 0) {
+    const {anim} = this.state;
+    return {
+      opacity: anim.interpolate({
+        inputRange: [delay, delay + 0.3],
+        outputRange: [0, 1],
+        extrapolate: 'clamp',
+      }),
+      transform: [{
+        translateY: anim.interpolate({
+          inputRange: [delay, delay + 0.3],
+          outputRange: [from, 0],
+          extrapolate: 'clamp',
+        }),
+      }],
+    }
   }
 }
 
@@ -105,15 +146,14 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: Math.round(74 * scale),
-    lineHeight: Math.round(60 * scale),
     color: F8Colors.darkText,
-    marginBottom: 20,
+    backgroundColor: 'transparent',
   },
   h2: {
     textAlign: 'center',
     fontSize: 17,
     color: F8Colors.darkText,
-    marginBottom: 20,
+    marginVertical: 20,
   },
   h3: {
     fontSize: 12,
