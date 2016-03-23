@@ -20,6 +20,8 @@ import com.BV.LinearGradient.LinearGradientPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 
+import cl.json.RNSharePackage;
+
 public class MainActivity extends ReactActivity {
   private CodePush _codePush;
   private ReactNativePushNotificationPackage _pushNotification;
@@ -78,6 +80,7 @@ public class MainActivity extends ReactActivity {
         new MainReactPackage(),
         new F8Package(),
         new LinearGradientPackage(),
+        new RNSharePackage(),
         this._codePush.getReactPackage(),
         this._pushNotification
       );

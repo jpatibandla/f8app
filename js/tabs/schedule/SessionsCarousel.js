@@ -35,7 +35,7 @@ const formatTime = require('./formatTime');
 const Carousel = require('../../common/Carousel');
 
 const {connect} = require('react-redux');
-const {loadFriendsSchedules} = require('../../actions');
+const {loadFriendsSchedules, shareSession} = require('../../actions');
 
 const {
   Text,
@@ -158,7 +158,7 @@ class SessionsCarusel extends React.Component {
 
   shareCurrentSession() {
     const session = this.state.flatSessionsList[this.state.selectedIndex];
-    console.log('TODO: Share', session);
+    this.props.dispatch(shareSession(session));
   }
 
   componentDidMount() {

@@ -48,7 +48,7 @@ var AddToScheduleButton = require('./AddToScheduleButton');
 var formatDuration = require('./formatDuration');
 var logError = require('logError');
 var {connect} = require('react-redux');
-var {addToSchedule, removeFromScheduleWithPrompt} = require('../../actions');
+var {addToSchedule, removeFromScheduleWithPrompt, shareSession} = require('../../actions');
 
 var F8SessionDetails = React.createClass({
   mixins: [Subscribable.Mixin],
@@ -348,6 +348,7 @@ function actions(dispatch, props) {
     addToSchedule: () => dispatch(addToSchedule(id)),
     removeFromScheduleWithPrompt:
       () => dispatch(removeFromScheduleWithPrompt(props.session)),
+    shareSession: (session) => dispatch(shareSession(session)),
   };
 }
 

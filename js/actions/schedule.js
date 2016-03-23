@@ -28,6 +28,7 @@ const Parse = require('parse/react-native');
 const Platform = require('Platform');
 const ActionSheetIOS = require('ActionSheetIOS');
 const Alert = require('Alert');
+const Share = require('react-native-share');
 const Agenda = Parse.Object.extend('Agenda');
 
 import type { ThunkAction, PromiseAction, Dispatch } from './types';
@@ -116,7 +117,38 @@ function setSharingEnabled(enabled: boolean): ThunkAction {
   };
 }
 
+function shareSession(session: Session): ThunkAction {
+  return (dispatch, getState) => {
+    const {sessionURLTemplate} = getState().config;
+    const url = sessionURLTemplate
+      .replace('{slug}', session.slug)
+      .replace('{id}', session.id);
+
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showShareActionSheetWithOptions({
+        message: session.title,
+        url,
+      }, logError, this.logShare.bind(null, session.id));
+    } else {
+      Share.open({
+        share_text: session.title,
+        share_URL: url,
+        title: 'Share Link to ' + session.title,
+      }, (e) => console.log(e));
+    }
+  };
+}
+
+function logShare(id, completed, activity) {
+  Parse.Analytics.track('share', {
+    id,
+    completed: completed ? 'yes' : 'no',
+    activity: activity || '?'
+  });
+}
+
 module.exports = {
+  shareSession,
   addToSchedule,
   removeFromSchedule,
   restoreSchedule,
