@@ -25,10 +25,7 @@
 
 var React = require('React');
 var F8Button = require('F8Button');
-var {
-  FBSDKAppInviteContent,
-  FBSDKAppInviteDialog,
-} = require('react-native-fbsdkshare');
+var {AppInviteDialog} = require('react-native-fbsdk');
 var { connect } = require('react-redux');
 
 class InviteFriendsButton extends React.Component {
@@ -54,13 +51,15 @@ class InviteFriendsButton extends React.Component {
   }
 
   inviteFriends() {
-    const content = new FBSDKAppInviteContent(
-      this.props.appLinkURL,
-      this.props.appInvitePreviewImageURL
-    );
-    FBSDKAppInviteDialog.setContent(content);
-    FBSDKAppInviteDialog.show((error) => {
-      if (error && error.message) {
+    LOG({
+      applinkUrl: this.props.appLinkURL,
+      previewImageUrl: this.props.appInvitePreviewImageURL,
+    });
+    AppInviteDialog.show({
+      applinkUrl: this.props.appLinkURL,
+      previewImageUrl: this.props.appInvitePreviewImageURL,
+    }).catch((error) => {
+      if (error.message) {
         alert(error.message);
       }
     });

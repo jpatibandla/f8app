@@ -10,9 +10,9 @@ pod 'React', :subspecs => [
   'RCTLinkingIOS',
   'RCTVibration',
 ], :path => '../node_modules/react-native'
-pod 'react-native-fbsdkcore', :path => '../node_modules/react-native-fbsdkcore'
-pod 'react-native-fbsdklogin', :path => '../node_modules/react-native-fbsdklogin'
-pod 'react-native-fbsdkshare', :path => '../node_modules/react-native-fbsdkshare'
+pod 'react-native-fbsdkcore', :path => '../node_modules/react-native-fbsdk/iOS/core'
+pod 'react-native-fbsdklogin', :path => '../node_modules/react-native-fbsdk/iOS/login'
+pod 'react-native-fbsdkshare', :path => '../node_modules/react-native-fbsdk/iOS/share'
 pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
 # Start the React Native JS packager server when running the project in Xcode.

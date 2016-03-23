@@ -108,5 +108,10 @@ function setup(): React.Component {
   return Root;
 }
 
+global.LOG = (...args) => {
+  console.log('-----');
+  console.log(...args);
+  console.log('-----');
+};
 
 module.exports = setup;

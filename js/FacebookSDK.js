@@ -27,8 +27,12 @@
  */
 'use strict';
 
-var {FBSDKLoginManager} = require('react-native-fbsdklogin');
-var {FBSDKAccessToken, FBSDKGraphRequest} = require('react-native-fbsdkcore');
+var {
+  LoginManager,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} = require('react-native-fbsdk');
 const FBSDK = require('react-native-fbsdk2');
 const Platform = require('Platform');
 
@@ -55,7 +59,7 @@ function handleIOSLoginCallback(callback: LoginCallback, error, result) {
     callback({error: new Error('Canceled by user')});
     return;
   }
-  FBSDKAccessToken.getCurrentAccessToken(
+  AccessToken.getCurrentAccessToken().then(
     (token) => {
       if (!token) {
         callback({error: new Error('No access token')});
@@ -63,8 +67,8 @@ function handleIOSLoginCallback(callback: LoginCallback, error, result) {
       }
       _authResponse = {
         userID: token.userID,
-        accessToken: token.tokenString,
-        expiresIn: Math.round((token.getExpirationDate() - Date.now()) / 1000),
+        accessToken: token.accessToken,
+        expiresIn: Math.round((token.expirationTime - Date.now()) / 1000),
       };
       callback({authResponse: _authResponse});
     }
@@ -98,9 +102,10 @@ var FacebookSDK = {
     const scope = options.scope || 'public_profile';
     const permissions = scope.split(',');
     if (Platform.OS === 'ios') {
-      FBSDKLoginManager.logInWithReadPermissions(
-        permissions,
-        (error, result) => handleIOSLoginCallback(callback, error, result));
+      LoginManager.logInWithReadPermissions(permissions).then(
+        (result) => handleIOSLoginCallback(callback, null, result),
+        (error) => handleIOSLoginCallback(callback, error, null),
+      );
     } else if (Platform.OS === 'android') {
       FBSDK.loginWithReadPermissions(permissions).then(
         (result) => handleAndroidLoginCallback(callback, null, result),
@@ -115,7 +120,7 @@ var FacebookSDK = {
 
   logout: function() {
     if (Platform.OS === 'ios') {
-      FBSDKLoginManager.logOut();
+      LoginManager.logOut();
     } else {
       FBSDK.logOut();
     }
@@ -152,23 +157,23 @@ var FacebookSDK = {
     var params = argByType['object'] || {};
     var callback = argByType['function'] || emptyFunction;
 
-    // FBSDKGraphRequest requires all params to be in {string: 'abc'}
+    // GraphRequest requires all params to be in {string: 'abc'}
     // or {uri: 'xyz'} format
     params = mapObject(params, (value) => ({string: value}));
 
     if (Platform.OS === 'ios') {
-      var request = new FBSDKGraphRequest(
+      var request = new GraphRequest(
+        path,
+        {
+          parameters: params,
+          httpMethod: method,
+        },
         (error, result) => {
           var data = error ? {error} : result;
           callback(data);
-        },
-        path,
-        params,
-        null,
-        null,
-        method
+        }
       );
-      request.start();
+      new GraphRequestManager().addRequest(request).start();
     } else if (Platform.OS === 'android') {
       FBSDK.makeGraphRequest(path, params, null, method.toUpperCase()).then(
         (result) => callback(JSON.parse(result)),
