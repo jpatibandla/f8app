@@ -31,7 +31,7 @@ var F8BigHeader = require('F8BigHeader');
 var ParallaxBackground = require('ParallaxBackground');
 var F8Header = require('F8Header');
 var React = require('React');
-var StyleSheet = require('StyleSheet');
+var StyleSheet = require('F8StyleSheet');
 var View = require('View');
 var { Text } = require('F8Text');
 var Platform = require('Platform');
@@ -244,7 +244,12 @@ var styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   listView: {
-    backgroundColor: 'transparent',
+    ios: {
+      backgroundColor: 'transparent',
+    },
+    android: {
+      backgroundColor: 'white',
+    }
   },
   headerTitle: {
     color: 'white',
