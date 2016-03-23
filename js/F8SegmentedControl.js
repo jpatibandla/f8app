@@ -25,7 +25,7 @@
 'use strict';
 
 var React = require('React');
-var StyleSheet = require('StyleSheet');
+var StyleSheet = require('F8StyleSheet');
 var { Text } = require('F8Text');
 var TouchableOpacity = require('TouchableOpacity');
 var View = require('View');
@@ -42,7 +42,7 @@ class F8SegmentedControl extends React.Component {
 
   render() {
     var segments = this.props.values.map(
-      (value, index) =>
+      (value, index) => (
         <Segment
           key={value}
           value={value}
@@ -50,6 +50,7 @@ class F8SegmentedControl extends React.Component {
           selectionColor={this.props.selectionColor || 'white'}
           onPress={() => this.props.onChange(index)}
         />
+      )
     );
     return (
       <View style={[styles.container, this.props.style]}>
@@ -90,17 +91,25 @@ class Segment extends React.Component {
 }
 
 const HEIGHT = 32;
-const platformStyles = {
+
+var styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    paddingBottom: 6,
     ios: {
       justifyContent: 'center',
       alignItems: 'center',
     },
     android: {
       paddingLeft: 60,
-    }
+    },
   },
   button: {
+    borderColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
     ios: {
       height: HEIGHT,
       paddingHorizontal: 20,
@@ -110,26 +119,10 @@ const platformStyles = {
     },
     android: {
       paddingBottom: 6,
-      paddingHorizontal: 0,
+      paddingHorizontal: 10,
       borderBottomWidth: 2,
       marginRight: 10,
     },
-  },
-};
-
-var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    paddingBottom: 6,
-    ...platformStyles.container[Platform.OS],
-  },
-  button: {
-    borderColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    ...platformStyles.button[Platform.OS],
   },
   label: {
     letterSpacing: 1,
