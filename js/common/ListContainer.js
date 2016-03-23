@@ -110,6 +110,7 @@ class ListContainer extends React.Component {
           backgroundColor={this.props.backgroundColor}>
           {this.renderParallaxContent()}
         </ParallaxBackground>
+        <View style={{elevation: 2, borderTopWidth: 1, borderTopColor: 'transparent'}}>
         <F8Header
           title={this.props.title}
           leftItem={leftItem}
@@ -117,11 +118,12 @@ class ListContainer extends React.Component {
           extraItems={this.props.extraItems}>
           {this.renderHeaderTitle()}
         </F8Header>
-        {
-          Platform.OS === 'ios'
-          ? <View style={{height: this.state.stickyHeaderHeight}} />
-          : stickyHeader
-        }
+          {
+            Platform.OS === 'ios'
+            ? <View style={{height: this.state.stickyHeaderHeight}} />
+            : stickyHeader
+          }
+        </View>
         <PureListView
           data={this.props.data}
           renderEmptyList={this.props.renderEmptyList}

@@ -96,8 +96,8 @@ var styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    paddingBottom: 6,
     ios: {
+      paddingBottom: 6,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -120,7 +120,7 @@ var styles = StyleSheet.create({
     android: {
       paddingBottom: 6,
       paddingHorizontal: 10,
-      borderBottomWidth: 2,
+      borderBottomWidth: 3,
       marginRight: 10,
     },
   },
