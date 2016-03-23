@@ -97,13 +97,14 @@ class F8TabsView extends React.Component {
     var accountItem, myF8Item, loginItem;
 
     if (this.props.user.isLoggedIn) {
+      var name = this.props.user.name || '';
       accountItem = (
         <View>
           <TouchableOpacity onPress={this.openProfileSettings}>
             <ProfilePicture userID={this.props.user.id} size={80} />
           </TouchableOpacity>
           <Text style={styles.name}>
-            {this.props.user.name.toUpperCase()}
+            {name.toUpperCase()}
           </Text>
         </View>
       );

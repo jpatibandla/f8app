@@ -66,30 +66,13 @@ function handleIOSLoginCallback(callback: LoginCallback, error, result) {
         return;
       }
       _authResponse = {
-        userID: token.userID,
+        userID: token.userID, // FIXME: RNFBSDK bug: userId -> userID
         accessToken: token.accessToken,
         expiresIn: Math.round((token.expirationTime - Date.now()) / 1000),
       };
       callback({authResponse: _authResponse});
     }
   );
-}
-
-function handleAndroidLoginCallback(callback: LoginCallback, error, result) {
-  if (error) {
-    callback({error});
-    return;
-  }
-  if (!result || result.isCancelled) {
-    callback({error: new Error('Canceled by user')});
-    return;
-  }
-  _authResponse = {
-    userID: result.userID,
-    accessToken: result.tokenString,
-    expiresIn: Math.round((result.expires - Date.now()) / 1000),
-  };
-  callback({authResponse: _authResponse});
 }
 
 var FacebookSDK = {
@@ -101,17 +84,10 @@ var FacebookSDK = {
   login: function(callback: LoginCallback, options: LoginOptions) {
     const scope = options.scope || 'public_profile';
     const permissions = scope.split(',');
-    if (Platform.OS === 'ios') {
-      LoginManager.logInWithReadPermissions(permissions).then(
-        (result) => handleIOSLoginCallback(callback, null, result),
-        (error) => handleIOSLoginCallback(callback, error, null),
-      );
-    } else if (Platform.OS === 'android') {
-      FBSDK.loginWithReadPermissions(permissions).then(
-        (result) => handleAndroidLoginCallback(callback, null, result),
-        (error) => handleAndroidLoginCallback(callback, error, null)
-      );
-    }
+    LoginManager.logInWithReadPermissions(permissions).then(
+      (result) => handleIOSLoginCallback(callback, null, result),
+      (error) => handleIOSLoginCallback(callback, error, null),
+    );
   },
 
   getAuthResponse: function(): ?AuthResponse {
@@ -119,11 +95,7 @@ var FacebookSDK = {
   },
 
   logout: function() {
-    if (Platform.OS === 'ios') {
-      LoginManager.logOut();
-    } else {
-      FBSDK.logOut();
-    }
+    LoginManager.logOut();
   },
 
   /**
@@ -161,25 +133,27 @@ var FacebookSDK = {
     // or {uri: 'xyz'} format
     params = mapObject(params, (value) => ({string: value}));
 
-    if (Platform.OS === 'ios') {
-      var request = new GraphRequest(
-        path,
-        {
-          parameters: params,
-          httpMethod: method,
-        },
-        (error, result) => {
-          var data = error ? {error} : result;
-          callback(data);
+    var request = new GraphRequest(
+      path,
+      {
+        parameters: params,
+        httpMethod: method.toUpperCase(),
+      },
+      (error, result) => {
+        // FIXME: RNFBSDK bug: result is Object on iOS and string on Android
+        if (!error && typeof result === 'string') {
+          try {
+            result = JSON.parse(result);
+          } catch(e) {
+            error = e;
+          }
         }
-      );
-      new GraphRequestManager().addRequest(request).start();
-    } else if (Platform.OS === 'android') {
-      FBSDK.makeGraphRequest(path, params, null, method.toUpperCase()).then(
-        (result) => callback(JSON.parse(result)),
-        (error) => callback({error})
-      );
-    }
+
+        var data = error ? {error} : result;
+        callback(data);
+      }
+    );
+    new GraphRequestManager().addRequest(request).start();
   }
 };
 

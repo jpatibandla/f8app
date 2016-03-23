@@ -109,9 +109,10 @@ function setup(): React.Component {
 }
 
 global.LOG = (...args) => {
-  console.log('-----');
+  console.log('/------------------------------\\');
   console.log(...args);
-  console.log('-----');
+  console.log('\\------------------------------/');
+  return args[args.length - 1];
 };
 
 module.exports = setup;

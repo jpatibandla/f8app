@@ -87,6 +87,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        multiDexEnabled true
     }
     signingConfigs {
         release {
@@ -136,4 +137,5 @@ dependencies {
     compile project(':react-native-code-push')
     compile project(':react-native-push-notification')
     compile project(':react-native-share')
+    compile project(':react-native-fbsdk')
 }

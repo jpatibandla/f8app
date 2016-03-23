@@ -8,9 +8,14 @@ import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.facebook.CallbackManager;
 import com.facebook.reactnative.facebooksdk.FBSDKModule;
 
+
+import com.facebook.FacebookSdk;
+
 import android.content.Intent;
+import android.os.Bundle;
 
 import java.util.Collections;
 import java.util.Arrays;
@@ -19,12 +24,14 @@ import java.util.List;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
 
 import cl.json.RNSharePackage;
 
 public class MainActivity extends ReactActivity {
   private CodePush _codePush;
   private ReactNativePushNotificationPackage _pushNotification;
+  private CallbackManager mCallbackManager;
 
   private class F8Package implements ReactPackage {
       @Override
@@ -75,9 +82,11 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
       this._codePush = new CodePush("qwfkzzq7Y8cSrkiuU7aRCkIP7XYLEJ6b-AFoe", this, BuildConfig.DEBUG);
       this._pushNotification = new ReactNativePushNotificationPackage(this);
+      mCallbackManager = new CallbackManager.Factory().create();
 
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+        new FBSDKPackage(mCallbackManager),
         new F8Package(),
         new LinearGradientPackage(),
         new RNSharePackage(),
@@ -87,6 +96,18 @@ public class MainActivity extends ReactActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+   @Override
    protected void onNewIntent (Intent intent) {
      super.onNewIntent(intent);
      _pushNotification.newIntent(intent);
