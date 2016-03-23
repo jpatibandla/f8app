@@ -25,7 +25,7 @@
 'use strict';
 
 var EmptySchedule = require('../schedule/EmptySchedule');
-var LinkingManager = require('NativeModules').LinkingManager;
+var Linking = require('Linking');
 var PushNUXModal = require('./PushNUXModal');
 var React = require('React');
 var Platform = require('Platform');
@@ -135,7 +135,7 @@ class F8NotificationsView extends React.Component {
       if (session) {
         this.props.navigator.push({session});
       } else {
-        LinkingManager.openURL(notification.url);
+        Linking.openURL(notification.url);
       }
     }
   }
