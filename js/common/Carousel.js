@@ -113,7 +113,7 @@ class Carousel extends React.Component {
       if (Platform.OS === 'ios') {
         this.refs.scrollview.scrollTo(0, nextProps.selectedIndex * this.state.width);
       } else {
-        this.refs.viewpager.setPage(nextProps.selectedIndex);
+        this.refs.scrollview.setPage(nextProps.selectedIndex);
       }
     }
   }

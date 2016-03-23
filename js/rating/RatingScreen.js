@@ -28,15 +28,18 @@ const {
   Text,
   Image,
   View,
-  StyleSheet,
   ScrollView,
   LayoutAnimation,
   TouchableOpacity,
+  ToastAndroid,
+  Platform,
 } = React;
 const Header = require('./Header');
+const StyleSheet = require('F8StyleSheet');
 const RatingQuestion = require('./RatingQuestion');
 const RatingCard = require('./RatingCard');
 const F8Button = require('F8Button');
+const F8Header = require('F8Header');
 const Carousel = require('../common/Carousel');
 const F8PageControl = require('F8PageControl');
 const F8CloseIcon = require('F8CloseIcon');
@@ -72,21 +75,27 @@ class RatingScreen extends React.Component {
     const {surveys} = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.close} onPress={this.dismiss}>
-            <F8CloseIcon />
-          </TouchableOpacity>
-          <Text style={styles.title}>
-            {surveys.length > 1
-              ? 'Review these sessions'
-              : 'Review this session'
-            }
-          </Text>
-          <F8PageControl
-            count={surveys.length}
-            selectedIndex={this.state.selectedIndex}
-          />
-        </View>
+        <F8Header
+          style={styles.header}
+          leftItem={{
+            layout: 'icon',
+            title: 'Close',
+            icon: require('../common/BackButtonIcon'),
+            onPress: this.dismiss,
+          }}>
+          <View style={styles.headerContent}>
+            <Text style={styles.title}>
+              {surveys.length > 1
+                ? 'Review these sessions'
+                : 'Review this session'
+              }
+            </Text>
+            <F8PageControl
+              count={surveys.length}
+              selectedIndex={this.state.selectedIndex}
+            />
+          </View>
+        </F8Header>
         <Carousel
           count={surveys.length}
           selectedIndex={this.state.selectedIndex}
@@ -121,6 +130,9 @@ class RatingScreen extends React.Component {
       this.setState({selectedIndex: index});
     } else {
       this.props.navigator.pop();
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('Thanks for your review!', ToastAndroid.SHORT);
+      }
     }
   }
 
@@ -138,10 +150,21 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 45,
-    paddingTop: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    android: {
+      backgroundColor: '#5597B8',
+    },
+  },
+  headerContent: {
+    android: {
+      flex: 1,
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+    },
+    ios: {
+      height: 65,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   },
   title: {
     color: 'white',

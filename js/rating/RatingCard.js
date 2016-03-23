@@ -28,10 +28,10 @@ const {
   Text,
   Image,
   View,
-  StyleSheet,
   ScrollView,
   LayoutAnimation,
 } = React;
+const StyleSheet = require('F8StyleSheet');
 const Header = require('./Header');
 const RatingQuestion = require('./RatingQuestion');
 const F8Button = require('F8Button');
@@ -91,7 +91,9 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     overflow: 'hidden',
-    borderRadius: 2,
+    ios: {
+      borderRadius: 2,
+    },
   },
   question: {
     padding: 40,
