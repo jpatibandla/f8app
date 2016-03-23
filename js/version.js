@@ -25,5 +25,5 @@
 'use strict';
 
 module.exports = {
-  version: 300,
+  version: 310,
 };
