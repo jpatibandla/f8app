@@ -33,8 +33,6 @@ var {
   GraphRequest,
   GraphRequestManager,
 } = require('react-native-fbsdk');
-const FBSDK = require('react-native-fbsdk2');
-const Platform = require('Platform');
 
 const emptyFunction = () => {};
 const mapObject = require('fbjs/lib/mapObject');

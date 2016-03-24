@@ -1,2 +1,0 @@
-configurations.create("default")
-artifacts.add("default", file('../../node_modules/react-native-fbsdk2/rnfbsdk-release.aar'))

@@ -9,8 +9,6 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.CallbackManager;
-import com.facebook.reactnative.facebooksdk.FBSDKModule;
-
 
 import com.facebook.FacebookSdk;
 
@@ -32,24 +30,6 @@ public class MainActivity extends ReactActivity {
   private CodePush _codePush;
   private ReactNativePushNotificationPackage _pushNotification;
   private CallbackManager mCallbackManager;
-
-  private class F8Package implements ReactPackage {
-      @Override
-      public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-          return Collections.<NativeModule>
-                  singletonList(new FBSDKModule(MainActivity.this, reactContext));
-      }
-
-      @Override
-      public List<Class<? extends JavaScriptModule>> createJSModules() {
-          return Collections.emptyList();
-      }
-
-      @Override
-      public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-          return Collections.emptyList();
-      }
-  }
 
     @Override
     protected String getJSBundleFile() {
@@ -87,7 +67,6 @@ public class MainActivity extends ReactActivity {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
         new FBSDKPackage(mCallbackManager),
-        new F8Package(),
         new LinearGradientPackage(),
         new RNSharePackage(),
         this._codePush.getReactPackage(),
