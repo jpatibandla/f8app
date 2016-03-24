@@ -101,28 +101,28 @@ class ListContainer extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <ParallaxBackground
-          minHeight={this.state.stickyHeaderHeight + F8Header.height}
-          maxHeight={EMPTY_CELL_HEIGHT + this.state.stickyHeaderHeight + F8Header.height}
-          offset={this.state.anim}
-          backgroundImage={this.props.backgroundImage}
-          backgroundShift={this.props.backgroundShift}
-          backgroundColor={this.props.backgroundColor}>
-          {this.renderParallaxContent()}
-        </ParallaxBackground>
-        <View style={{elevation: 2, borderTopWidth: 1, borderTopColor: 'transparent'}}>
-        <F8Header
-          title={this.props.title}
-          leftItem={leftItem}
-          rightItem={this.props.rightItem}
-          extraItems={this.props.extraItems}>
-          {this.renderHeaderTitle()}
-        </F8Header>
-          {
-            Platform.OS === 'ios'
-            ? <View style={{height: this.state.stickyHeaderHeight}} />
-            : stickyHeader
-          }
+        <View style={styles.headerWrapper}>
+          <ParallaxBackground
+            minHeight={this.state.stickyHeaderHeight + F8Header.height}
+            maxHeight={EMPTY_CELL_HEIGHT + this.state.stickyHeaderHeight + F8Header.height}
+            offset={this.state.anim}
+            backgroundImage={this.props.backgroundImage}
+            backgroundShift={this.props.backgroundShift}
+            backgroundColor={this.props.backgroundColor}>
+            {this.renderParallaxContent()}
+          </ParallaxBackground>
+          <F8Header
+            title={this.props.title}
+            leftItem={leftItem}
+            rightItem={this.props.rightItem}
+            extraItems={this.props.extraItems}>
+            {this.renderHeaderTitle()}
+          </F8Header>
+            {
+              Platform.OS === 'ios'
+              ? <View style={{height: this.state.stickyHeaderHeight}} />
+              : stickyHeader
+            }
         </View>
         <PureListView
           data={this.props.data}
@@ -244,6 +244,15 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  headerWrapper: {
+    android: {
+      elevation: 2,
+      backgroundColor: 'transparent',
+      // FIXME: elevation doesn't seem to work without setting border
+      borderTopWidth: 1,
+      borderTopColor: 'transparent',
+    }
   },
   listView: {
     ios: {
