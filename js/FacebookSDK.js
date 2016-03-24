@@ -36,9 +36,8 @@ var {
 const FBSDK = require('react-native-fbsdk2');
 const Platform = require('Platform');
 
-var emptyFunction = () => {};
-var mapObject = require('fbjs/lib/mapObject');
-
+const emptyFunction = () => {};
+const mapObject = require('fbjs/lib/mapObject');
 
 type AuthResponse = {
   userID: string;
@@ -48,53 +47,47 @@ type AuthResponse = {
 type LoginOptions = { scope: string };
 type LoginCallback = (result: {authResponse?: AuthResponse, error?: Error}) => void;
 
-var _authResponse: ?AuthResponse = null;
+let _authResponse: ?AuthResponse = null;
 
-function handleIOSLoginCallback(callback: LoginCallback, error, result) {
-  if (error) {
-    callback({error});
-    return;
+async function loginWithFacebookSDK(options: LoginOptions): Promise<AuthResponse> {
+  const scope = options.scope || 'public_profile';
+  const permissions = scope.split(',');
+
+  const loginResult = await LoginManager.logInWithReadPermissions(permissions);
+  if (loginResult.isCancelled) {
+    throw new Error('Canceled by user');
   }
-  if (!result || result.isCancelled) {
-    callback({error: new Error('Canceled by user')});
-    return;
+
+  const accessToken = await AccessToken.getCurrentAccessToken();
+  if (!accessToken) {
+    throw new Error('No access token');
   }
-  AccessToken.getCurrentAccessToken().then(
-    (token) => {
-      if (!token) {
-        callback({error: new Error('No access token')});
-        return;
-      }
-      _authResponse = {
-        userID: token.userID, // FIXME: RNFBSDK bug: userId -> userID
-        accessToken: token.accessToken,
-        expiresIn: Math.round((token.expirationTime - Date.now()) / 1000),
-      };
-      callback({authResponse: _authResponse});
-    }
-  );
+
+  return _authResponse = {
+    userID: accessToken.userID, // FIXME: RNFBSDK bug: userId -> userID
+    accessToken: accessToken.accessToken,
+    expiresIn: Math.round((accessToken.expirationTime - Date.now()) / 1000),
+  };
 }
 
 var FacebookSDK = {
-  init: function() {
+  init() {
     // This is needed by Parse
     window.FB = FacebookSDK;
   },
 
-  login: function(callback: LoginCallback, options: LoginOptions) {
-    const scope = options.scope || 'public_profile';
-    const permissions = scope.split(',');
-    LoginManager.logInWithReadPermissions(permissions).then(
-      (result) => handleIOSLoginCallback(callback, null, result),
-      (error) => handleIOSLoginCallback(callback, error, null),
+  login(callback: LoginCallback, options: LoginOptions) {
+    loginWithFacebookSDK(options).then(
+      (authResponse) => callback({authResponse}),
+      (error) => callback({error})
     );
   },
 
-  getAuthResponse: function(): ?AuthResponse {
+  getAuthResponse(): ?AuthResponse {
     return _authResponse;
   },
 
-  logout: function() {
+  logout() {
     LoginManager.logOut();
   },
 
@@ -122,37 +115,33 @@ var FacebookSDK = {
    * param cb     {Function} the callback function to handle the response
    */
   api: function(path: string, ...args: Array<mixed>) {
-    var argByType = {};
+    const argByType = {};
     args.forEach((arg) => { argByType[typeof arg] = arg; });
 
-    var method = argByType['string'] || 'get';
-    var params = argByType['object'] || {};
-    var callback = argByType['function'] || emptyFunction;
+    const httpMethod = (argByType['string'] || 'get').toUpperCase();
+    const params = argByType['object'] || {};
+    const callback = argByType['function'] || emptyFunction;
 
-    // GraphRequest requires all params to be in {string: 'abc'}
+    // FIXME: Move this into RNFBSDK
+    // GraphRequest requires all parameters to be in {string: 'abc'}
     // or {uri: 'xyz'} format
-    params = mapObject(params, (value) => ({string: value}));
+    const parameters = mapObject(params, (value) => ({string: value}));
 
-    var request = new GraphRequest(
-      path,
-      {
-        parameters: params,
-        httpMethod: method.toUpperCase(),
-      },
-      (error, result) => {
-        // FIXME: RNFBSDK bug: result is Object on iOS and string on Android
-        if (!error && typeof result === 'string') {
-          try {
-            result = JSON.parse(result);
-          } catch(e) {
-            error = e;
-          }
+    function processResponse(error, result) {
+      // FIXME: RNFBSDK bug: result is Object on iOS and string on Android
+      if (!error && typeof result === 'string') {
+        try {
+          result = JSON.parse(result);
+        } catch(e) {
+          error = e;
         }
-
-        var data = error ? {error} : result;
-        callback(data);
       }
-    );
+
+      const data = error ? {error} : result;
+      callback(data);
+    };
+
+    const request = new GraphRequest(path, {parameters, httpMethod}, processResponse);
     new GraphRequestManager().addRequest(request).start();
   }
 };
