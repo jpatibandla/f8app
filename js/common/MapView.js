@@ -64,7 +64,7 @@ function urlForMap(map: ?Map): string {
 var styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    height: 350,
+    height: 400,
   },
   map: {
     flex: 1,
