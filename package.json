@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "art": "^0.10.1",
+    "crc32": "^0.2.2",
     "immutable": "^3.7.6",
     "moment": "^2.11.2",
     "parse": "^1.7.0",

@@ -25,6 +25,7 @@
 'use strict';
 
 var Platform = require('Platform');
+var crc32 = require('crc32');
 
 export type Notification = {
   id: string;
@@ -68,7 +69,7 @@ function notifications(state: State = initialState, action: Action): State {
       return {...state, server: list};
 
     case 'RECEIVED_PUSH_NOTIFICATION':
-      return {...state, push: [action.notification, ...state.push]};
+      return {...state, push: append(action.notification, state.push)};
 
     case 'LOGGED_OUT':
       return {...state, push: []};
@@ -91,6 +92,14 @@ function notifications(state: State = initialState, action: Action): State {
     default:
       return state;
   }
+}
+
+function append(notification, list) {
+  const id = notification.id || crc32(notification.text + notification.url).toString(36);
+  if (list.find((n) => n.id === id)) {
+    return list;
+  }
+  return [{id, ...notification}, ...list];
 }
 
 function fetchAllIds(notifications: Array<Notification>): SeenNotifications {

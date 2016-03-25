@@ -82,7 +82,6 @@ function skipPushNotifications(): Action {
 
 function receivePushNotification(notification: PushNotification): ThunkAction {
   return (dispatch) => {
-    console.log('Got push notification', notification);
     const {foreground, message } = notification;
     const data = normalizeData(notification.data);
 
@@ -107,7 +106,6 @@ function receivePushNotification(notification: PushNotification): ThunkAction {
     dispatch({
       type: 'RECEIVED_PUSH_NOTIFICATION',
       notification: {
-        id: 'PUSH' + timestamp,
         text: message,
         url: data.url,
         time: timestamp,

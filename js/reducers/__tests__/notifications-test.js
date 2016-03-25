@@ -58,4 +58,27 @@ describe('notifications reducer', () => {
     }]);
   });
 
+  it('skips duplicates', () => {
+    const notification = {
+      text: 'Hello, world!',
+      url: null,
+      time: 1234567,
+    };
+
+    const action1 = {
+      type: 'RECEIVED_PUSH_NOTIFICATION',
+      notification: {...notification},
+    };
+    const action2 = {
+      type: 'RECEIVED_PUSH_NOTIFICATION',
+      notification: {...notification},
+    };
+
+    const {push} = notifications(notifications(empty, action1), action2);
+    expect(push).toEqual([{
+      id: jasmine.any(String),
+      ...notification
+    }]);
+  });
+
 });
