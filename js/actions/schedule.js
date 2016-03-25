@@ -25,6 +25,7 @@
 'use strict';
 
 const Parse = require('parse/react-native');
+const {AppEventsLogger} = require('react-native-fbsdk');
 const Platform = require('Platform');
 const ActionSheetIOS = require('ActionSheetIOS');
 const Alert = require('Alert');
@@ -40,7 +41,6 @@ function addToSchedule(id: string): ThunkAction {
       Parse.User.current().relation('mySchedule').add(new Agenda({id}));
       Parse.User.current().save();
     }
-    Parse.Analytics.track('addToSchedule', {id});
     dispatch({
       type: 'SESSION_ADDED',
       id,
@@ -54,7 +54,6 @@ function removeFromSchedule(id: string): ThunkAction {
       Parse.User.current().relation('mySchedule').remove(new Agenda({id}));
       Parse.User.current().save();
     }
-    Parse.Analytics.track('removeFromSchedule', {id});
     dispatch({
       type: 'SESSION_REMOVED',
       id,
@@ -128,18 +127,19 @@ function shareSession(session: Session): ThunkAction {
       ActionSheetIOS.showShareActionSheetWithOptions({
         message: session.title,
         url,
-      }, logError, this.logShare.bind(null, session.id));
+      }, (e) => console.error(e), logShare.bind(null, session.id));
     } else {
       Share.open({
         share_text: session.title,
         share_URL: url,
         title: 'Share Link to ' + session.title,
-      }, (e) => console.log(e));
+      }, (e) => logShare(session.id, true, null));
     }
   };
 }
 
 function logShare(id, completed, activity) {
+  AppEventsLogger.logEvent('Share Session', 1, {id});
   Parse.Analytics.track('share', {
     id,
     completed: completed ? 'yes' : 'no',

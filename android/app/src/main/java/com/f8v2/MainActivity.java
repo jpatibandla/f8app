@@ -11,6 +11,7 @@ import com.facebook.react.uimanager.ViewManager;
 import com.facebook.CallbackManager;
 
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -91,4 +92,22 @@ public class MainActivity extends ReactActivity {
      super.onNewIntent(intent);
      _pushNotification.newIntent(intent);
    }
+
+  @Override
+  protected void onResume() {
+      super.onResume();
+      AppEventsLogger.activateApp(getApplicationContext());
+  }
+
+  @Override
+  protected void onPause() {
+      super.onPause();
+      AppEventsLogger.deactivateApp(getApplicationContext());
+  }
+
+  @Override
+  protected void onStop() {
+      super.onStop();
+      AppEventsLogger.onContextStop();
+  }
 }

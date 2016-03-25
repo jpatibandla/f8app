@@ -55,6 +55,7 @@ class LoginModal extends React.Component {
           <F8Button
             type="secondary"
             caption="Not Now"
+            source="Modal"
             onPress={() => this.props.navigator.pop()}
           />
         </Image>

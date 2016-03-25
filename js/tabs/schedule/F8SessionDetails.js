@@ -132,7 +132,7 @@ var F8SessionDetails = React.createClass({
           </Section>
           {inlineMap}
           <TouchableOpacity
-            onPress={this.handleShare}
+            onPress={this.props.onShare}
             style={styles.shareButton}>
             <Image source={require('./img/share.png')} />
           </TouchableOpacity>
@@ -182,24 +182,6 @@ var F8SessionDetails = React.createClass({
         setTimeout(() => this.props.navigator.push({share: true}), 1000);
       }
     }
-  },
-
-  handleShare: function() {
-    var {session, sessionURLTemplate} = this.props;
-    var url = sessionURLTemplate.replace('{slug}', session.slug);
-
-    ActionSheetIOS.showShareActionSheetWithOptions({
-      message: session.title,
-      url,
-    }, logError, this.logShare);
-  },
-
-  logShare: function(completed, activity) {
-    Parse.Analytics.track('share', {
-      id: this.props.session.id,
-      completed: completed ? 'yes' : 'no',
-      activity: activity || '?'
-    });
   },
 });
 
@@ -348,7 +330,6 @@ function actions(dispatch, props) {
     addToSchedule: () => dispatch(addToSchedule(id)),
     removeFromScheduleWithPrompt:
       () => dispatch(removeFromScheduleWithPrompt(props.session)),
-    shareSession: (session) => dispatch(shareSession(session)),
   };
 }
 

@@ -55,7 +55,7 @@ async function queryFacebookAPI(path, ...args): Promise {
   });
 }
 
-async function _logInWithFacebook(): Promise<Array<Action>> {
+async function _logInWithFacebook(source: ?string): Promise<Array<Action>> {
   await ParseFacebookLogin('public_profile,email,user_friends');
   const profile = await queryFacebookAPI('/me', {fields: 'name,email'});
 
@@ -68,6 +68,7 @@ async function _logInWithFacebook(): Promise<Array<Action>> {
 
   const action = {
     type: 'LOGGED_IN',
+    source,
     data: {
       id: profile.id,
       name: profile.name,
@@ -81,9 +82,9 @@ async function _logInWithFacebook(): Promise<Array<Action>> {
   ]);
 }
 
-function logInWithFacebook(): ThunkAction {
+function logInWithFacebook(source: ?string): ThunkAction {
   return (dispatch) => {
-    const login = _logInWithFacebook();
+    const login = _logInWithFacebook(source);
 
     // Loading friends schedules shouldn't block the login process
     login.then(

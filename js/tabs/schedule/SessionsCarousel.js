@@ -24,6 +24,7 @@
 'use strict';
 
 const Parse = require('parse/react-native');
+const {AppEventsLogger} = require('react-native-fbsdk');
 const StatusBarIOS = require('StatusBarIOS');
 const React = require('react-native');
 const F8SessionDetails = require('F8SessionDetails');
@@ -152,6 +153,7 @@ class SessionsCarusel extends React.Component {
         style={styles.card}
         navigator={this.props.navigator}
         session={this.state.flatSessionsList[index]}
+        onShare={this.shareCurrentSession}
       />
     );
   }
@@ -176,9 +178,9 @@ class SessionsCarusel extends React.Component {
   }
 
   track(index: number) {
-    Parse.Analytics.track('view', {
-      id: this.state.flatSessionsList[index].id,
-    });
+    const {id} = this.state.flatSessionsList[index];
+    Parse.Analytics.track('view', {id});
+    AppEventsLogger.logEvent('View Session', 1, {id});
   }
 }
 

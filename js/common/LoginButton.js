@@ -33,6 +33,7 @@ const {connect} = require('react-redux');
 class LoginButton extends React.Component {
   props: {
     style: any;
+    source?: string; // For Analytics
     dispatch: (action: any) => Promise;
     onLoggedIn: ?() => void;
   };
@@ -77,7 +78,7 @@ class LoginButton extends React.Component {
     this.setState({isLoading: true});
     try {
       await Promise.race([
-        dispatch(logInWithFacebook()),
+        dispatch(logInWithFacebook(this.props.source)),
         timeout(15000),
       ]);
     } catch (e) {

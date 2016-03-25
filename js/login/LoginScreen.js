@@ -97,7 +97,7 @@ class LoginScreen extends React.Component {
           <Text style={styles.loginComment}>
             Use Facebook to find your friends at F8.
           </Text>
-          <LoginButton />
+          <LoginButton source="First screen" />
         </Animated.View>
       </Image>
     );

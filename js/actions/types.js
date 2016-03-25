@@ -35,7 +35,7 @@ export type Action =
   | { type: 'LOADED_SESSIONS', list: Array<ParseObject> }
   | { type: 'LOADED_SURVEYS', list: Array<Object> }
   | { type: 'SUBMITTED_SURVEY_ANSWERS', id: string; }
-  | { type: 'LOGGED_IN', data: { id: string; name: string; sharedSchedule: ?boolean; } }
+  | { type: 'LOGGED_IN', source: ?string; data: { id: string; name: string; sharedSchedule: ?boolean; } }
   | { type: 'RESTORED_SCHEDULE', list: Array<ParseObject> }
   | { type: 'SKIPPED_LOGIN' }
   | { type: 'LOGGED_OUT' }

@@ -131,7 +131,7 @@ class F8TabsView extends React.Component {
           <Text style={styles.loginText}>
             Log in to find your friends at F8.
           </Text>
-          <LoginButton />
+          <LoginButton source="Drawer" />
         </View>
       );
     }
