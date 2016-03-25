@@ -250,8 +250,9 @@ var styles = StyleSheet.create({
       elevation: 2,
       backgroundColor: 'transparent',
       // FIXME: elevation doesn't seem to work without setting border
-      borderTopWidth: 1,
-      borderTopColor: 'transparent',
+      borderRightWidth: 1,
+      marginRight: -1,
+      borderRightColor: 'transparent',
     }
   },
   listView: {
