@@ -31,7 +31,6 @@ var LoginScreen = require('./login/LoginScreen');
 var PushNotificationsController = require('./PushNotificationsController');
 var StyleSheet = require('StyleSheet');
 var F8Navigator = require('F8Navigator');
-var CodePush = require('react-native-code-push');
 var View = require('View');
 var StatusBar = require('StatusBar');
 var {
@@ -60,7 +59,7 @@ var F8App = React.createClass({
     this.props.dispatch(loadSurveys());
 
     updateInstallation({version});
-    CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
+    //CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
   },
 
   componentWillUnmount: function() {
@@ -72,7 +71,6 @@ var F8App = React.createClass({
       this.props.dispatch(loadSessions());
       this.props.dispatch(loadNotifications());
       this.props.dispatch(loadSurveys());
-      CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
     }
   },
 
@@ -88,7 +86,6 @@ var F8App = React.createClass({
           barStyle="light-content"
          />
         <F8Navigator />
-        <PushNotificationsController />
       </View>
     );
   },
