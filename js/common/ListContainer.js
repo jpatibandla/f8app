@@ -74,6 +74,7 @@ const EMPTY_CELL_HEIGHT = Dimensions.get('window').height > 600 ? 200 : 150;
 
 class ListContainer extends React.Component {
   props: Props;
+  _refs: Array<any>;
 
   constructor(props: Props) {
     super(props);
@@ -93,19 +94,6 @@ class ListContainer extends React.Component {
   }
 
   render() {
-    var stickyHeader = this.props.renderStickyHeader
-      && this.props.renderStickyHeader();
-    stickyHeader = (
-      <View>
-        <F8SegmentedControl
-          values={['Day 1', 'Day 2']}
-          selectedIndex={this.state.idx}
-          selectionColor="#51CDDA"
-          onChange={(idx) => this.setState({idx})}
-        />
-        {stickyHeader}
-      </View>
-    );
     var leftItem = this.props.leftItem;
     if (!leftItem && Platform.OS === 'android') {
       leftItem = {
@@ -114,6 +102,28 @@ class ListContainer extends React.Component {
         onPress: this.handleShowMenu,
       };
     }
+
+    const segments = Object.keys(this.props.data);
+    var stickyHeader = this.props.renderStickyHeader
+      && this.props.renderStickyHeader();
+    if (segments.length > 1) {
+      // {/*selectionColor="#51CDDA"*/}
+      stickyHeader = (
+        <View>
+          <F8SegmentedControl
+            values={segments}
+            selectedIndex={this.state.idx}
+            selectionColor="white"
+            onChange={(idx) => this.setState({idx})}
+          />
+          {stickyHeader}
+        </View>
+      );
+    }
+    // TODO: Bind to Carousel animation
+    const backgroundShift = segments.length === 1
+      ? 0
+      : this.state.idx / (segments.length - 1);
     return (
       <View style={styles.container}>
         <View style={styles.headerWrapper}>
@@ -122,7 +132,7 @@ class ListContainer extends React.Component {
             maxHeight={EMPTY_CELL_HEIGHT + this.state.stickyHeaderHeight + F8Header.height}
             offset={this.state.anim}
             backgroundImage={this.props.backgroundImage}
-            backgroundShift={this.props.backgroundShift}
+            backgroundShift={backgroundShift}
             backgroundColor={this.props.backgroundColor}>
             {this.renderParallaxContent()}
           </ParallaxBackground>
@@ -140,7 +150,7 @@ class ListContainer extends React.Component {
             }
         </View>
         <Carousel
-          count={2}
+          count={segments.length}
           selectedIndex={this.state.idx}
           onSelectedIndexChange={(idx) => {
             this.setState({idx});
@@ -148,15 +158,17 @@ class ListContainer extends React.Component {
           renderCard={(idx) => (
             <PureListView
               ref={(ref) => this._refs[idx] = ref}
-              data={this.props.data[idx]}
-              renderEmptyList={this.props.renderEmptyList}
+              data={this.props.data && this.props.data[segments[idx]]}
+              renderEmptyList={() => {
+                return this.props.renderEmptyList && this.props.renderEmptyList(segments[idx])
+              }}
               style={styles.listView}
               onScroll={(e) => this.handleScroll(idx, e)}
               showsVerticalScrollIndicator={false}
               scrollEventThrottle={16}
               contentInset={{bottom: 49, top: 0}}
               automaticallyAdjustContentInsets={false}
-              renderRow={this.props.renderRow}
+              renderRow={(data) => this.props.renderRow(segments[idx], data)}
               renderSectionHeader={this.props.renderSectionHeader}
               renderSeparator={this.props.renderSeparator}
               renderHeader={this.renderFakeHeader}
@@ -215,10 +227,13 @@ class ListContainer extends React.Component {
     console.log(e.nativeEvent);
     var otherScollviewIdx = idx === 0 ? 1 : 0;
     const height = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
-    this._refs[otherScollviewIdx].scrollTo({
-      y: Math.min(e.nativeEvent.contentOffset.y, height),
-      animated: false,
+    const y = Math.min(e.nativeEvent.contentOffset.y, height);
+    this._refs.forEach((ref, ii) => {
+      if (ii != idx && ref) {
+        ref.scrollTo({y, animated: false });
+      }
     });
+
   }
 
   renderFakeHeader() {

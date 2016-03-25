@@ -40,10 +40,11 @@ var VENUE_ADDRESS = '2 Marina Blvd, San Francisco, CA 94123';
 
 function select(store) {
   return {
-    maps: [
-      store.maps.find((map) => map.name === 'Overview'),
-      store.maps.find((map) => map.name === 'Developer Garage'),
-    ]
+    store,
+    maps: {
+      'Overview': {},
+      'Developer Garage': {},
+    }
   };
 }
 
@@ -57,6 +58,7 @@ class F8MapView extends React.Component {
     this.handlePageChange = this.handlePageChange.bind(this);
     this.renderStickyHeader = this.renderStickyHeader.bind(this);
     this.openMaps = this.openMaps.bind(this);
+    this.renderEmptyList = this.renderEmptyList.bind(this);
   }
 
   render() {
@@ -76,15 +78,18 @@ class F8MapView extends React.Component {
           backgroundImage={require('./img/maps-background.png')}
           backgroundShift={this.state.page / 2}
           backgroundColor={'#9176D2'}
-          renderStickyHeader={this.renderStickyHeader}>
-          <MapView
-            key={this.state.page}
-            map={this.props.maps[this.state.page]}
-          />
+          data={this.props.maps}
+          renderEmptyList={this.renderEmptyList}>
         </ListContainer>
         {directionsButton}
       </View>
     );
+  }
+
+  renderEmptyList(segment) {
+    const map = this.props.store.maps.find((map) => map.name === segment);
+    LOG('RENDER ' + segment, map);
+    return <MapView map={map} />;
   }
 
   renderStickyHeader() {

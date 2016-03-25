@@ -53,6 +53,7 @@ class F8InfoView extends React.Component {
     return (
       <ListContainer
         title="Information"
+        data={{}}
         backgroundImage={require('./img/info-background.png')}
         backgroundColor={'#47BFBF'}>
         <WiFiDetails

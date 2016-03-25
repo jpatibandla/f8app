@@ -67,7 +67,7 @@ class SessionsCarusel extends React.Component {
 
     var flatSessionsList = [];
     var contexts: Array<Context> = [];
-    let allSessions = this.props.allSessions;
+    var allSessions = this.props.allSessions;
     console.log(allSessions.length);
     if (!allSessions) {
       const {session} = this.props;

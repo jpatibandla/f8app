@@ -50,10 +50,10 @@ var { createSelector } = require('reselect');
 const data = createSelector(
   (store) => store.sessions,
   (store) => store.filter,
-  (sessions, filter) => [
-    groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 1)),
-    groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 2)),
-  ],
+  (sessions, filter) => ({
+    'Day 1': groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 1)),
+    'Day 2': groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 2)),
+  }),
 );
 
 type Props = {
@@ -89,7 +89,6 @@ class GeneralScheduleView extends React.Component {
         backgroundImage={require('./img/schedule-background.png')}
         backgroundShift={this.props.day - 1}
         backgroundColor={'#5597B8'}
-        sections={['Day 1', 'Day 2']}
         data={this.props.data}
         renderStickyHeader={this.renderStickyHeader}
         renderSectionHeader={this.renderSectionHeader}
@@ -137,11 +136,11 @@ class GeneralScheduleView extends React.Component {
     return <SessionsSectionHeader title={sectionID} />;
   }
 
-  renderRow(session) {
+  renderRow(segment, session) {
     const route = {
       day: this.props.day,
       session: session,
-      allSessions: this.props.data[this.props.day - 1],
+      allSessions: this.props.data[segment],
     };
     return (
       <F8SessionCell

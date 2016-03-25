@@ -57,7 +57,9 @@ const data = createSelector(
     if (surveys.length > 0) {
       extra.push({surveysCount: surveys.length});
     }
-    return [...extra, ...notifications];
+    return {
+      'Notifications': [...extra, ...notifications],
+    };
   }
 );
 
@@ -102,7 +104,7 @@ class F8NotificationsView extends React.Component {
     );
   }
 
-  renderRow(notification) {
+  renderRow(all, notification) {
     if (notification.surveysCount) {
       return (
         <RateSessionsCell

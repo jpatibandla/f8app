@@ -69,11 +69,11 @@ const data = createSelector(
   (store) => store.friendsSchedules,
   (sessions, schedule, friends) => {
     const sessionsInSchedule = FilterSessions.bySchedule(sessions, schedule);
-    return [
-      groupSessions(FilterSessions.byDay(sessionsInSchedule, 1)),
-      groupSessions(FilterSessions.byDay(sessionsInSchedule, 2)),
-      groupFriends(friends),
-    ];
+    return {
+      'Day 1': groupSessions(FilterSessions.byDay(sessionsInSchedule, 1)),
+      'Day 2': groupSessions(FilterSessions.byDay(sessionsInSchedule, 2)),
+      'Friends': groupFriends(friends),
+    };
   }
 );
 
@@ -97,7 +97,7 @@ class MyScheduleView extends React.Component {
 
     this.state = { page: 0 };
 
-    this.renderStickyHeader = this.renderStickyHeader.bind(this);
+    // this.renderStickyHeader = this.renderStickyHeader.bind(this);
     this.renderSectionHeader = this.renderSectionHeader.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.renderEmptyList = this.renderEmptyList.bind(this);
@@ -126,7 +126,7 @@ class MyScheduleView extends React.Component {
         backgroundImage={require('./img/my-f8-background.png')}
         backgroundShift={this.state.page / 2}
         backgroundColor={'#A8D769'}
-        data={this.props.data[this.state.page]}
+        data={this.props.data}
         renderStickyHeader={this.renderStickyHeader}
         renderSectionHeader={this.renderSectionHeader}
         renderRow={this.renderRow}
@@ -173,25 +173,25 @@ class MyScheduleView extends React.Component {
     );
   }
 
-  renderStickyHeader() {
-    if (!this.props.user.isLoggedIn) {
-      return null;
-    }
-    return (
-      <F8SegmentedControl
-        values={['Day 1', 'Day 2', 'Friends']}
-        selectedIndex={this.state.page}
-        selectionColor="white"
-        onChange={this.selectDay}
-      />
-    );
-  }
+  // renderStickyHeader() {
+  //   if (!this.props.user.isLoggedIn) {
+  //     return null;
+  //   }
+  //   return (
+  //     <F8SegmentedControl
+  //       values={['Day 1', 'Day 2', 'Friends']}
+  //       selectedIndex={this.state.page}
+  //       selectionColor="white"
+  //       onChange={this.selectDay}
+  //     />
+  //   );
+  // }
 
   renderSectionHeader(sectionData, sectionID) {
     return <SessionsSectionHeader title={sectionID} />;
   }
 
-  renderRow(row) {
+  renderRow(all, row) {
     if (row === 'invite') {
       return <InviteFriendsButton style={styles.inviteFriendsButton} />;
     }
@@ -205,17 +205,17 @@ class MyScheduleView extends React.Component {
     }
     return (
       <F8SessionCell
-        onPress={() => this.openSession(row)}
+        onPress={() => this.openSession(row, all)}
         session={row}
       />
     );
   }
 
-  openSession(session) {
+  openSession(session, allSessions) {
     this.props.navigator.push({
       session,
       day: this.state.page + 1,
-      allSessions: this.props.data[this.state.page],
+      allSessions,
     });
   }
 
