@@ -35,7 +35,7 @@ var React = require('React');
 var StyleSheet = require('F8StyleSheet');
 var View = require('View');
 var { Text } = require('F8Text');
-var Carousel = require('./Carousel');
+var ViewPager = require('./ViewPager');
 var Image = require('Image');
 var Platform = require('Platform');
 var PureListView = require('./PureListView');
@@ -120,10 +120,32 @@ class ListContainer extends React.Component {
         </View>
       );
     }
-    // TODO: Bind to Carousel animation
+    // TODO: Bind to ViewPager animation
     const backgroundShift = segments.length === 1
       ? 0
       : this.state.idx / (segments.length - 1);
+
+    const content = segments.map((segment, idx) => (
+      <PureListView
+        ref={(ref) => this._refs[idx] = ref}
+        data={this.props.data && this.props.data[segments[idx]]}
+        renderEmptyList={() => {
+          return this.props.renderEmptyList && this.props.renderEmptyList(segments[idx])
+        }}
+        style={styles.listView}
+        onScroll={(e) => this.handleScroll(idx, e)}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        contentInset={{bottom: 49, top: 0}}
+        automaticallyAdjustContentInsets={false}
+        renderRow={(data) => this.props.renderRow(segments[idx], data)}
+        renderSectionHeader={this.props.renderSectionHeader}
+        renderSeparator={this.props.renderSeparator}
+        renderHeader={this.renderFakeHeader}
+        renderFooter={this.renderFooter}
+      />
+    ));
+
     return (
       <View style={styles.container}>
         <View style={styles.headerWrapper}>
@@ -149,33 +171,12 @@ class ListContainer extends React.Component {
               : stickyHeader
             }
         </View>
-        <Carousel
+        <ViewPager
           count={segments.length}
           selectedIndex={this.state.idx}
-          onSelectedIndexChange={(idx) => {
-            this.setState({idx});
-          }}
-          renderCard={(idx) => (
-            <PureListView
-              ref={(ref) => this._refs[idx] = ref}
-              data={this.props.data && this.props.data[segments[idx]]}
-              renderEmptyList={() => {
-                return this.props.renderEmptyList && this.props.renderEmptyList(segments[idx])
-              }}
-              style={styles.listView}
-              onScroll={(e) => this.handleScroll(idx, e)}
-              showsVerticalScrollIndicator={false}
-              scrollEventThrottle={16}
-              contentInset={{bottom: 49, top: 0}}
-              automaticallyAdjustContentInsets={false}
-              renderRow={(data) => this.props.renderRow(segments[idx], data)}
-              renderSectionHeader={this.props.renderSectionHeader}
-              renderSeparator={this.props.renderSeparator}
-              renderHeader={this.renderFakeHeader}
-              renderFooter={this.renderFooter}
-            />
-          )}
-        />
+          onSelectedIndexChange={(idx) => { this.setState({idx}); }}>
+          {content}
+        </ViewPager>
         {Platform.OS === 'ios' && this.renderStickyHeader(stickyHeader)}
       </View>
     );

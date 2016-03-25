@@ -25,14 +25,7 @@
 
 const React = require('react-native');
 const StaticContainer = require('StaticContainer.react');
-
-const {
-  View,
-  StyleSheet,
-  ScrollView,
-  ViewPagerAndroid,
-  Platform,
-} = React;
+const ViewPager = require('./ViewPager');
 
 type Props = {
   count: number;
@@ -45,160 +38,27 @@ type Props = {
 class Carousel extends React.Component {
   props: Props;
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      width: 0,
-      height: 0,
-      selectedIndex: this.props.selectedIndex,
-      initialSelectedIndex: this.props.selectedIndex,
-      scrollingTo: (null: ?number),
-    };
-    this.handleHorizontalScroll = this.handleHorizontalScroll.bind(this);
-    this.adjustCardSize = this.adjustCardSize.bind(this);
-  }
-
   render() {
-    if (Platform.OS === 'ios') {
-      return this.renderIOS();
-    } else {
-      return this.renderAndroid();
-    }
-  }
+    let cards = [];
+    const {count, selectedIndex, renderCard} = this.props;
 
-  renderIOS() {
-    return (
-      <ScrollView
-        ref="scrollview"
-        contentOffset={{
-          x: this.state.width * this.state.initialSelectedIndex,
-          y: 0,
-        }}
-        style={[styles.scrollview, this.props.style]}
-        horizontal={true}
-        pagingEnabled={true}
-        bounces={false}
-        scrollsToTop={false}
-        onScroll={this.handleHorizontalScroll}
-        scrollEventThrottle={100}
-        removeClippedSubviews={true}
-        automaticallyAdjustContentInsets={false}
-        directionalLockEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        onLayout={this.adjustCardSize}>
-        {this.renderCards()}
-      </ScrollView>
-    );
-  }
-
-  renderAndroid() {
-    return (
-      <ViewPagerAndroid
-        ref="scrollview"
-        initialPage={this.state.initialSelectedIndex}
-        onPageSelected={this.handleHorizontalScroll}
-        style={styles.container}>
-        {this.renderCards()}
-      </ViewPagerAndroid>
-    );
-  }
-
-  adjustCardSize(e: any) {
-    this.setState({
-      width: e.nativeEvent.layout.width,
-      height: e.nativeEvent.layout.height,
-    });
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.selectedIndex !== this.state.selectedIndex) {
-      if (Platform.OS === 'ios') {
-        this.refs.scrollview.scrollTo({
-          x: nextProps.selectedIndex * this.state.width,
-          animated: true,
-        });
-        this.setState({scrollingTo: nextProps.selectedIndex});
-      } else {
-        this.refs.scrollview.setPage(nextProps.selectedIndex);
-        this.setState({selectedIndex: nextProps.selectedIndex});
-      }
-    }
-  }
-
-  renderCards(): Array<ReactElement> {
-    // TODO: Optimization - use absolutely positioned cards instead
-    // of rendering placeholder views. Another one is to rotate keys
-    // and force React to recycle views
-    var {width, height} = this.state;
-    var cards = [];
-    for (var i = 0; i < this.props.count; i++) {
-      var content = null;
-      if (Math.abs(i - this.props.selectedIndex) < 2) {
+    for (let i = 0; i < count; i++) {
+      let content = null;
+      if (Math.abs(i - selectedIndex) < 2) {
         content = (
-          <StaticContainer>
-            {this.props.renderCard(i)}
+          <StaticContainer key={`s_${i}`}>
+            {renderCard(i)}
           </StaticContainer>
         );
       }
-      var style = Platform.OS === 'ios' && styles.card;
-      cards.push(
-        <View style={[style, {width, height}]} key={'r_' + i}>
-          {content}
-        </View>
-      );
+      cards.push(content);
     }
-    return cards;
-  }
-
-  handleHorizontalScroll(e: any) {
-    var selectedIndex = e.nativeEvent.position;
-    if (selectedIndex === undefined) {
-      selectedIndex = Math.round(
-        e.nativeEvent.contentOffset.x / this.state.width,
-      );
-    }
-    if (selectedIndex < 0 || selectedIndex >= this.props.count) {
-      return;
-    }
-    if (this.state.scrollingTo !== null && this.state.scrollingTo !== selectedIndex) {
-      return;
-    }
-    if (this.props.selectedIndex !== selectedIndex || this.state.scrollingTo !== null) {
-      this.setState({selectedIndex, scrollingTo: null});
-      const {onSelectedIndexChange} = this.props;
-      onSelectedIndexChange && onSelectedIndexChange(selectedIndex);
-    }
+    return (
+      <ViewPager {...this.props} bounces={true}>
+        {cards}
+      </ViewPager>
+    );
   }
 }
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    height: 65,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    color: 'white',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  close: {
-    position: 'absolute',
-    padding: 10,
-    top: 10,
-    left: 0,
-  },
-  scrollview: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  card: {
-    backgroundColor: 'transparent',
-  }
-});
 
 module.exports = Carousel;
