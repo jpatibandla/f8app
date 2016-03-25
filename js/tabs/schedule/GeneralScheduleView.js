@@ -32,6 +32,7 @@ var React = require('React');
 var Platform = require('Platform');
 var F8DrawerLayout = require('F8DrawerLayout');
 var ScheduleListView = require('./ScheduleListView');
+var F8SplitView = require('F8SplitView');
 var FilterScreen = require('../../filter/FilterScreen');
 
 var { connect } = require('react-redux');
@@ -60,7 +61,8 @@ type Props = {
 class GeneralScheduleView extends React.Component {
   props: Props;
   _drawer: ?F8DrawerLayout;
-
+  _splitView: ?F8SplitView;
+  
   constructor(props) {
     super(props);
 
@@ -110,6 +112,16 @@ class GeneralScheduleView extends React.Component {
 
     if (Platform.OS === 'ios') {
       return content;
+    } else if (Platform.OS === 'windows') {
+      return (
+        <F8SplitView
+          ref={(splitView) => this._splitView = splitView}
+          paneWidth={300}
+          panePosition="right"
+          renderPaneView={this.renderNavigationView}>
+          {content}
+        </F8SplitView>  
+      );
     }
     return (
       <F8DrawerLayout
@@ -123,7 +135,9 @@ class GeneralScheduleView extends React.Component {
   }
 
   renderNavigationView() {
-    return <FilterScreen onClose={() => this._drawer && this._drawer.closeDrawer()} />;
+    return <FilterScreen
+             onClose={() => (this._drawer && this._drawer.closeDrawer()) || (this._splitView && this._splitView.closePane())}
+           />;
   }
 
   renderEmptyList(day: number) {
@@ -138,6 +152,8 @@ class GeneralScheduleView extends React.Component {
   openFilterScreen() {
     if (Platform.OS === 'ios') {
       this.props.navigator.push({ filter: 123 });
+    } else if (Platform.OS === 'windows') {
+      this._splitView && this._splitView.openPane();   
     } else {
       this._drawer && this._drawer.openDrawer();
     }

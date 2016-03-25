@@ -28,7 +28,6 @@
 var React = require('React');
 var AppState = require('AppState');
 var BackAndroid = require('BackAndroid');
-var F8TabsView = require('F8TabsView');
 var FriendsScheduleView = require('./tabs/schedule/FriendsScheduleView');
 var F8SessionDetails = require('F8SessionDetails');
 var FilterScreen = require('./filter/FilterScreen');
@@ -40,10 +39,8 @@ var SharingSettingsModal = require('./tabs/schedule/SharingSettingsModal');
 var SharingSettingsScreen = require('./tabs/schedule/SharingSettingsScreen');
 var RatingScreen = require('./rating/RatingScreen');
 var StatusBarIOS = require('StatusBarIOS');
-var PushNotificationsController = require('./PushNotificationsController');
 var StyleSheet = require('StyleSheet');
 var F8Navigator = require('F8Navigator');
-var CodePush = require('react-native-code-push');
 var View = require('View');
 var StatusBar = require('StatusBar');
 var {
@@ -76,7 +73,6 @@ var F8App = React.createClass({
     this.props.dispatch(loadSurveys());
 
     updateInstallation(version);
-    CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
   },
 
   componentWillUnmount: function() {
@@ -88,7 +84,6 @@ var F8App = React.createClass({
       this.props.dispatch(loadSessions());
       this.props.dispatch(loadNotifications());
       this.props.dispatch(loadSurveys());
-      CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
     }
   },
 
@@ -104,7 +99,6 @@ var F8App = React.createClass({
           barStyle="light-content"
          />
         <F8Navigator />
-        <PushNotificationsController />
       </View>
     );
   },

@@ -30,7 +30,6 @@ var F8Colors = require('F8Colors');
 var F8FriendGoing = require('F8FriendGoing');
 var F8SpeakerProfile = require('F8SpeakerProfile');
 var Image = require('Image');
-var LinearGradient = require('react-native-linear-gradient');
 var MapView = require('../../common/MapView');
 var PixelRatio = require('PixelRatio');
 var React = require('React');
@@ -205,9 +204,7 @@ class Section extends React.Component {
           <Text style={styles.sectionTitle}>
             {this.props.title.toUpperCase()}
           </Text>
-          <LinearGradient
-            start={[0, 0]} end={[1, 0]}
-            colors={['#E1E1E1', 'white']}
+          <View
             style={styles.line}
           />
         </View>
