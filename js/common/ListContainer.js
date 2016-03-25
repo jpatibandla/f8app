@@ -59,7 +59,7 @@ type Props = {
   renderRow?: ?Function;
   renderSectionHeader: ?Function;
   renderSeparator: ?Function;
-  renderStickyHeader?: ?Function;
+  renderFloatingStickyHeader?: ?Function;
   renderEmptyList?: ?Function;
   leftItem: ?ReactElement;
   onLeftItemPress: ?() => void;
@@ -87,7 +87,6 @@ class ListContainer extends React.Component {
 
     this.renderFakeHeader = this.renderFakeHeader.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
-    // this.handleScroll = this.handleScroll.bind(this);
     this.handleStickyHeaderLayout = this.handleStickyHeaderLayout.bind(this);
     this.handleShowMenu = this.handleShowMenu.bind(this);
     this._refs = [];
@@ -103,11 +102,28 @@ class ListContainer extends React.Component {
       };
     }
 
-    const segments = Object.keys(this.props.data);
-    var stickyHeader = this.props.renderStickyHeader
-      && this.props.renderStickyHeader();
+
+    const segments = [];
+    const content = React.Children.map(this.props.children, (child, idx) => {
+      segments.push(child.props.title);
+      return React.cloneElement(child, {
+        ref: (ref) => this._refs[idx] = ref,
+        onScroll: (e) => this.handleScroll(idx, e),
+        style: styles.listView,
+        showsVerticalScrollIndicator: false,
+        scrollEventThrottle: 16,
+        contentInset: {bottom: 49, top: 0},
+        automaticallyAdjustContentInsets: false,
+        renderHeader: this.renderFakeHeader,
+        scrollsToTop: idx === this.state.idx,
+        renderSeparator: (sectionID, rowID) => <View style={styles.separator} key={rowID} />,
+      });
+    });
+
+
+    let {stickyHeader} = this.props;
     if (segments.length > 1) {
-      // {/*selectionColor="#51CDDA"*/}
+      // TODO: {/*selectionColor="#51CDDA"*/}
       stickyHeader = (
         <View>
           <F8SegmentedControl
@@ -124,27 +140,6 @@ class ListContainer extends React.Component {
     const backgroundShift = segments.length === 1
       ? 0
       : this.state.idx / (segments.length - 1);
-
-    const content = segments.map((segment, idx) => (
-      <PureListView
-        ref={(ref) => this._refs[idx] = ref}
-        data={this.props.data && this.props.data[segments[idx]]}
-        renderEmptyList={() => {
-          return this.props.renderEmptyList && this.props.renderEmptyList(segments[idx])
-        }}
-        style={styles.listView}
-        onScroll={(e) => this.handleScroll(idx, e)}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-        contentInset={{bottom: 49, top: 0}}
-        automaticallyAdjustContentInsets={false}
-        renderRow={(data) => this.props.renderRow(segments[idx], data)}
-        renderSectionHeader={this.props.renderSectionHeader}
-        renderSeparator={this.props.renderSeparator}
-        renderHeader={this.renderFakeHeader}
-        renderFooter={this.renderFooter}
-      />
-    ));
 
     return (
       <View style={styles.container}>
@@ -165,11 +160,7 @@ class ListContainer extends React.Component {
             extraItems={this.props.extraItems}>
             {this.renderHeaderTitle()}
           </F8Header>
-            {
-              Platform.OS === 'ios'
-              ? <View style={{height: this.state.stickyHeaderHeight}} />
-              : stickyHeader
-            }
+          {this.renderFixedStickyHeader(stickyHeader)}
         </View>
         <ViewPager
           count={segments.length}
@@ -177,7 +168,7 @@ class ListContainer extends React.Component {
           onSelectedIndexChange={(idx) => { this.setState({idx}); }}>
           {content}
         </ViewPager>
-        {Platform.OS === 'ios' && this.renderStickyHeader(stickyHeader)}
+        {this.renderFloatingStickyHeader(stickyHeader)}
       </View>
     );
   }
@@ -225,8 +216,6 @@ class ListContainer extends React.Component {
     if (Platform.OS === 'ios') {
       this.state.anim.setValue(e.nativeEvent.contentOffset.y);
     }
-    console.log(e.nativeEvent);
-    var otherScollviewIdx = idx === 0 ? 1 : 0;
     const height = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
     const y = Math.min(e.nativeEvent.contentOffset.y, height);
     this._refs.forEach((ref, ii) => {
@@ -252,12 +241,17 @@ class ListContainer extends React.Component {
     }
   }
 
-  renderStickyHeader(stickyHeader: ?ReactElement) {
-    if (!stickyHeader) {
+  renderFixedStickyHeader(stickyHeader: ?ReactElement) {
+    return Platform.OS === 'ios'
+      ? <View style={{height: this.state.stickyHeaderHeight}} />
+      : stickyHeader;
+  }
+
+  renderFloatingStickyHeader(stickyHeader: ?ReactElement) {
+    if (!stickyHeader || Platform.OS !== 'ios') {
       return;
     }
-    // Potential scrolling perf optimization - put the sticky header into
-    // the scrollview
+    var opacity = this.state.stickyHeaderHeight === 0 ? 0 : 1;
     var distance = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
     var translateY = this.state.anim.interpolate({
       inputRange: [0, distance],
@@ -267,7 +261,7 @@ class ListContainer extends React.Component {
     return (
       <Animated.View
         onLayout={this.handleStickyHeaderLayout}
-        style={[styles.stickyHeader, {transform: [{translateY}]}]}>
+        style={[styles.stickyHeader, {opacity}, {transform: [{translateY}]}]}>
         {stickyHeader}
       </Animated.View>
     );

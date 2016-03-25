@@ -35,6 +35,7 @@ var SessionsSectionHeader = require('./SessionsSectionHeader');
 var View = require('View');
 var Platform = require('Platform');
 var F8DrawerLayout = require('F8DrawerLayout');
+var PureListView = require('../../common/PureListView');
 var FilterScreen = require('../../filter/FilterScreen');
 var groupSessions = require('./groupSessions');
 
@@ -50,10 +51,10 @@ var { createSelector } = require('reselect');
 const data = createSelector(
   (store) => store.sessions,
   (store) => store.filter,
-  (sessions, filter) => ({
-    'Day 1': groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 1)),
-    'Day 2': groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 2)),
-  }),
+  (sessions, filter) => [
+    groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 1)),
+    groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 2)),
+  ],
 );
 
 type Props = {
@@ -73,7 +74,6 @@ class GeneralScheduleView extends React.Component {
   constructor(props) {
     super(props);
 
-    this.renderStickyHeader = this.renderStickyHeader.bind(this);
     this.renderSectionHeader = this.renderSectionHeader.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.renderEmptyList = this.renderEmptyList.bind(this);
@@ -83,23 +83,37 @@ class GeneralScheduleView extends React.Component {
   }
 
   render() {
+    const filterItem = {
+      icon: require('../../common/img/filter.png'),
+      title: 'Filter',
+      onPress: this.openFilterScreen,
+    };
+    const filterHeader = Object.keys(this.props.filter).length > 0
+      ? <FilterHeader />
+      : null;
     const content = (
       <ListContainer
         title="Schedule"
         backgroundImage={require('./img/schedule-background.png')}
         backgroundShift={this.props.day - 1}
         backgroundColor={'#5597B8'}
-        data={this.props.data}
-        renderStickyHeader={this.renderStickyHeader}
-        renderSectionHeader={this.renderSectionHeader}
-        renderRow={this.renderRow}
-        renderEmptyList={this.renderEmptyList}
-        rightItem={{
-          icon: require('../../common/img/filter.png'),
-          title: 'Filter',
-          onPress: this.openFilterScreen,
-        }}
-      />
+        stickyHeader={filterHeader}
+        rightItem={filterItem}>
+        <PureListView
+          title="Day 1"
+          data={this.props.data[0]}
+          renderRow={(row) => this.renderRow(row, 1)}
+          renderEmptyList={() => this.renderEmptyList(1)}
+          renderSectionHeader={this.renderSectionHeader}
+        />
+        <PureListView
+          title="Day 2"
+          data={this.props.data[1]}
+          renderRow={(row) => this.renderRow(row, 2)}
+          renderEmptyList={() => this.renderEmptyList(2)}
+          renderSectionHeader={this.renderSectionHeader}
+        />
+      </ListContainer>
     );
     if (Platform.OS === 'ios') {
       return content;
@@ -119,32 +133,25 @@ class GeneralScheduleView extends React.Component {
     return <FilterScreen onClose={() => this._drawer && this._drawer.closeDrawer()} />;
   }
 
-  renderEmptyList() {
+  renderEmptyList(day: number) {
     return (
       <EmptySchedule
-        title={`No sessions on day ${this.props.day} match the filter`}
+        title={`No sessions on day ${day} match the filter`}
         text="Check the schedule for the other day or remove the filter."
       />
     );
-  }
-
-  renderStickyHeader() {
-    return <FilterHeader />;
   }
 
   renderSectionHeader(sectionData, sectionID) {
     return <SessionsSectionHeader title={sectionID} />;
   }
 
-  renderRow(segment, session) {
-    const route = {
-      day: this.props.day,
-      session: session,
-      allSessions: this.props.data[segment],
-    };
+  renderRow(session, day) {
     return (
       <F8SessionCell
-        onPress={() => this.props.navigator.push(route)}
+        onPress={() => this.props.navigator.push({
+          day, session, allSessions: this.props.data[day - 1],
+        })}
         session={session}
       />
     );
@@ -166,6 +173,7 @@ class GeneralScheduleView extends React.Component {
 function select(store) {
   return {
     day: store.navigation.day,
+    filter: store.filter,
     data: data(store),
   };
 }
