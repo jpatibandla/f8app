@@ -92,11 +92,12 @@ class ListContainer extends React.Component {
     var stickyHeader = this.props.renderStickyHeader
       && this.props.renderStickyHeader();
     var leftItem = this.props.leftItem;
-    if (!leftItem && Platform.OS === 'android') {
+    if (!leftItem && Platform.OS !== 'ios') {
       leftItem = {
         title: 'Menu',
         icon: require('./img/hamburger.png'),
         onPress: this.handleShowMenu,
+        layout: 'icon',
       };
     }
     return (
@@ -143,7 +144,7 @@ class ListContainer extends React.Component {
   }
 
   renderParallaxContent() {
-    if (Platform.OS === 'android') {
+    if (Platform.OS !== 'ios') {
       return <View />;
     }
     if (this.props.parallaxContent) {
@@ -157,7 +158,7 @@ class ListContainer extends React.Component {
   }
 
   renderHeaderTitle() {
-    if (Platform.OS === 'android') {
+    if (Platform.OS !== 'ios') {
       return null;
     }
     var transform;

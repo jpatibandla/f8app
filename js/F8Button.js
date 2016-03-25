@@ -27,7 +27,6 @@
 
 var F8Colors = require('F8Colors');
 var Image = require('Image');
-var LinearGradient = require('react-native-linear-gradient');
 var React = require('React');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
@@ -52,15 +51,13 @@ class F8Button extends React.Component {
     let content;
     if (this.props.type === 'primary' || this.props.type === undefined) {
       content = (
-        <LinearGradient
-          start={[0.5, 1]} end={[1, 1]}
-          colors={['#6A6AD5', '#6F86D9']}
+        <View
           style={[styles.button, styles.primaryButton]}>
           {icon}
           <Text style={[styles.caption, styles.primaryCaption]}>
             {caption}
           </Text>
-        </LinearGradient>
+        </View>
       );
     } else {
       var border = this.props.type === 'bordered' && styles.border;

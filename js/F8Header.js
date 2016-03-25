@@ -230,7 +230,12 @@ var styles = StyleSheet.create({
   },
 });
 
-const Header = Platform.OS === 'ios' ? F8HeaderIOS : F8HeaderAndroid;
+const Header = Platform.OS === 'ios'
+  ? F8HeaderIOS 
+  : Platform.OS === 'android'
+    ? F8HeaderAndroid
+    : F8HeaderIOS;
+    
 Header.height = HEADER_HEIGHT;
 
 module.exports = Header;

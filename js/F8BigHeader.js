@@ -33,7 +33,6 @@ var { Text } = require('F8Text');
 var View = require('View');
 var Image = require('Image');
 var Dimensions = require('Dimensions');
-var LinearGradient = require('react-native-linear-gradient');
 
 const HEIGHT = Dimensions.get('window').height > 600
   ? 200
@@ -84,9 +83,7 @@ class F8BigHeader extends React.Component {
     const collapsedTitle = this.props.showCollapsedTitle ? this.props.title : '';
 
     return (
-      <LinearGradient
-        colors={this.props.colors}
-        locations={[0, 0.7]}
+      <View
         style={styles.header}>
         <Animated.Image
           source={this.props.curve}
@@ -110,7 +107,7 @@ class F8BigHeader extends React.Component {
             {expandedTitle}
           </Text>
         </Animated.View>
-      </LinearGradient>
+      </View>
     );
   }
 }

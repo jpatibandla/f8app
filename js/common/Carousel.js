@@ -59,8 +59,10 @@ class Carousel extends React.Component {
   render() {
     if (Platform.OS === 'ios') {
       return this.renderIOS();
-    } else {
+    } else if (Platform.OS === 'android') {
       return this.renderAndroid();
+    } else if (Platform.OS === 'windows') {
+      return this.renderWindows();
     }
   }
 
@@ -100,6 +102,23 @@ class Carousel extends React.Component {
       </ViewPagerAndroid>
     );
   }
+  
+  renderWindows() {
+    return (
+      <ScrollView
+        ref="scrollview"
+        style={styles.scrollview}
+        scrollsToTop={false}
+        scrollEventThrottle={100}
+        automaticallyAdjustContentInsets={false}
+        directionalLockEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        onLayout={this.adjustCardSize}>
+        {this.renderCards()}
+      </ScrollView>
+    );
+  }
 
   adjustCardSize(e: any) {
     this.setState({
@@ -112,7 +131,7 @@ class Carousel extends React.Component {
     if (nextProps.selectedIndex !== this.state.selectedIndex) {
       if (Platform.OS === 'ios') {
         this.refs.scrollview.scrollTo(0, nextProps.selectedIndex * this.state.width);
-      } else {
+      } else if (Platform.OS === 'android') {
         this.refs.viewpager.setPage(nextProps.selectedIndex);
       }
     }

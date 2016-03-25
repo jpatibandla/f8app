@@ -90,10 +90,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(F8APP_RELEASE_STORE_FILE)
-            storePassword F8APP_RELEASE_STORE_PASSWORD
-            keyAlias F8APP_RELEASE_KEY_ALIAS
-            keyPassword F8APP_RELEASE_KEY_PASSWORD
+            //storeFile file(F8APP_RELEASE_STORE_FILE)
+            //storePassword F8APP_RELEASE_STORE_PASSWORD
+            //keyAlias F8APP_RELEASE_KEY_ALIAS
+            //keyPassword F8APP_RELEASE_KEY_PASSWORD
         }
     }
     splits {

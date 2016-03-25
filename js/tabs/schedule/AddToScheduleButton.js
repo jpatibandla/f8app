@@ -26,7 +26,6 @@
 
 var F8Colors = require('F8Colors');
 var Image = require('Image');
-var LinearGradient = require('react-native-linear-gradient');
 var React = require('React');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
@@ -108,9 +107,7 @@ class AddToScheduleButton extends React.Component {
         onPress={this.props.onPress}
         activeOpacity={0.9}
         style={[styles.container, this.props.style]}>
-        <LinearGradient
-          start={[0.5, 1]} end={[1, 1]}
-          colors={colors}
+        <View
           collapsable={false}
           style={styles.button}>
           <View style={{flex: 1}}>
@@ -133,7 +130,7 @@ class AddToScheduleButton extends React.Component {
               </Animated.Text>
             </View>
           </View>
-        </LinearGradient>
+        </View>
       </TouchableOpacity>
     );
   }
