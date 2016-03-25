@@ -150,6 +150,9 @@ class Carousel extends React.Component {
         e.nativeEvent.contentOffset.x / this.state.width,
       );
     }
+    if (selectedIndex < 0 || selectedIndex >= this.props.count) {
+      return;
+    }
     if (this.props.selectedIndex !== selectedIndex) {
       this.setState({selectedIndex});
       this.props.onSelectedIndexChange(selectedIndex)
