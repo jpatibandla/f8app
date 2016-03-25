@@ -130,13 +130,14 @@ class ListContainer extends React.Component {
 
   render() {
     var leftItem = this.props.leftItem;
-    if (!leftItem && Platform.OS === 'android') {
+    if (!leftItem && Platform.OS !== 'ios') {
       leftItem = {
         title: 'Menu',
         icon: this.context.hasUnreadNotifications
           ? require('./img/hamburger-unread.png')
           : require('./img/hamburger.png'),
         onPress: this.handleShowMenu,
+        layout: 'icon',
       };
     }
 
@@ -208,7 +209,7 @@ class ListContainer extends React.Component {
   }
 
   renderParallaxContent() {
-    if (Platform.OS === 'android') {
+    if (Platform.OS !== 'ios') {
       return <View />;
     }
     if (this.props.parallaxContent) {
@@ -222,7 +223,7 @@ class ListContainer extends React.Component {
   }
 
   renderHeaderTitle(): ?ReactElement {
-    if (Platform.OS === 'android') {
+    if (Platform.OS !== 'ios') {
       return null;
     }
     var transform;

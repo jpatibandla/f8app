@@ -36,11 +36,11 @@ class SessionsSectionHeader extends React.Component {
 
   render() {
     return (
-      <LinearGradient colors={['#F4F6F7', '#EBEEF1']} style={styles.header}>
+      <View style={styles.header}>
         <Text style={styles.label}>
           {this.props.title}
         </Text>
-      </LinearGradient>
+      </View>
     );
   }
 }
@@ -50,6 +50,7 @@ var styles = StyleSheet.create({
     height: 32,
     justifyContent: 'center',
     paddingLeft: 17,
+    backgroundColor: '#F4F6F7',
   },
   label: {
     color: F8Colors.lightText,
