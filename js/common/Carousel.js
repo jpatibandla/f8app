@@ -39,6 +39,7 @@ type Props = {
   selectedIndex: number;
   onSelectedIndexChange?: (index: number) => void;
   renderCard: (index: number) => ReactElement;
+  style: any;
 };
 
 class Carousel extends React.Component {
@@ -51,6 +52,7 @@ class Carousel extends React.Component {
       height: 0,
       selectedIndex: this.props.selectedIndex,
       initialSelectedIndex: this.props.selectedIndex,
+      scrollingTo: (null: ?number),
     };
     this.handleHorizontalScroll = this.handleHorizontalScroll.bind(this);
     this.adjustCardSize = this.adjustCardSize.bind(this);
@@ -112,9 +114,14 @@ class Carousel extends React.Component {
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.selectedIndex !== this.state.selectedIndex) {
       if (Platform.OS === 'ios') {
-        this.refs.scrollview.scrollTo(0, nextProps.selectedIndex * this.state.width);
+        this.refs.scrollview.scrollTo({
+          x: nextProps.selectedIndex * this.state.width,
+          animated: true,
+        });
+        this.setState({scrollingTo: nextProps.selectedIndex});
       } else {
         this.refs.scrollview.setPage(nextProps.selectedIndex);
+        this.setState({selectedIndex: nextProps.selectedIndex});
       }
     }
   }
@@ -154,8 +161,11 @@ class Carousel extends React.Component {
     if (selectedIndex < 0 || selectedIndex >= this.props.count) {
       return;
     }
-    if (this.props.selectedIndex !== selectedIndex) {
-      this.setState({selectedIndex});
+    if (this.state.scrollingTo !== null && this.state.scrollingTo !== selectedIndex) {
+      return;
+    }
+    if (this.props.selectedIndex !== selectedIndex || this.state.scrollingTo !== null) {
+      this.setState({selectedIndex, scrollingTo: null});
       const {onSelectedIndexChange} = this.props;
       onSelectedIndexChange && onSelectedIndexChange(selectedIndex);
     }
