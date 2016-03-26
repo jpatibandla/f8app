@@ -27,7 +27,6 @@
 
 var Animated = require('Animated');
 var Dimensions = require('Dimensions');
-var F8BigHeader = require('F8BigHeader');
 var F8Header = require('F8Header');
 var F8SegmentedControl = require('F8SegmentedControl');
 var ParallaxBackground = require('ParallaxBackground');
@@ -36,38 +35,20 @@ var StyleSheet = require('F8StyleSheet');
 var View = require('View');
 var { Text } = require('F8Text');
 var ViewPager = require('./ViewPager');
-var Image = require('Image');
 var Platform = require('Platform');
-var PureListView = require('./PureListView');
-var TouchableOpacity = require('TouchableOpacity');
-var shallowEqual = require('fbjs/lib/shallowEqual');
 
-import type {Data} from './PureListView';
-import type {Props as HeaderProps, Item as HeaderItem} from 'F8Header';
+import type {Item as HeaderItem} from 'F8Header';
 
 type Props = {
   title: string;
   leftItem?: HeaderItem;
   rightItem?: HeaderItem;
   extraItems?: Array<HeaderItem>;
-  image: ?ReactElement;
-  colors: Array<string>;
   selectedSectionColor: string;
-  curve: number;
   backgroundImage: number;
-  backgroundShift: number;
   backgroundColor: string;
-  renderRow?: ?Function;
-  renderSectionHeader: ?Function;
-  renderSeparator: ?Function;
-  renderFloatingStickyHeader?: ?Function;
-  renderEmptyList?: ?Function;
-  leftItem: ?ReactElement;
-  onLeftItemPress: ?() => void;
-  rightItem: string | ReactElement;
-  onRightItemPress: ?() => void;
   parallaxContent: ?ReactElement;
-  data: Data;
+  stickyHeader?: ?ReactElement;
   children: any;
 };
 
@@ -188,7 +169,7 @@ class ListContainer extends React.Component {
     );
   }
 
-  renderHeaderTitle() {
+  renderHeaderTitle(): ?ReactElement {
     if (Platform.OS === 'android') {
       return null;
     }
@@ -279,8 +260,6 @@ class ListContainer extends React.Component {
 }
 
 ListContainer.defaultProps = {
-  renderRow: () => null,
-  renderSeparator: (sectionID, rowID) => <View style={styles.separator} key={rowID} />,
   selectedSectionColor: 'white',
 };
 
