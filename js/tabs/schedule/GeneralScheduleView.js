@@ -24,15 +24,11 @@
 'use strict';
 
 var EmptySchedule = require('./EmptySchedule');
-var F8SegmentedControl = require('F8SegmentedControl');
-var F8SessionCell = require('F8SessionCell');
 var FilterHeader = require('./FilterHeader');
 var FilterSessions = require('./filterSessions');
 var ListContainer = require('ListContainer');
 var Navigator = require('Navigator');
 var React = require('React');
-var SessionsSectionHeader = require('./SessionsSectionHeader');
-var View = require('View');
 var Platform = require('Platform');
 var F8DrawerLayout = require('F8DrawerLayout');
 var ScheduleListView = require('./ScheduleListView');
@@ -161,7 +157,7 @@ function select(store) {
 function actions(dispatch) {
   return {
     switchDay: (day) => dispatch(switchDay(day)),
-  }
+  };
 }
 
 module.exports = connect(select, actions)(GeneralScheduleView);

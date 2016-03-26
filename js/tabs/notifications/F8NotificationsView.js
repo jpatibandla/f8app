@@ -27,12 +27,12 @@
 var EmptySchedule = require('../schedule/EmptySchedule');
 var Linking = require('Linking');
 var PushNUXModal = require('./PushNUXModal');
+var PureListView = require('../../common/PureListView');
 var React = require('React');
 var Platform = require('Platform');
 var ActionSheetIOS = require('ActionSheetIOS');
 var ListContainer = require('ListContainer');
 var NotificationCell = require('./NotificationCell');
-var TurnOnPushNotificationsCell = require('./TurnOnPushNotificationsCell');
 var RateSessionsCell = require('./RateSessionsCell');
 var allNotifications = require('./allNotifications');
 var View = require('View');
@@ -43,8 +43,6 @@ var {
   skipPushNotifications,
   TEST_MENU,
 } = require('../../actions');
-
-const RATE_SESSIONS_CELL = {};
 
 var { createSelector } = require('reselect');
 
@@ -57,9 +55,7 @@ const data = createSelector(
     if (surveys.length > 0) {
       extra.push({surveysCount: surveys.length});
     }
-    return {
-      'Notifications': [...extra, ...notifications],
-    };
+    return [...extra, ...notifications];
   }
 );
 
@@ -94,17 +90,19 @@ class F8NotificationsView extends React.Component {
           title="Notifications"
           backgroundImage={require('./img/notifications-background.png')}
           backgroundColor={'#E78196'}
-          data={this.props.notifications}
-          renderEmptyList={this.renderEmptyList}
-          renderRow={this.renderRow}
-          {...this.renderTestItems()}
-        />
+          {...this.renderTestItems()}>
+          <PureListView
+            data={this.props.notifications}
+            renderEmptyList={this.renderEmptyList}
+            renderRow={this.renderRow}
+          />
+        </ListContainer>
         {modal}
       </View>
     );
   }
 
-  renderRow(all, notification) {
+  renderRow(notification) {
     if (notification.surveysCount) {
       return (
         <RateSessionsCell
