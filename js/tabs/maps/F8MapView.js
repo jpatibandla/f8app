@@ -26,7 +26,7 @@
 
 var ActionSheetIOS = require('ActionSheetIOS');
 var F8Button = require('F8Button');
-var F8SegmentedControl = require('F8SegmentedControl');
+var PureListView = require('../../common/PureListView');
 var Linking = require('Linking');
 var Platform = require('Platform');
 var ListContainer = require('ListContainer');
@@ -38,73 +38,40 @@ var { connect } = require('react-redux');
 
 var VENUE_ADDRESS = '2 Marina Blvd, San Francisco, CA 94123';
 
-function select(store) {
-  return {
-    store,
-    maps: {
-      'Overview': {},
-      'Developer Garage': {},
-    }
-  };
-}
-
 class F8MapView extends React.Component {
   constructor() {
     super();
 
-    this.state = { page: 0 };
-
     this.handleGetDirections = this.handleGetDirections.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
-    this.renderStickyHeader = this.renderStickyHeader.bind(this);
     this.openMaps = this.openMaps.bind(this);
-    this.renderEmptyList = this.renderEmptyList.bind(this);
   }
 
   render() {
-    const directionsButton = this.state.page === 0 && (
-      <F8Button
-        type="secondary"
-        icon={require('./img/directions.png')}
-        caption="Directions to Fort Mason Center"
-        onPress={this.handleGetDirections}
-        style={styles.directionsButton}
-      />
-    );
+    const {map1, map2} = this.props;
     return (
       <View style={styles.container}>
         <ListContainer
           title="Maps"
           backgroundImage={require('./img/maps-background.png')}
-          backgroundShift={this.state.page / 2}
-          backgroundColor={'#9176D2'}
-          data={this.props.maps}
-          renderEmptyList={this.renderEmptyList}>
+          backgroundColor={'#9176D2'}>
+          <PureListView
+            title={map1.name}
+            renderEmptyList={() => <MapView map={map1} />}
+          />
+          <PureListView
+            title={map2.name}
+            renderEmptyList={() => <MapView map={map2} />}
+          />
         </ListContainer>
-        {directionsButton}
+        <F8Button
+          type="secondary"
+          icon={require('./img/directions.png')}
+          caption="Directions to Fort Mason Center"
+          onPress={this.handleGetDirections}
+          style={styles.directionsButton}
+        />
       </View>
     );
-  }
-
-  renderEmptyList(segment) {
-    const map = this.props.store.maps.find((map) => map.name === segment);
-    LOG('RENDER ' + segment, map);
-    return <MapView map={map} />;
-  }
-
-  renderStickyHeader() {
-    return (
-      <F8SegmentedControl
-        values={['Overview', 'Developer Garage']}
-        selectedIndex={this.state.page}
-        selectionColor="white"
-        onChange={this.handlePageChange}
-      />
-    );
-  }
-
-  handlePageChange(page) {
-    this.setState({page});
   }
 
   handleGetDirections() {
@@ -165,5 +132,12 @@ var styles = StyleSheet.create({
     },
   },
 });
+
+function select(store) {
+  return {
+    map1: store.maps.find((map) => map.name === 'Overview'),
+    map2: store.maps.find((map) => map.name === 'Developer Garage'),
+  };
+}
 
 module.exports = connect(select)(F8MapView);
