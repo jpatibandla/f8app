@@ -24,7 +24,6 @@
 'use strict';
 
 const React = require('react-native');
-const StaticContainer = require('StaticContainer.react');
 const ViewPager = require('./ViewPager');
 
 type Props = {
@@ -45,11 +44,7 @@ class Carousel extends React.Component {
     for (let i = 0; i < count; i++) {
       let content = null;
       if (Math.abs(i - selectedIndex) < 2) {
-        content = (
-          <StaticContainer key={`s_${i}`}>
-            {renderCard(i)}
-          </StaticContainer>
-        );
+        content = renderCard(i);
       }
       cards.push(content);
     }
