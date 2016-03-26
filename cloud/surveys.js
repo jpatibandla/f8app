@@ -60,18 +60,28 @@ Parse.Cloud.define('submit_survey', function(request, response) {
 function toSurveys(emptyResults) {
   return emptyResults.map(function(emptyResult) {
     var survey = emptyResult.get('survey');
-    return {
-      id: emptyResult.id,
-      sessionId: survey.get('session').id,
-      questions: [{
+
+    var questions = [];
+    if (survey.get('q1')) {
+      questions.push({
         text: survey.get('q1'),
         lowLabel: 'Not at all',
         highLabel: 'Very useful',
-      }, {
+      });
+    }
+
+    if (survey.get('q2')) {
+      questions.push({
         text: survey.get('q2'),
         lowLabel: 'Not likely',
         highLabel: 'Very likely',
-      }]
+      });
     }
+
+    return {
+      id: emptyResult.id,
+      sessionId: survey.get('session').id,
+      questions: questions,
+    };
   });
 }
