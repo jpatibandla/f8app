@@ -44,6 +44,9 @@ var TouchableHighlight = require('TouchableHighlight');
 var View = require('View');
 var InviteFriendsButton = require('./InviteFriendsButton');
 var groupSessions = require('./groupSessions');
+var PureListView = require('../../common/PureListView');
+var ScheduleListView = require('./ScheduleListView');
+var FriendsListView = require('./FriendsListView');
 
 var { connect } = require('react-redux');
 
@@ -59,23 +62,8 @@ import type {State as User} from '../../reducers/user';
 import type {State as Schedule} from '../../reducers/schedule';
 import type {SessionsListData} from './groupSessions';
 
-const PAGE_FRIENDS = 2;
-
 var { createSelector } = require('reselect');
 
-const data = createSelector(
-  (store) => store.sessions,
-  (store) => store.schedule,
-  (store) => store.friendsSchedules,
-  (sessions, schedule, friends) => {
-    const sessionsInSchedule = FilterSessions.bySchedule(sessions, schedule);
-    return {
-      'Day 1': groupSessions(FilterSessions.byDay(sessionsInSchedule, 1)),
-      'Day 2': groupSessions(FilterSessions.byDay(sessionsInSchedule, 2)),
-      'Friends': groupFriends(friends),
-    };
-  }
-);
 
 type Props = {
   user: User;
@@ -95,15 +83,8 @@ class MyScheduleView extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { page: 0 };
-
-    // this.renderStickyHeader = this.renderStickyHeader.bind(this);
-    this.renderSectionHeader = this.renderSectionHeader.bind(this);
-    this.renderRow = this.renderRow.bind(this);
-    this.renderEmptyList = this.renderEmptyList.bind(this);
-    this.openSession = this.openSession.bind(this);
+    this.renderEmptySessionsList = this.renderEmptySessionsList.bind(this);
     this.openSharingSettings = this.openSharingSettings.bind(this);
-    this.selectDay = this.selectDay.bind(this);
   }
 
   render() {
@@ -124,42 +105,57 @@ class MyScheduleView extends React.Component {
         title="My F8"
         parallaxContent={profilePicture}
         backgroundImage={require('./img/my-f8-background.png')}
-        backgroundShift={this.state.page / 2}
         backgroundColor={'#A8D769'}
-        data={this.props.data}
-        renderStickyHeader={this.renderStickyHeader}
-        renderSectionHeader={this.renderSectionHeader}
-        renderRow={this.renderRow}
-        renderEmptyList={this.renderEmptyList}
-        rightItem={rightItem}
-      />
+        rightItem={rightItem}>
+        {this.renderContent()}
+      </ListContainer>
     );
   }
 
-  renderEmptyList() {
+  renderContent() {
     if (!this.props.user.isLoggedIn) {
       return (
-        <EmptySchedule
-          key="login"
-          title="Log in to make a schedule."
-          text="You’ll be able to save sessions to your schedule to view or share later.">
-          <LoginButton source="My F8" />
-        </EmptySchedule>
-      );
+        <PureListView
+          renderEmptyList={this.renderNotLoggedIn}
+        />
+      )
     }
 
-    if (this.state.page === PAGE_FRIENDS) {
-      return (
-        <EmptySchedule
-          key="friends"
-          image={require('./img/no-friends-found.png')}
-          text={'Friends using the F8 app\nwill appear here.'}>
-          <InviteFriendsButton />
-        </EmptySchedule>
-      );
-    }
+    return [
+      <ScheduleListView
+        title="Day 1"
+        day={1}
+        sessions={this.props.sessions}
+        renderEmptyList={this.renderEmptySessionsList}
+        navigator={this.props.navigator}
+      />,
+      <ScheduleListView
+        title="Day 2"
+        day={2}
+        sessions={this.props.sessions}
+        renderEmptyList={this.renderEmptySessionsList}
+        navigator={this.props.navigator}
+      />,
+      <FriendsListView
+        title="Friends"
+        friends={this.props.friends}
+        navigator={this.props.navigator}
+      />,
+    ];
+  }
 
-    var day = this.state.page + 1;
+  renderNotLoggedIn() {
+    return (
+      <EmptySchedule
+        key="login"
+        title="Log in to make a schedule."
+        text="You’ll be able to save sessions to your schedule to view or share later.">
+        <LoginButton source="My F8" />
+      </EmptySchedule>
+    );
+  }
+
+  renderEmptySessionsList(day) {
     return (
       <EmptySchedule
         key="schedule"
@@ -173,52 +169,6 @@ class MyScheduleView extends React.Component {
     );
   }
 
-  // renderStickyHeader() {
-  //   if (!this.props.user.isLoggedIn) {
-  //     return null;
-  //   }
-  //   return (
-  //     <F8SegmentedControl
-  //       values={['Day 1', 'Day 2', 'Friends']}
-  //       selectedIndex={this.state.page}
-  //       selectionColor="white"
-  //       onChange={this.selectDay}
-  //     />
-  //   );
-  // }
-
-  renderSectionHeader(sectionData, sectionID) {
-    return <SessionsSectionHeader title={sectionID} />;
-  }
-
-  renderRow(all, row) {
-    if (row === 'invite') {
-      return <InviteFriendsButton style={styles.inviteFriendsButton} />;
-    }
-    if (row.schedule) {
-      return (
-        <FriendCell
-          friend={row}
-          onPress={() => this.props.navigator.push({friend: row})}
-        />
-      );
-    }
-    return (
-      <F8SessionCell
-        onPress={() => this.openSession(row, all)}
-        session={row}
-      />
-    );
-  }
-
-  openSession(session, allSessions) {
-    this.props.navigator.push({
-      session,
-      day: this.state.page + 1,
-      allSessions,
-    });
-  }
-
   openSharingSettings() {
     this.props.navigator.push({shareSettings: 1});
   }
@@ -228,19 +178,28 @@ class MyScheduleView extends React.Component {
       return;
     }
     this.setState({page});
-    if (page === PAGE_FRIENDS) {
-      this.props.loadFriendsSchedules();
-    }
+    // TODO: Load friends
+    // if (page === PAGE_FRIENDS) {
+    //   this.props.loadFriendsSchedules();
+    // }
   }
 }
+
+const data = createSelector(
+  (store) => store.sessions,
+  (store) => store.schedule,
+  (sessions, schedule) => FilterSessions.bySchedule(sessions, schedule),
+);
 
 function select(store) {
   return {
     user: store.user,
-    data: data(store),
-    sessions: store.sessions,
+    sessions: data(store),
     schedule: store.schedule,
-    friends: store.friendsSchedules,
+    // Only show friends who have something in their schedule
+    friends: store.friendsSchedules.filter(
+      (friend) => Object.keys(friend.schedule).length > 0
+    ),
   };
 }
 
@@ -254,27 +213,5 @@ function actions(dispatch) {
     loadFriendsSchedules: () => dispatch(loadFriendsSchedules()),
   };
 }
-
-function groupFriends(friends) {
-  const data = {};
-  friends.forEach((friend) => {
-    if (Object.keys(friend.schedule).length > 0) {
-      data[friend.id] = friend;
-    }
-  });
-  if (friends.length > 0) {
-    data['invite'] = 'invite';
-  }
-  return {
-    "See a friend's schedule": data,
-  };
-}
-
-var styles = StyleSheet.create({
-  inviteFriendsButton: {
-    margin: 10,
-    alignSelf: 'center',
-  }
-});
 
 module.exports = connect(select, actions)(MyScheduleView);

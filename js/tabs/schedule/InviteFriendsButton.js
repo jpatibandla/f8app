@@ -51,10 +51,6 @@ class InviteFriendsButton extends React.Component {
   }
 
   inviteFriends() {
-    LOG({
-      applinkUrl: this.props.appLinkURL,
-      previewImageUrl: this.props.appInvitePreviewImageURL,
-    });
     AppInviteDialog.show({
       applinkUrl: this.props.appLinkURL,
       previewImageUrl: this.props.appInvitePreviewImageURL,

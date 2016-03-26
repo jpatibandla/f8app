@@ -88,22 +88,16 @@ class PureListView extends React.Component {
     this.refs.listview.scrollTo(...args);
   }
 
-  renderFooter() {
-    const footer = this.props.renderFooter && this.props.renderFooter();
-
-    let emptyListView;
+  renderFooter(): ?ReactElement {
     if (this.state.dataSource.getRowCount() === 0) {
-      emptyListView = this.props.renderEmptyList && this.props.renderEmptyList();
+      return this.props.renderEmptyList && this.props.renderEmptyList();
     }
 
-    return (
-      <View>
-        {emptyListView}
-        {footer}
-      </View>
-    );
+    return this.props.renderFooter && this.props.renderFooter();
   }
 }
+
+PureListView.defaultProps = { data: [] };
 
 function cloneWithData(dataSource: ListView.DataSource, data: ?Data) {
   if (!data) {

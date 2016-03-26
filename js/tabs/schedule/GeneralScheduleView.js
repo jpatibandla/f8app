@@ -35,15 +35,13 @@ var SessionsSectionHeader = require('./SessionsSectionHeader');
 var View = require('View');
 var Platform = require('Platform');
 var F8DrawerLayout = require('F8DrawerLayout');
-var PureListView = require('../../common/PureListView');
+var ScheduleListView = require('./ScheduleListView');
 var FilterScreen = require('../../filter/FilterScreen');
-var groupSessions = require('./groupSessions');
 
 var { connect } = require('react-redux');
 var {switchDay} = require('../../actions');
 
 import type {Session} from '../../reducers/sessions';
-import type {SessionsListData} from './groupSessions';
 
 // TODO: Move from reselect to memoize?
 var { createSelector } = require('reselect');
@@ -51,10 +49,7 @@ var { createSelector } = require('reselect');
 const data = createSelector(
   (store) => store.sessions,
   (store) => store.filter,
-  (sessions, filter) => [
-    groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 1)),
-    groupSessions(FilterSessions.byDay(FilterSessions.byTopics(sessions, filter), 2)),
-  ],
+  (sessions, filter) => FilterSessions.byTopics(sessions, filter),
 );
 
 type Props = {
@@ -64,7 +59,6 @@ type Props = {
   navigator: Navigator;
   logOut: () => void;
   switchDay: (day: number) => void;
-  data: Array<SessionsListData>;
 };
 
 class GeneralScheduleView extends React.Component {
@@ -74,8 +68,6 @@ class GeneralScheduleView extends React.Component {
   constructor(props) {
     super(props);
 
-    this.renderSectionHeader = this.renderSectionHeader.bind(this);
-    this.renderRow = this.renderRow.bind(this);
     this.renderEmptyList = this.renderEmptyList.bind(this);
     this.switchDay = this.switchDay.bind(this);
     this.openFilterScreen = this.openFilterScreen.bind(this);
@@ -88,9 +80,11 @@ class GeneralScheduleView extends React.Component {
       title: 'Filter',
       onPress: this.openFilterScreen,
     };
+
     const filterHeader = Object.keys(this.props.filter).length > 0
       ? <FilterHeader />
       : null;
+
     const content = (
       <ListContainer
         title="Schedule"
@@ -99,22 +93,23 @@ class GeneralScheduleView extends React.Component {
         backgroundColor={'#5597B8'}
         stickyHeader={filterHeader}
         rightItem={filterItem}>
-        <PureListView
+        <ScheduleListView
           title="Day 1"
-          data={this.props.data[0]}
-          renderRow={(row) => this.renderRow(row, 1)}
-          renderEmptyList={() => this.renderEmptyList(1)}
-          renderSectionHeader={this.renderSectionHeader}
+          day={1}
+          sessions={this.props.sessions}
+          renderEmptyList={this.renderEmptyList}
+          navigator={this.props.navigator}
         />
-        <PureListView
+        <ScheduleListView
           title="Day 2"
-          data={this.props.data[1]}
-          renderRow={(row) => this.renderRow(row, 2)}
-          renderEmptyList={() => this.renderEmptyList(2)}
-          renderSectionHeader={this.renderSectionHeader}
+          day={2}
+          sessions={this.props.sessions}
+          renderEmptyList={this.renderEmptyList}
+          navigator={this.props.navigator}
         />
       </ListContainer>
     );
+
     if (Platform.OS === 'ios') {
       return content;
     }
@@ -142,21 +137,6 @@ class GeneralScheduleView extends React.Component {
     );
   }
 
-  renderSectionHeader(sectionData, sectionID) {
-    return <SessionsSectionHeader title={sectionID} />;
-  }
-
-  renderRow(session, day) {
-    return (
-      <F8SessionCell
-        onPress={() => this.props.navigator.push({
-          day, session, allSessions: this.props.data[day - 1],
-        })}
-        session={session}
-      />
-    );
-  }
-
   openFilterScreen() {
     if (Platform.OS === 'ios') {
       this.props.navigator.push({ filter: 123 });
@@ -174,7 +154,7 @@ function select(store) {
   return {
     day: store.navigation.day,
     filter: store.filter,
-    data: data(store),
+    sessions: data(store),
   };
 }
 
