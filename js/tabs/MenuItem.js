@@ -54,7 +54,7 @@ class MenuItem extends React.Component {
             {this.props.badge}
           </Text>
         </View>
-      )
+      );
     }
     return (
       <F8Touchable onPress={this.props.onPress}>
@@ -91,6 +91,7 @@ var styles = StyleSheet.create({
   badge: {
     backgroundColor: '#DC3883',
     paddingHorizontal: 10,
+    paddingVertical: 2,
     borderRadius: 10,
   },
   badgeText: {
