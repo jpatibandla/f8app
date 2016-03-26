@@ -98,11 +98,12 @@ class ListContainer extends React.Component {
     if (!leftItem && Platform.OS === 'android') {
       leftItem = {
         title: 'Menu',
-        icon: require('./img/hamburger.png'),
+        icon: this.context.hasUnreadNotifications
+          ? require('./img/hamburger-unread.png')
+          : require('./img/hamburger.png'),
         onPress: this.handleShowMenu,
       };
     }
-
 
     const segments = [];
     const content = React.Children.map(this.props.children, (child, idx) => {
@@ -284,6 +285,7 @@ ListContainer.defaultProps = {
 
 ListContainer.contextTypes = {
   openDrawer: React.PropTypes.func,
+  hasUnreadNotifications: React.PropTypes.number,
 };
 
 var styles = StyleSheet.create({

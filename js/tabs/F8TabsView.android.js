@@ -61,16 +61,18 @@ class F8TabsView extends React.Component {
 
     this.renderNavigationView = this.renderNavigationView.bind(this);
     this.openProfileSettings = this.openProfileSettings.bind(this);
+    this.openDrawer = this.openDrawer.bind(this);
   }
 
   getChildContext() {
     return {
-      openDrawer: () => this.refs.drawer.openDrawer(),
+      openDrawer: this.openDrawer,
+      hasUnreadNotifications: this.props.notificationsBadge > 0,
     };
   }
 
-  componentDidMount() {
-    // this.refs.drawer.openDrawer();
+  openDrawer() {
+    this.refs.drawer.openDrawer();
   }
 
   onTabSelect(tab: Tab) {
@@ -221,6 +223,7 @@ class F8TabsView extends React.Component {
 
 F8TabsView.childContextTypes = {
   openDrawer: React.PropTypes.func,
+  hasUnreadNotifications: React.PropTypes.number,
 };
 
 function select(store) {
