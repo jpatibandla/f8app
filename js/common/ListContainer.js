@@ -52,6 +52,7 @@ type Props = {
   extraItems?: Array<HeaderItem>;
   image: ?ReactElement;
   colors: Array<string>;
+  selectedSectionColor: string;
   curve: number;
   backgroundImage: number;
   backgroundShift: number;
@@ -120,7 +121,6 @@ class ListContainer extends React.Component {
       });
     });
 
-
     let {stickyHeader} = this.props;
     if (segments.length > 1) {
       // TODO: {/*selectionColor="#51CDDA"*/}
@@ -129,7 +129,7 @@ class ListContainer extends React.Component {
           <F8SegmentedControl
             values={segments}
             selectedIndex={this.state.idx}
-            selectionColor="white"
+            selectionColor={this.props.selectedSectionColor}
             onChange={(idx) => this.setState({idx})}
           />
           {stickyHeader}
@@ -279,6 +279,7 @@ class ListContainer extends React.Component {
 ListContainer.defaultProps = {
   renderRow: () => null,
   renderSeparator: (sectionID, rowID) => <View style={styles.separator} key={rowID} />,
+  selectedSectionColor: 'white',
 };
 
 ListContainer.contextTypes = {

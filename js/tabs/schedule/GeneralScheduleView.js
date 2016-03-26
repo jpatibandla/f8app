@@ -86,7 +86,8 @@ class GeneralScheduleView extends React.Component {
         title="Schedule"
         backgroundImage={require('./img/schedule-background.png')}
         backgroundShift={this.props.day - 1}
-        backgroundColor={'#5597B8'}
+        backgroundColor="#5597B8"
+        selectedSectionColor="#51CDDA"
         stickyHeader={filterHeader}
         rightItem={filterItem}>
         <ScheduleListView
