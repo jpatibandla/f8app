@@ -26,23 +26,15 @@
 const React = require('react-native');
 const {
   Text,
-  Image,
   View,
-  ScrollView,
-  LayoutAnimation,
-  TouchableOpacity,
   ToastAndroid,
   Platform,
 } = React;
-const Header = require('./Header');
 const StyleSheet = require('F8StyleSheet');
-const RatingQuestion = require('./RatingQuestion');
 const RatingCard = require('./RatingCard');
-const F8Button = require('F8Button');
 const F8Header = require('F8Header');
 const Carousel = require('../common/Carousel');
 const F8PageControl = require('F8PageControl');
-const F8CloseIcon = require('F8CloseIcon');
 const { connect } = require('react-redux');
 const { submitSurveyAnswers } = require('../actions');
 
@@ -111,6 +103,7 @@ class RatingScreen extends React.Component {
     const session = this.props.sessions.find((s) => s.id === survey.sessionId);
     return (
       <RatingCard
+        style={styles.card}
         session={session}
         questions={survey.questions}
         onSubmit={(answers) => this.submitAnswers(index, answers)}
@@ -171,11 +164,11 @@ var styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-  close: {
-    position: 'absolute',
-    padding: 10,
-    top: 10,
-    left: 0,
+  card: {
+    ios: {
+      borderRadius: 2,
+      marginHorizontal: 3,
+    },
   },
 });
 

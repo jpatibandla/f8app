@@ -25,6 +25,7 @@
 
 const React = require('react-native');
 const ViewPager = require('./ViewPager');
+const StyleSheet = require('F8StyleSheet');
 
 type Props = {
   count: number;
@@ -49,11 +50,21 @@ class Carousel extends React.Component {
       cards.push(content);
     }
     return (
-      <ViewPager {...this.props} bounces={true}>
+      <ViewPager style={styles.carousel} {...this.props} bounces={true}>
         {cards}
       </ViewPager>
     );
   }
 }
+
+var styles = StyleSheet.create({
+  carousel: {
+    ios: {
+      margin: 10,
+      overflow: 'visible',
+      backgroundColor: 'black',
+    },
+  }
+});
 
 module.exports = Carousel;

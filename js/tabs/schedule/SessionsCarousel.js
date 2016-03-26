@@ -25,7 +25,6 @@
 
 const Parse = require('parse/react-native');
 const {AppEventsLogger} = require('react-native-fbsdk');
-const StatusBarIOS = require('StatusBarIOS');
 const React = require('react-native');
 const F8SessionDetails = require('F8SessionDetails');
 const F8PageControl = require('F8PageControl');
@@ -41,7 +40,6 @@ const {loadFriendsSchedules, shareSession} = require('../../actions');
 const {
   Text,
   View,
-  TouchableOpacity,
   Navigator,
 } = React;
 
@@ -68,12 +66,11 @@ class SessionsCarusel extends React.Component {
     var flatSessionsList = [];
     var contexts: Array<Context> = [];
     var allSessions = this.props.allSessions;
-    console.log(allSessions.length);
     if (!allSessions) {
       const {session} = this.props;
       allSessions = {
         [formatTime(session.startTime)]: {[session.id]: session}
-      }
+      };
     }
 
     // TODO: Add test
@@ -112,7 +109,6 @@ class SessionsCarusel extends React.Component {
   }
 
   render() {
-    console.log(this.state.selectedIndex);
     var {rowIndex, sectionLength, sectionTitle} = this.state.contexts[this.state.selectedIndex];
     var rightItem;
     if (Platform.OS === 'android') {
@@ -146,7 +142,6 @@ class SessionsCarusel extends React.Component {
           </View>
         </F8Header>
         <Carousel
-          style={styles.carousel}
           count={this.state.count}
           selectedIndex={this.state.selectedIndex}
           onSelectedIndexChange={this.handleIndexChange}
@@ -240,12 +235,6 @@ var styles = StyleSheet.create({
       borderRadius: 2,
       marginHorizontal: 3,
     },
-  },
-  carousel: {
-    flex: 1,
-    margin: 10,
-    overflow: 'visible',
-    backgroundColor: 'black',
   },
 });
 

@@ -25,11 +25,8 @@
 
 const React = require('react-native');
 const {
-  Text,
-  Image,
   View,
   ScrollView,
-  LayoutAnimation,
 } = React;
 const StyleSheet = require('F8StyleSheet');
 const Header = require('./Header');
@@ -65,7 +62,7 @@ class RatingCard extends React.Component {
     ));
     const completed = Object.keys(this.state).length === this.props.questions.length;
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.style]}>
         <ScrollView>
           <Header session={this.props.session} />
           {questions}
@@ -90,10 +87,6 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    overflow: 'hidden',
-    ios: {
-      borderRadius: 2,
-    },
   },
   question: {
     padding: 40,
