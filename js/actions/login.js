@@ -31,6 +31,7 @@ const {Platform} = require('react-native');
 const Alert = require('Alert');
 const {restoreSchedule, loadFriendsSchedules} = require('./schedule');
 const {updateInstallation} = require('./installation');
+const {loadSurveys} = require('./surveys');
 
 import type { Action, ThunkAction, PromiseAction } from './types';
 
@@ -91,6 +92,7 @@ function logInWithFacebook(source: ?string): ThunkAction {
       (result) => {
         dispatch(result);
         dispatch(loadFriendsSchedules());
+        dispatch(loadSurveys());
       }
     );
     return login;
