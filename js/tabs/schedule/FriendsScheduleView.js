@@ -63,7 +63,7 @@ class FriendsScheduleView extends React.Component {
         title={`${firstName}'s Schedule`}
         parallaxContent={<ProfilePicture userID={this.props.friend.id} size={100} />}
         backgroundImage={require('./img/schedule-background.png')}
-        backgroundColor={'#A8D769'}
+        backgroundColor={'#5597B8'}
         leftItem={backItem}>
         <ScheduleListView
           title="Day 1"
