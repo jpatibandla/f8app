@@ -26,8 +26,6 @@
 var ListView = require('ListView');
 var Dimensions = require('Dimensions');
 var React = require('React');
-var View = require('View');
-var shallowEqual = require('fbjs/lib/shallowEqual');
 
 type Rows = Array<Object>;
 type RowsAndSections = {
@@ -40,10 +38,9 @@ type RenderElement = () => ?ReactElement;
 type Props = {
   data: ?Data;
   renderEmptyList?: ?RenderElement;
-  minContentHeight: ?number;
+  minContentHeight: number;
+  contentInset: { top: number; bottom: number; };
 };
-
-const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class PureListView extends React.Component {
   props: Props;
@@ -58,10 +55,12 @@ class PureListView extends React.Component {
     });
 
     this.state = {
+      contentHeight: 0,
       dataSource: cloneWithData(dataSource, props.data),
     };
 
     this.renderFooter = this.renderFooter.bind(this);
+    this.onContentSizeChange = this.onContentSizeChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -73,18 +72,28 @@ class PureListView extends React.Component {
   }
 
   render() {
-    // contentContainerStyle={{minHeight: SCREEN_HEIGHT}}
+    const {contentInset} = this.props;
+    const bottom = contentInset.bottom +
+      Math.max(0, this.props.minContentHeight - this.state.contentHeight);
     return (
       <ListView
         {...this.props}
         ref="listview"
         dataSource={this.state.dataSource}
         renderFooter={this.renderFooter}
+        contentInset={{bottom, top: contentInset.top}}
+        onContentSizeChange={this.onContentSizeChange}
       />
     );
   }
 
-  scrollTo(...args) {
+  onContentSizeChange(contentWidth: number, contentHeight: number) {
+    if (contentHeight !== this.state.contentHeight) {
+      this.setState({contentHeight});
+    }
+  }
+
+  scrollTo(...args: Array<any>) {
     this.refs.listview.scrollTo(...args);
   }
 
@@ -97,7 +106,11 @@ class PureListView extends React.Component {
   }
 }
 
-PureListView.defaultProps = { data: [] };
+PureListView.defaultProps = {
+  data: [],
+  contentInset: { top: 0, bottom: 0 },
+  minContentHeight: Dimensions.get('window').height,
+};
 
 function cloneWithData(dataSource: ListView.DataSource, data: ?Data) {
   if (!data) {
