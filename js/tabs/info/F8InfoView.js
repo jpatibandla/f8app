@@ -27,6 +27,8 @@
 var CommonQuestions = require('./CommonQuestions');
 var LinksList = require('./LinksList');
 var React = require('React');
+var View = require('View');
+var PureListView = require('../../common/PureListView');
 var ListContainer = require('ListContainer');
 var WiFiDetails = require('./WiFiDetails');
 
@@ -41,7 +43,7 @@ const POLICIES_LINKS = [{
 }, {
   title: 'Code of Conduct',
   url: 'https://www.fbf8.com/code-of-conduct',
-}]
+}];
 
 class F8InfoView extends React.Component {
   render() {
@@ -53,16 +55,21 @@ class F8InfoView extends React.Component {
     return (
       <ListContainer
         title="Information"
-        data={{}}
         backgroundImage={require('./img/info-background.png')}
         backgroundColor={'#47BFBF'}>
-        <WiFiDetails
-          network={this.props.config.wifiNetwork}
-          password={this.props.config.wifiPassword}
+        <PureListView
+          renderEmptyList={() => (
+            <View>
+              <WiFiDetails
+                network={this.props.config.wifiNetwork}
+                password={this.props.config.wifiPassword}
+              />
+              <CommonQuestions faqs={this.props.faqs} />
+              <LinksList title="Facebook pages" links={pages} />
+              <LinksList title="Facebook policies" links={POLICIES_LINKS} />
+            </View>
+          )}
         />
-        <CommonQuestions faqs={this.props.faqs} />
-        <LinksList title="Facebook pages" links={pages} />
-        <LinksList title="Facebook policies" links={POLICIES_LINKS} />
       </ListContainer>
     );
   }
