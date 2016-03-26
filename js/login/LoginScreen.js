@@ -25,7 +25,6 @@
 
 var Animated = require('Animated');
 var Dimensions = require('Dimensions');
-var F8Button = require('F8Button');
 var F8Colors = require('F8Colors');
 var Image = require('Image');
 var React = require('React');
@@ -39,25 +38,17 @@ var TouchableOpacity = require('TouchableOpacity');
 var { skipLogin } = require('../actions');
 var { connect } = require('react-redux');
 
-function Section({anim, shift, children}) {
-  return (
-    <Animated.View style={[styes.section]}>
-      {children}
-    </Animated.View>
-  );
-}
-
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      anim: new Animated.Value(0.0),
+      anim: new Animated.Value(0),
     };
   }
 
   componentDidMount() {
     StatusBarIOS && StatusBarIOS.setStyle('default');
-    Animated.timing(this.state.anim, {toValue: 1.0, duration: 2000}).start();
+    Animated.timing(this.state.anim, {toValue: 3000, duration: 3000}).start();
   }
 
   render() {
@@ -69,7 +60,7 @@ class LoginScreen extends React.Component {
           style={styles.skip}
           onPress={() => this.props.dispatch(skipLogin())}>
           <Animated.Image
-            style={this.fadeIn(0.8)}
+            style={this.fadeIn(2800)}
             source={require('./img/x.png')}
           />
         </TouchableOpacity>
@@ -80,20 +71,20 @@ class LoginScreen extends React.Component {
           />
         </View>
         <View style={styles.section}>
-          <Animated.Text style={[styles.h1, this.fadeIn(0.2, -10)]}>
+          <Animated.Text style={[styles.h1, this.fadeIn(700, -20)]}>
             code to
           </Animated.Text>
-          <Animated.Text style={[styles.h1, {marginTop: -30}, this.fadeIn(0.2, 10)]}>
+          <Animated.Text style={[styles.h1, {marginTop: -30}, this.fadeIn(700, 20)]}>
             connect
           </Animated.Text>
-          <Animated.Text style={[styles.h2, this.fadeIn(0.3, 10)]}>
+          <Animated.Text style={[styles.h2, this.fadeIn(1000, 10)]}>
             April 12 + 13 / Fort Mason Center
           </Animated.Text>
-          <Animated.Text style={[styles.h3, this.fadeIn(0.35, 10)]}>
+          <Animated.Text style={[styles.h3, this.fadeIn(1200, 10)]}>
             SAN FRANCISCO, CALIFORNIA
           </Animated.Text>
         </View>
-        <Animated.View style={[styles.section, styles.last, this.fadeIn(0.6, 20)]}>
+        <Animated.View style={[styles.section, styles.last, this.fadeIn(2500, 20)]}>
           <Text style={styles.loginComment}>
             Use Facebook to find your friends at F8.
           </Text>
@@ -107,18 +98,18 @@ class LoginScreen extends React.Component {
     const {anim} = this.state;
     return {
       opacity: anim.interpolate({
-        inputRange: [delay, delay + 0.3],
+        inputRange: [delay, Math.min(delay + 500, 3000)],
         outputRange: [0, 1],
         extrapolate: 'clamp',
       }),
       transform: [{
         translateY: anim.interpolate({
-          inputRange: [delay, delay + 0.3],
+          inputRange: [delay, Math.min(delay + 500, 3000)],
           outputRange: [from, 0],
           extrapolate: 'clamp',
         }),
       }],
-    }
+    };
   }
 }
 
