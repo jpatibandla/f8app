@@ -214,14 +214,15 @@ class ListContainer extends React.Component {
     if (idx !== this.state.idx) {
       return;
     }
+    let y = 0;
     if (Platform.OS === 'ios') {
       this.state.anim.setValue(e.nativeEvent.contentOffset.y);
+      const height = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
+      y = Math.min(e.nativeEvent.contentOffset.y, height);
     }
-    const height = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
-    const y = Math.min(e.nativeEvent.contentOffset.y, height);
     this._refs.forEach((ref, ii) => {
-      if (ii != idx && ref) {
-        ref.scrollTo({y, animated: false });
+      if (ii !== idx && ref) {
+        ref.scrollTo({y, animated: false});
       }
     });
 
