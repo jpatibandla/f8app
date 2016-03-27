@@ -24,7 +24,6 @@
 
 'use strict';
 
-var F8Colors = require('F8Colors');
 var Image = require('Image');
 var LinearGradient = require('react-native-linear-gradient');
 var React = require('React');
@@ -37,6 +36,7 @@ var Animated = require('Animated');
 type Props = {
   isAdded: boolean;
   onPress: () => void;
+  addedImageSource?: number;
   style: any;
 };
 
@@ -116,7 +116,7 @@ class AddToScheduleButton extends React.Component {
           <View style={{flex: 1}}>
             <View style={styles.content} collapsable={false}>
               <Animated.Image
-                source={require('./img/added.png')}
+                source={this.props.addedImageSource || require('./img/added.png')}
                 style={[styles.icon, addedOpacityImage]}
               />
               <Animated.Text style={[styles.caption, addedOpacity]}>

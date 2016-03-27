@@ -25,16 +25,13 @@
 
 'use strict';
 
-var ActionSheetIOS = require('ActionSheetIOS');
 var Animated = require('Animated');
 var F8Colors = require('F8Colors');
 var F8FriendGoing = require('F8FriendGoing');
 var F8SpeakerProfile = require('F8SpeakerProfile');
-var F8TagView = require('F8TagView');
 var Image = require('Image');
 var LinearGradient = require('react-native-linear-gradient');
 var MapView = require('../../common/MapView');
-var Parse = require('parse/react-native');
 var PixelRatio = require('PixelRatio');
 var React = require('React');
 var ScrollView = require('ScrollView');
@@ -46,9 +43,8 @@ var View = require('View');
 var AddToScheduleButton = require('./AddToScheduleButton');
 
 var formatDuration = require('./formatDuration');
-var logError = require('logError');
 var {connect} = require('react-redux');
-var {addToSchedule, removeFromScheduleWithPrompt, shareSession} = require('../../actions');
+var {addToSchedule, removeFromScheduleWithPrompt} = require('../../actions');
 
 var F8SessionDetails = React.createClass({
   mixins: [Subscribable.Mixin],
@@ -95,7 +91,7 @@ var F8SessionDetails = React.createClass({
     }
 
     var locationColor = F8Colors.colorForLocation(this.props.session.location);
-    var locationTitle = this.props.session.location && this.props.session.location.toUpperCase()
+    var locationTitle = this.props.session.location && this.props.session.location.toUpperCase();
     var location = (
       <Text style={[styles.location, {color: locationColor}]}>
         {locationTitle}
@@ -105,6 +101,9 @@ var F8SessionDetails = React.createClass({
         </Text>
       </Text>
     );
+
+    var title = this.props.session.title || '';
+    var isReactTalk = title.indexOf('React') > -1;
 
     return (
       <View style={[styles.container, this.props.style]}>
@@ -116,7 +115,7 @@ var F8SessionDetails = React.createClass({
           automaticallyAdjustContentInsets={false}>
           {location}
           <Text style={styles.title}>
-            {this.props.session.title}
+            {title}
           </Text>
           <Text style={styles.description}>
             {this.props.session.description}
@@ -139,6 +138,7 @@ var F8SessionDetails = React.createClass({
         </ScrollView>
         <View style={styles.actions}>
           <AddToScheduleButton
+            addedImageSource={isReactTalk && require('./img/added-react.png')}
             isAdded={this.props.isAddedToSchedule}
             onPress={this.toggleAdded}
           />
@@ -154,7 +154,7 @@ var F8SessionDetails = React.createClass({
           }
         ]}>
           <Text numberOfLines={1} style={styles.miniTitle}>
-            {this.props.session.title}
+            {title}
           </Text>
           {location}
         </Animated.View>
