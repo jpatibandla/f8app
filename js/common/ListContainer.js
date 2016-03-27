@@ -26,6 +26,7 @@
 'use strict';
 
 var Animated = require('Animated');
+var NativeModules = require('NativeModules');
 var Dimensions = require('Dimensions');
 var F8Header = require('F8Header');
 var F8SegmentedControl = require('F8SegmentedControl');
@@ -57,6 +58,7 @@ const EMPTY_CELL_HEIGHT = Dimensions.get('window').height > 600 ? 200 : 150;
 class ListContainer extends React.Component {
   props: Props;
   _refs: Array<any>;
+  _pinned: any;
 
   constructor(props: Props) {
     super(props);
@@ -235,23 +237,53 @@ class ListContainer extends React.Component {
       return;
     }
     var opacity = this.state.stickyHeaderHeight === 0 ? 0 : 1;
-    var distance = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
-    var translateY = this.state.anim.interpolate({
-      inputRange: [0, distance],
-      outputRange: [distance, 0],
-      extrapolateRight: 'clamp',
-    });
+    var transform;
+
+    // If native pinning is not available, fallback to Animated
+    if (!NativeModules.F8Scrolling) {
+      var distance = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
+      var translateY = 0; this.state.anim.interpolate({
+        inputRange: [0, distance],
+        outputRange: [distance, 0],
+        extrapolateRight: 'clamp',
+      });
+      transform = [{translateY}];
+    }
+
     return (
       <Animated.View
+        ref={(ref) => this._pinned = ref}
         onLayout={this.handleStickyHeaderLayout}
-        style={[styles.stickyHeader, {opacity}, {transform: [{translateY}]}]}>
+        style={[styles.stickyHeader, {opacity}, {transform}]}>
         {stickyHeader}
       </Animated.View>
     );
   }
 
-  handleStickyHeaderLayout({nativeEvent: { layout }}: any) {
+  handleStickyHeaderLayout({nativeEvent: { layout, target }}: any) {
     this.setState({stickyHeaderHeight: layout.height});
+  }
+
+  componentDidUpdate(prevProps: Props, prevState) {
+    if (!NativeModules.F8Scrolling) {
+      return;
+    }
+
+    if (this.state.idx !== prevState.idx ||
+        this.state.stickyHeaderHeight !== prevState.stickyHeaderHeight) {
+      var distance = EMPTY_CELL_HEIGHT - this.state.stickyHeaderHeight;
+
+      const oldScrollViewTag = React.findNodeHandle(
+        this._refs[prevState.idx].getScrollResponder()
+      );
+      const newScrollViewTag = React.findNodeHandle(
+        this._refs[this.state.idx].getScrollResponder()
+      );
+      const pinnedViewTag = React.findNodeHandle(this._pinned);
+
+      NativeModules.F8Scrolling.unpin(oldScrollViewTag);
+      NativeModules.F8Scrolling.pin(newScrollViewTag, pinnedViewTag, distance);
+    }
   }
 
   handleShowMenu() {

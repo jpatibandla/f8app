@@ -106,6 +106,10 @@ class FriendsListView extends React.Component {
   scrollTo(...args: Array<any>) {
     this._innerRef && this._innerRef.scrollTo(...args);
   }
+
+  getScrollResponder(): any {
+    return this._innerRef && this._innerRef.getScrollResponder();
+  }
 }
 
 module.exports = FriendsListView;

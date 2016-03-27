@@ -97,6 +97,10 @@ class PureListView extends React.Component {
     this.refs.listview.scrollTo(...args);
   }
 
+  getScrollResponder(): any {
+    return this.refs.listview.getScrollResponder();
+  }
+
   renderFooter(): ?ReactElement {
     if (this.state.dataSource.getRowCount() === 0) {
       return this.props.renderEmptyList && this.props.renderEmptyList();

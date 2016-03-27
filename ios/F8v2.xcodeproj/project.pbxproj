@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002BD47E1CA7399D00E80F7A /* F8Scrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 002BD47D1CA7399D00E80F7A /* F8Scrolling.m */; };
 		0086BC3A1C90DDE500EC8D24 /* Splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0086BC391C90DDE500EC8D24 /* Splash@2x.png */; };
 		008F20481C7EC19C00D6981E /* Graphik-Regular-App.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 008F20451C7EC17900D6981E /* Graphik-Regular-App.ttf */; };
 		008F20491C7EC19C00D6981E /* Graphik-Semibold-App.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 008F20461C7EC17900D6981E /* Graphik-Semibold-App.ttf */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		002BD47C1CA7399D00E80F7A /* F8Scrolling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = F8Scrolling.h; sourceTree = "<group>"; };
+		002BD47D1CA7399D00E80F7A /* F8Scrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = F8Scrolling.m; sourceTree = "<group>"; };
 		0086BC391C90DDE500EC8D24 /* Splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Splash@2x.png"; sourceTree = "<group>"; };
 		008F20451C7EC17900D6981E /* Graphik-Regular-App.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Graphik-Regular-App.ttf"; sourceTree = "<group>"; };
 		008F20461C7EC17900D6981E /* Graphik-Semibold-App.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Graphik-Semibold-App.ttf"; sourceTree = "<group>"; };
@@ -113,6 +116,8 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				00AE9D3B1C44464400514148 /* Default-568h@2x.png */,
+				002BD47C1CA7399D00E80F7A /* F8Scrolling.h */,
+				002BD47D1CA7399D00E80F7A /* F8Scrolling.m */,
 			);
 			name = F8v2;
 			sourceTree = "<group>";
@@ -364,6 +369,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				002BD47E1CA7399D00E80F7A /* F8Scrolling.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
