@@ -25,13 +25,13 @@
 
 var Clipboard = require('Clipboard');
 var F8Button = require('F8Button');
+var ToastAndroid = require('ToastAndroid');
+var Platform = require('Platform');
 var ItemsWithSeparator = require('../../common/ItemsWithSeparator');
-var PixelRatio = require('PixelRatio');
 var React = require('React');
 var Section = require('./Section');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
-var TouchableOpacity = require('TouchableOpacity');
 var View = require('View');
 var F8Colors = require('F8Colors');
 
@@ -69,8 +69,12 @@ class WiFiDetails extends React.Component {
 
   handleCopy() {
     Clipboard.setString(this.props.password);
-    this.setState({copied: true});
-    setTimeout(() => this.setState({copied: false}), 800);
+    if (Platform.OS === 'android') {
+      ToastAndroid.show('Copied!', ToastAndroid.SHORT);
+    } else {
+      this.setState({copied: true});
+      setTimeout(() => this.setState({copied: false}), 800);
+    }
   }
 }
 
