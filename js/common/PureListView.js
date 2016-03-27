@@ -25,7 +25,10 @@
 
 var ListView = require('ListView');
 var Dimensions = require('Dimensions');
+var StyleSheet = require('StyleSheet');
 var React = require('React');
+var View = require('View');
+var shallowEqual = require('fbjs/lib/shallowEqual');
 
 type Rows = Array<Object>;
 type RowsAndSections = {
@@ -113,7 +116,9 @@ class PureListView extends React.Component {
 PureListView.defaultProps = {
   data: [],
   contentInset: { top: 0, bottom: 0 },
-  minContentHeight: Dimensions.get('window').height,
+  // TODO: This has to be scrollview height + fake header
+  minContentHeight: Dimensions.get('window').height + 20,
+  renderSeparator: (sectionID, rowID) => <View style={styles.separator} key={rowID} />,
 };
 
 function cloneWithData(dataSource: ListView.DataSource, data: ?Data) {
@@ -125,5 +130,12 @@ function cloneWithData(dataSource: ListView.DataSource, data: ?Data) {
   }
   return dataSource.cloneWithRowsAndSections(data);
 }
+
+var styles = StyleSheet.create({
+  separator: {
+    backgroundColor: '#eeeeee',
+    height: 1,
+  },
+});
 
 module.exports = PureListView;

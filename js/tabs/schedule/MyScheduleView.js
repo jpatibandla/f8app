@@ -118,7 +118,7 @@ class MyScheduleView extends React.Component {
         <PureListView
           renderEmptyList={this.renderNotLoggedIn}
         />
-      )
+      );
     }
 
     return [

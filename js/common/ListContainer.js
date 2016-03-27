@@ -70,9 +70,9 @@ class ListContainer extends React.Component {
     };
 
     this.renderFakeHeader = this.renderFakeHeader.bind(this);
-    this.renderFooter = this.renderFooter.bind(this);
     this.handleStickyHeaderLayout = this.handleStickyHeaderLayout.bind(this);
     this.handleShowMenu = this.handleShowMenu.bind(this);
+    this.handleSelectDay = this.handleSelectDay.bind(this);
     this._refs = [];
   }
 
@@ -101,20 +101,18 @@ class ListContainer extends React.Component {
         automaticallyAdjustContentInsets: false,
         renderHeader: this.renderFakeHeader,
         scrollsToTop: idx === this.state.idx,
-        renderSeparator: (sectionID, rowID) => <View style={styles.separator} key={rowID} />,
       });
     });
 
     let {stickyHeader} = this.props;
     if (segments.length > 1) {
-      // TODO: {/*selectionColor="#51CDDA"*/}
       stickyHeader = (
         <View>
           <F8SegmentedControl
             values={segments}
             selectedIndex={this.state.idx}
             selectionColor={this.props.selectedSectionColor}
-            onChange={(idx) => this.setState({idx})}
+            onChange={this.handleSelectDay}
           />
           {stickyHeader}
         </View>
@@ -220,12 +218,6 @@ class ListContainer extends React.Component {
     }
   }
 
-  renderFooter(): ?ReactElement {
-    if (React.Children.count(this.props.children) > 0) {
-      return this.props.children;
-    }
-  }
-
   renderFixedStickyHeader(stickyHeader: ?ReactElement) {
     return Platform.OS === 'ios'
       ? <View style={{height: this.state.stickyHeaderHeight}} />
@@ -286,6 +278,12 @@ class ListContainer extends React.Component {
     }
   }
 
+  handleSelectDay(idx) {
+    if (this.state.idx !== idx) {
+      this.setState({idx});
+    }
+  }
+
   handleShowMenu() {
     this.context.openDrawer();
   }
@@ -339,10 +337,6 @@ var styles = StyleSheet.create({
     top: F8Header.height,
     left: 0,
     right: 0,
-  },
-  separator: {
-    backgroundColor: '#eeeeee',
-    height: 1,
   },
 });
 

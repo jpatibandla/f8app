@@ -27,10 +27,8 @@
 
 var Animated = require('Animated');
 var resolveAssetSource = require('resolveAssetSource');
-var TouchableOpacity = require('TouchableOpacity');
 var React = require('React');
 var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
 var View = require('View');
 var Image = require('Image');
 var Dimensions = require('Dimensions');
@@ -95,7 +93,7 @@ class ParallaxBackground extends React.Component {
       inputRange: [0, 1],
       outputRange: [0, SCREEN_WIDTH - width],
       extrapolate: 'clamp',
-    })
+    });
 
     const length = maxHeight - minHeight;
     const translateY = offset.interpolate({
@@ -149,7 +147,6 @@ class ParallaxBackground extends React.Component {
 // TODO: Remove this magic numbers
 ParallaxBackground.HEIGHT = HEIGHT;
 
-var STATUS_BAR_HEIGHT = 20;
 var HEADER_HEIGHT = HEIGHT + 156;
 
 var styles = StyleSheet.create({
