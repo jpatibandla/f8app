@@ -84,8 +84,9 @@ class GeneralScheduleView extends React.Component {
     const content = (
       <ListContainer
         title="Schedule"
+        selectedSegment={this.props.day - 1}
+        onSegmentChange={this.switchDay}
         backgroundImage={require('./img/schedule-background.png')}
-        backgroundShift={this.props.day - 1}
         backgroundColor="#5597B8"
         selectedSectionColor="#51CDDA"
         stickyHeader={filterHeader}

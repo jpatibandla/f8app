@@ -45,11 +45,13 @@ type Props = {
   leftItem?: HeaderItem;
   rightItem?: HeaderItem;
   extraItems?: Array<HeaderItem>;
+  selectedSegment?: number;
   selectedSectionColor: string;
   backgroundImage: number;
   backgroundColor: string;
   parallaxContent: ?ReactElement;
   stickyHeader?: ?ReactElement;
+  onSegmentChange?: (segment: number) => void;
   children: any;
 };
 
@@ -72,7 +74,7 @@ class ListContainer extends React.Component {
     this.renderFakeHeader = this.renderFakeHeader.bind(this);
     this.handleStickyHeaderLayout = this.handleStickyHeaderLayout.bind(this);
     this.handleShowMenu = this.handleShowMenu.bind(this);
-    this.handleSelectDay = this.handleSelectDay.bind(this);
+    this.handleSelectSegment = this.handleSelectSegment.bind(this);
     this._refs = [];
   }
 
@@ -112,7 +114,7 @@ class ListContainer extends React.Component {
             values={segments}
             selectedIndex={this.state.idx}
             selectionColor={this.props.selectedSectionColor}
-            onChange={this.handleSelectDay}
+            onChange={this.handleSelectSegment}
           />
           {stickyHeader}
         </View>
@@ -147,7 +149,7 @@ class ListContainer extends React.Component {
         <ViewPager
           count={segments.length}
           selectedIndex={this.state.idx}
-          onSelectedIndexChange={(idx) => { this.setState({idx}); }}>
+          onSelectedIndexChange={this.handleSelectSegment}>
           {content}
         </ViewPager>
         {this.renderFloatingStickyHeader(stickyHeader)}
@@ -256,6 +258,13 @@ class ListContainer extends React.Component {
     this.setState({stickyHeaderHeight: layout.height});
   }
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (typeof nextProps.selectedSegment === 'number' &&
+        nextProps.selectedSegment !== this.state.idx) {
+      this.setState({idx: nextProps.selectedSegment});
+    }
+  }
+
   componentDidUpdate(prevProps: Props, prevState) {
     if (!NativeModules.F8Scrolling) {
       return;
@@ -278,9 +287,10 @@ class ListContainer extends React.Component {
     }
   }
 
-  handleSelectDay(idx) {
+  handleSelectSegment(idx: number) {
     if (this.state.idx !== idx) {
-      this.setState({idx});
+      const {onSegmentChange} = this.props;
+      this.setState({idx}, () => onSegmentChange && onSegmentChange(idx));
     }
   }
 

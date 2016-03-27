@@ -24,26 +24,13 @@
 'use strict';
 
 var EmptySchedule = require('./EmptySchedule');
-var F8Colors = require('F8Colors');
 var F8Button = require('F8Button');
-var F8SegmentedControl = require('F8SegmentedControl');
-var F8SessionCell = require('F8SessionCell');
 var FilterSessions = require('./filterSessions');
-var FriendCell = require('./FriendCell');
-var Image = require('Image');
 var ListContainer = require('ListContainer');
 var LoginButton = require('../../common/LoginButton');
 var Navigator = require('Navigator');
-var Platform = require('Platform');
 var ProfilePicture = require('../../common/ProfilePicture');
 var React = require('React');
-var SessionsSectionHeader = require('./SessionsSectionHeader');
-var StyleSheet = require('StyleSheet');
-var { Text } = require('F8Text');
-var TouchableHighlight = require('TouchableHighlight');
-var View = require('View');
-var InviteFriendsButton = require('./InviteFriendsButton');
-var groupSessions = require('./groupSessions');
 var PureListView = require('../../common/PureListView');
 var ScheduleListView = require('./ScheduleListView');
 var FriendsListView = require('./FriendsListView');
@@ -58,9 +45,9 @@ var {
 } = require('../../actions');
 
 import type {Session} from '../../reducers/sessions';
+import type {FriendsSchedule} from '../../reducers/friendsSchedules';
 import type {State as User} from '../../reducers/user';
 import type {State as Schedule} from '../../reducers/schedule';
-import type {SessionsListData} from './groupSessions';
 
 var { createSelector } = require('reselect');
 
@@ -68,12 +55,12 @@ var { createSelector } = require('reselect');
 type Props = {
   user: User;
   sessions: Array<Session>;
+  friends: Array<FriendsSchedule>;
   schedule: Schedule;
   navigator: Navigator;
   logOut: () => void;
   jumpToSchedule: (day: number) => void;
   loadFriendsSchedules: () => void;
-  data: SessionsListData;
 };
 
 // TODO: Rename to MyF8View
@@ -85,6 +72,7 @@ class MyScheduleView extends React.Component {
 
     this.renderEmptySessionsList = this.renderEmptySessionsList.bind(this);
     this.openSharingSettings = this.openSharingSettings.bind(this);
+    this.handleSegmentChanged = this.handleSegmentChanged.bind(this);
   }
 
   render() {
@@ -106,6 +94,7 @@ class MyScheduleView extends React.Component {
         parallaxContent={profilePicture}
         backgroundImage={require('./img/my-f8-background.png')}
         backgroundColor={'#A8D769'}
+        onSegmentChange={this.handleSegmentChanged}
         rightItem={rightItem}>
         {this.renderContent()}
       </ListContainer>
@@ -173,15 +162,10 @@ class MyScheduleView extends React.Component {
     this.props.navigator.push({shareSettings: 1});
   }
 
-  selectDay(page) {
-    if (this.state.page === page) {
-      return;
+  handleSegmentChanged(segment) {
+    if (segment === 2 /* friends */) {
+      this.props.loadFriendsSchedules();
     }
-    this.setState({page});
-    // TODO: Load friends
-    // if (page === PAGE_FRIENDS) {
-    //   this.props.loadFriendsSchedules();
-    // }
   }
 }
 
@@ -215,3 +199,4 @@ function actions(dispatch) {
 }
 
 module.exports = connect(select, actions)(MyScheduleView);
+window.RRR = require('ReactDefaultPerf');
