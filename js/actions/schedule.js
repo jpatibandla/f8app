@@ -31,6 +31,7 @@ const ActionSheetIOS = require('ActionSheetIOS');
 const Alert = require('Alert');
 const Share = require('react-native-share');
 const Agenda = Parse.Object.extend('Agenda');
+const {currentInstallation, updateInstallation} = require('./installation');
 
 import type { ThunkAction, PromiseAction, Dispatch } from './types';
 import type { Session } from '../reducers/sessions';
@@ -40,6 +41,10 @@ function addToSchedule(id: string): ThunkAction {
     if (Parse.User.current()) {
       Parse.User.current().relation('mySchedule').add(new Agenda({id}));
       Parse.User.current().save();
+      currentInstallation().then((installation) => {
+        installation.addUnique('channels', `session_${id}`);
+        return installation.save();
+      });
     }
     dispatch({
       type: 'SESSION_ADDED',
@@ -53,6 +58,10 @@ function removeFromSchedule(id: string): ThunkAction {
     if (Parse.User.current()) {
       Parse.User.current().relation('mySchedule').remove(new Agenda({id}));
       Parse.User.current().save();
+      currentInstallation().then((installation) => {
+        installation.remove('channels', `session_${id}`);
+        return installation.save();
+      });
     }
     dispatch({
       type: 'SESSION_REMOVED',
@@ -91,6 +100,9 @@ function removeFromScheduleWithPrompt(session: Session): ThunkAction {
 
 async function restoreSchedule(): PromiseAction {
   const list = await Parse.User.current().relation('mySchedule').query().find();
+  const channels = list.map(({id}) => `session_${id}`);
+  updateInstallation({channels});
+
   return {
     type: 'RESTORED_SCHEDULE',
     list,

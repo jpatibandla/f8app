@@ -109,7 +109,7 @@ function logOut(): ThunkAction {
   return (dispatch) => {
     Parse.User.logOut();
     FacebookSDK.logout();
-    updateInstallation({user: null});
+    updateInstallation({user: null, channels: []});
 
     // TODO: Make sure reducers clear their state
     return dispatch({
