@@ -24,14 +24,12 @@
 'use strict';
 
 var F8Colors = require('F8Colors');
-var PixelRatio = require('PixelRatio');
 var React = require('React');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
 var TouchableOpacity = require('TouchableOpacity');
 var View = require('View');
 var Image = require('Image');
-var moment = require('moment');
 
 type Props = {
   numberOfSessions: number;
@@ -50,7 +48,7 @@ function RateSessionsCell({numberOfSessions, onPress}: Props) {
         You have {numberOfSessions} session{pluralSuffix} to review
       </Text>
 
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity accessibilityTraits="button" onPress={onPress}>
         <View style={styles.button}>
           <Text style={styles.caption}>
             REVIEW

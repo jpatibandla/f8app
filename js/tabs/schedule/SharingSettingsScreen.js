@@ -23,15 +23,12 @@
  */
 'use strict';
 
-var F8Button = require('F8Button');
 var F8Colors = require('F8Colors');
-var Image = require('Image');
 var React = require('React');
 var StyleSheet = require('StyleSheet');
 var { Text } = require('F8Text');
 var FriendsUsingApp = require('./FriendsUsingApp');
 var Navigator = require('Navigator');
-var ProfilePicture = require('../../common/ProfilePicture');
 var Switch = require('Switch');
 var View = require('View');
 var F8Header = require('F8Header');
@@ -65,6 +62,7 @@ class SharingSettingsScreen extends React.Component {
             NO
           </Text>
           <Switch
+            accessibilityLabel="Let friends view your schedule"
             style={styles.switch}
             value={!!this.props.sharedSchedule}
             onValueChange={(enabled) => this.props.dispatch(setSharingEnabled(enabled))}
@@ -81,7 +79,7 @@ class SharingSettingsScreen extends React.Component {
           title="Settings"
           leftItem={{
             icon: require('../../common/img/back.png'),
-            title: 'Close',
+            title: 'Back',
             layout: 'icon',
             onPress: () => this.props.navigator.pop(),
           }}

@@ -131,6 +131,8 @@ var F8SessionDetails = React.createClass({
           </Section>
           {inlineMap}
           <TouchableOpacity
+            accessibilityLabel="Share this session"
+            accessibilityTraits="button"
             onPress={this.props.onShare}
             style={styles.shareButton}>
             <Image source={require('./img/share.png')} />

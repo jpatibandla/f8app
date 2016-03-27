@@ -30,10 +30,15 @@ import React, {
   TouchableNativeFeedback,
   Platform,
 } from 'react-native';
-import F8Colors from 'F8Colors';
 
 function F8TouchableIOS(props: Object): ReactElement {
-  return <TouchableHighlight underlayColor="#3C5EAE" {...props} />;
+  return (
+    <TouchableHighlight
+      accessibilityTraits="button"
+      underlayColor="#3C5EAE"
+      {...props}
+    />
+  );
 }
 
 const F8Touchable = Platform.OS === 'android'

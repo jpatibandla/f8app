@@ -75,6 +75,7 @@ class F8Button extends React.Component {
     }
     return (
       <TouchableOpacity
+        accessibilityTraits="button"
         onPress={this.props.onPress}
         activeOpacity={0.8}
         style={[styles.container, this.props.style]}>

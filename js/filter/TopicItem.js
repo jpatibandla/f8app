@@ -45,8 +45,16 @@ class TopicItem extends React.Component {
     const style = isChecked
       ? {backgroundColor: color}
       : {borderColor: color, borderWidth: 1};
+    const accessibilityTraits = ['button'];
+    if (isChecked) {
+      accessibilityTraits.push('selected');
+    }
     return (
-      <TouchableOpacity activeOpacity={0.8} style={styles.container} onPress={onToggle}>
+      <TouchableOpacity
+        accessibilityTraits={accessibilityTraits}
+        activeOpacity={0.8}
+        style={styles.container}
+        onPress={onToggle}>
         <View style={[styles.checkbox, style]} />
         <Text style={styles.title}>
           {topic}

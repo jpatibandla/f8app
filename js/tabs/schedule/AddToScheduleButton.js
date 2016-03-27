@@ -40,6 +40,9 @@ type Props = {
   style: any;
 };
 
+const SAVED_LABEL = 'Saved to your schedule';
+const ADD_LABEL = 'Add to my schedule';
+
 class AddToScheduleButton extends React.Component {
   constructor(props: Props) {
     super(props);
@@ -105,6 +108,8 @@ class AddToScheduleButton extends React.Component {
 
     return (
       <TouchableOpacity
+        accessibilityLabel={this.props.isAdded ? SAVED_LABEL : ADD_LABEL}
+        accessibilityTraits="button"
         onPress={this.props.onPress}
         activeOpacity={0.9}
         style={[styles.container, this.props.style]}>
@@ -120,7 +125,7 @@ class AddToScheduleButton extends React.Component {
                 style={[styles.icon, addedOpacityImage]}
               />
               <Animated.Text style={[styles.caption, addedOpacity]}>
-                <Text>{'Saved to your schedule'.toUpperCase()}</Text>
+                <Text>{SAVED_LABEL.toUpperCase()}</Text>
               </Animated.Text>
             </View>
             <View style={styles.content}>
@@ -129,7 +134,7 @@ class AddToScheduleButton extends React.Component {
                 style={[styles.icon, addOpacityImage]}
               />
               <Animated.Text style={[styles.caption, addOpacity]}>
-                <Text>{'Add to my schedule'.toUpperCase()}</Text>
+                <Text>{ADD_LABEL.toUpperCase()}</Text>
               </Animated.Text>
             </View>
           </View>

@@ -90,7 +90,7 @@ class F8HeaderAndroid extends React.Component {
         <View collapsable={false} style={{flex: 1}}>
           {this.props.children}
         </View>
-      )
+      );
     }
 
     return (
@@ -139,7 +139,11 @@ class F8HeaderIOS extends React.Component {
         <View style={styles.leftItem}>
           <ItemWrapperIOS color={itemsColor} item={leftItem} />
         </View>
-        <View style={styles.centerItem}>
+        <View
+          accessible={true}
+          accessibilityLabel={title}
+          accessibilityTraits="header"
+          style={styles.centerItem}>
           {content}
         </View>
         <View style={styles.rightItem}>
@@ -177,7 +181,11 @@ class ItemWrapperIOS extends React.Component {
     }
 
     return (
-      <TouchableOpacity onPress={onPress} style={styles.itemWrapper}>
+      <TouchableOpacity
+        accessibilityLabel={title}
+        accessibilityTraits="button"
+        onPress={onPress}
+        style={styles.itemWrapper}>
         {content}
       </TouchableOpacity>
     );

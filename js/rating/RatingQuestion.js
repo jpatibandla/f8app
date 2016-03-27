@@ -51,6 +51,7 @@ function RatingQuestion({question, rating, onChange, style}: Props) {
     (value) => (
       <Star
         key={value}
+        value={value}
         isFull={rating && value <= rating}
         onPress={() => onChange(value)}
       />
@@ -76,13 +77,20 @@ function RatingQuestion({question, rating, onChange, style}: Props) {
   );
 }
 
-function Star({isFull, onPress}) {
+function Star({isFull, value, onPress}) {
   const source = isFull
     ? require('./img/full-star.png')
     : require('./img/empty-star.png');
 
+  const accessibilityTraits = ['button'];
+  if (isFull) {
+    accessibilityTraits.push('selected');
+  }
+
   return (
     <TouchableOpacity
+      accessibilityLabel={`${value} stars`}
+      accessibilityTraits={accessibilityTraits}
       style={styles.star}
       activeOpacity={0.8}
       onPress={onPress}>

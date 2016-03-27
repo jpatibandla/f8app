@@ -30,7 +30,6 @@ const Text = require('Text');
 const TouchableOpacity = require('TouchableOpacity');
 const View = require('View');
 const Image = require('Image');
-const F8CloseIcon = require('F8CloseIcon');
 
 // TODO: Pull redux connection up
 const {connect} = require('react-redux');
@@ -51,7 +50,11 @@ class FilterHeader extends React.Component {
             {topics.join(', ')}
           </Text>
         </Text>
-        <TouchableOpacity style={styles.clear} onPress={this.props.onClearFilter}>
+        <TouchableOpacity
+          accessibilityLabel="Clear filter"
+          accessibilityTraits="button"
+          style={styles.clear}
+          onPress={this.props.onClearFilter}>
           <Image source={require('../../common/img/x-white.png')} />
         </TouchableOpacity>
       </View>

@@ -40,7 +40,6 @@ const {
 const shallowEqual = require('fbjs/lib/shallowEqual');
 const {
   applyTopicsFilter,
-  clearFilter,
 } = require('../actions');
 const {connect} = require('react-redux');
 
@@ -84,10 +83,6 @@ class FilterScreen extends React.Component {
   }
 
   render() {
-    var changedTopics = !shallowEqual(
-      this.props.selectedTopics,
-      this.state.selectedTopics,
-    );
     var bottom = this.state.anim.interpolate({
       inputRange: [0, 1],
       outputRange: [-100, 0],
