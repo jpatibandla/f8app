@@ -101,13 +101,10 @@ class F8MapView extends React.Component {
       case 1:
         var nativeGoogleUrl = 'comgooglemaps-x-callback://?q=' +
           address + '&x-success=f8://&x-source=F8';
-        Linking.canOpenURL(
-          nativeGoogleUrl,
-          (supported) => {
-            var url = supported ? nativeGoogleUrl : 'http://maps.google.com/?q=' + address;
-            Linking.openURL(url);
-          }
-        );
+        Linking.canOpenURL(nativeGoogleUrl).then((supported) => {
+          var url = supported ? nativeGoogleUrl : 'http://maps.google.com/?q=' + address;
+          Linking.openURL(url);
+        });
         break;
     }
   }
