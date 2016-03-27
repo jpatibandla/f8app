@@ -77,13 +77,14 @@ class Segment extends React.Component {
     if (!this.props.isSelected && Platform.OS === 'android') {
       deselectedLabelStyle = styles.deselectedLabel;
     }
+    var title = this.props.value && this.props.value.toUpperCase()
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={this.props.onPress}
         style={[styles.button, selectedButtonStyle]}>
         <Text style={[styles.label, deselectedLabelStyle]}>
-          {this.props.value.toUpperCase()}
+          {title}
         </Text>
       </TouchableOpacity>
     );
