@@ -83,10 +83,11 @@ class LoginButton extends React.Component {
       ]);
     } catch (e) {
       const message = e.message || e;
-      if (message !== 'Timed out') {
+      if (message !== 'Timed out' && message !== 'Canceled by user') {
         alert(message);
         console.warn(e);
       }
+      return;
     } finally {
       this._isMounted && this.setState({isLoading: false});
     }
