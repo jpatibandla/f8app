@@ -25,7 +25,7 @@
 
 var React = require('React');
 var F8Button = require('F8Button');
-var {AppInviteDialog} = require('react-native-fbsdk');
+var {AppInviteDialog, AppEventsLogger} = require('react-native-fbsdk');
 var { connect } = require('react-redux');
 
 class InviteFriendsButton extends React.Component {
@@ -51,6 +51,7 @@ class InviteFriendsButton extends React.Component {
   }
 
   inviteFriends() {
+    AppEventsLogger.logEvent('Invite Friends', 1);
     AppInviteDialog.show({
       applinkUrl: this.props.appLinkURL,
       previewImageUrl: this.props.appInvitePreviewImageURL,
