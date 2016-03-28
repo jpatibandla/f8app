@@ -66,7 +66,7 @@ class ListContainer extends React.Component {
     super(props);
 
     this.state = {
-      idx: 0,
+      idx: this.props.selectedSegment || 0,
       anim: new Animated.Value(0),
       stickyHeaderHeight: 0,
     };
