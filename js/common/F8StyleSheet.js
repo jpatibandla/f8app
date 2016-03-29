@@ -40,7 +40,6 @@ export function create(styles: Object): {[name: string]: number} {
     if (windows && Platform.OS === 'windows') {
       style = {...style, ...windows};
     }
-    
     platformStyles[name] = style;
   });
   return StyleSheet.create(platformStyles);
