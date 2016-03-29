@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Media;
 
 namespace BV.LinearGradient
 {
+    /// <summary>
+    /// A content control that supports gradient backgrounds.
+    /// </summary>
     public class LinearGradientContentControl : BorderedContentControl
     {
         private uint[] _colors;

@@ -4,6 +4,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace BV.LinearGradient
 {
+    /// <summary>
+    /// View manager for linear gradient view parent control.
+    /// </summary>
     public class LinearGradientViewManager : BorderedViewParentManager<LinearGradientContentControl>
     {
         /// <summary>
