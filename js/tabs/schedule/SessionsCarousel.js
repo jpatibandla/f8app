@@ -206,6 +206,9 @@ var styles = StyleSheet.create({
     android: {
       backgroundColor: '#5597B8',
     },
+    windows: {
+      backgroundColor: '#5597B8',
+    }
   },
   headerContent: {
     android: {
@@ -216,6 +219,11 @@ var styles = StyleSheet.create({
     ios: {
       height: 65,
       alignItems: 'center',
+      justifyContent: 'center',
+    },
+    windows: {
+      flex: 1,
+      alignItems: 'flex-start',
       justifyContent: 'center',
     },
   },
