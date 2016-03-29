@@ -32,7 +32,7 @@ async function currentInstallation(): Promise<Parse.Installation> {
   return new Parse.Installation({
     installationId,
     appName: 'F8',
-    deviceType: Platform.OS,
+    deviceType: Platform.OS === 'windows' ? 'winrt' : Platform.OS,
     // TODO: Get this information from the app itself
     appIdentifier: Platform.OS === 'ios' ? 'com.facebook.f8' : 'com.facebook.f8',
   });
