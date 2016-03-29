@@ -69,6 +69,23 @@ async function loginWithFacebookSDK(options: LoginOptions): Promise<AuthResponse
   return _authResponse;
 }
 
+function handleWindowsLoginCallback(callback: LoginCallback, error, result) {
+  if (error) {
+    callback({error});
+    return;
+  }
+  if (!result || result.isCancelled) {
+    callback({error: new Error('Canceled by user')});
+    return;
+  }
+  _authResponse = {
+    userID: result.userID,
+    accessToken: result.tokenString,
+    expiresIn: Math.round((result.expires - Date.now()) / 1000),
+  };
+  callback({authResponse: _authResponse});
+}
+
 var FacebookSDK = {
   init() {
     // This is needed by Parse
@@ -76,10 +93,17 @@ var FacebookSDK = {
   },
 
   login(callback: LoginCallback, options: LoginOptions) {
-    loginWithFacebookSDK(options).then(
-      (authResponse) => callback({authResponse}),
-      (error) => callback({error})
-    );
+    if (Platform.OS !== 'windows') {
+      loginWithFacebookSDK(options).then(
+        (authResponse) => callback({authResponse}),
+        (error) => callback({error})
+      );
+    } else {
+      FBSDK.loginWithReadPermissions(permissions).then(
+        (result) => handleWindowsLoginCallback(callback, null, result),
+        (error) => handleWindowsLoginCallback(callback, error, null),        
+      );
+    }
   },
 
   getAuthResponse(): ?AuthResponse {
@@ -124,24 +148,31 @@ var FacebookSDK = {
     // FIXME: Move this into RNFBSDK
     // GraphRequest requires all parameters to be in {string: 'abc'}
     // or {uri: 'xyz'} format
-    const parameters = mapObject(params, (value) => ({string: value}));
+    if (Platform.OS !== 'windows') {
+      const parameters = mapObject(params, (value) => ({string: value}));
 
-    function processResponse(error, result) {
-      // FIXME: RNFBSDK bug: result is Object on iOS and string on Android
-      if (!error && typeof result === 'string') {
-        try {
-          result = JSON.parse(result);
-        } catch (e) {
-          error = e;
+      function processResponse(error, result) {
+        // FIXME: RNFBSDK bug: result is Object on iOS and string on Android
+        if (!error && typeof result === 'string') {
+          try {
+            result = JSON.parse(result);
+          } catch (e) {
+            error = e;
+          }
         }
+
+        const data = error ? {error} : result;
+        callback(data);
       }
 
-      const data = error ? {error} : result;
-      callback(data);
+      const request = new GraphRequest(path, {parameters, httpMethod}, processResponse);
+      new GraphRequestManager().addRequest(request).start();
+    } else if (Platform.OS === 'windows') {
+      FBSDK.makeGraphRequest(path, params, null, httpMethod).then(
+        (result) => callback(JSON.parse(result)),
+        (error) => callback({error})          
+      );
     }
-
-    const request = new GraphRequest(path, {parameters, httpMethod}, processResponse);
-    new GraphRequestManager().addRequest(request).start();
   }
 };
 
