@@ -99,6 +99,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppReactPage.cs" />
+    <Compile Include="LinearGradient\LinearGradientContentControl.cs" />
+    <Compile Include="LinearGradient\LinearGradientPackage.cs" />
+    <Compile Include="LinearGradient\LinearGradientViewManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
