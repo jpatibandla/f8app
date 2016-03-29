@@ -103,7 +103,7 @@ var styles = StyleSheet.create({
   },
   primaryButton: {
     borderRadius: HEIGHT / 2,
-    backgroundColor: 'transparent',
+    backgroundColor: '#6A6AD5',
   },
   icon: {
     marginRight: 12,
