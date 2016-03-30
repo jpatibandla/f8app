@@ -330,6 +330,9 @@ var styles = StyleSheet.create({
     },
     android: {
       backgroundColor: 'white',
+    },
+    windows: {
+      backgroundColor: 'white',
     }
   },
   headerTitle: {

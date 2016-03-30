@@ -62,16 +62,18 @@ class F8TabsView extends React.Component {
 
     this.renderPaneView = this.renderPaneView.bind(this);
     this.openProfileSettings = this.openProfileSettings.bind(this);
+    this.openPane = this.openPane.bind(this);
   }
 
   getChildContext() {
     return {
-      openDrawer: () => this.refs.splitView.openPane(),
+      openDrawer: this.openPane,
+      hasUnreadNotifications: this.props.notificationsBadge > 0,
     };
   }
 
-  componentDidMount() {
-    // this.refs.splitView.openPane();
+  openPane() {
+    this.refs.splitView.openPane();
   }
 
   onTabSelect(tab: Tab) {
@@ -96,13 +98,14 @@ class F8TabsView extends React.Component {
     var accountItem, myF8Item, loginItem;
 
     if (this.props.user.isLoggedIn) {
+      var name = this.props.user.name || '';
       accountItem = (
         <View>
           <TouchableOpacity onPress={this.openProfileSettings}>
             <ProfilePicture userID={this.props.user.id} size={80} />
           </TouchableOpacity>
           <Text style={styles.name}>
-            {this.props.user.name.toUpperCase()}
+            {name.toUpperCase()}
           </Text>
         </View>
       );
@@ -129,7 +132,7 @@ class F8TabsView extends React.Component {
           <Text style={styles.loginText}>
             Log in to find your friends at F8.
           </Text>
-          <LoginButton />
+          <LoginButton source="Drawer" />
         </View>
       );
     }
@@ -221,6 +224,7 @@ class F8TabsView extends React.Component {
 
 F8TabsView.childContextTypes = {
   openDrawer: React.PropTypes.func,
+  hasUnreadNotifications: React.PropTypes.number,
 };
 
 function select(store) {
