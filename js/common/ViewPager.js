@@ -71,8 +71,10 @@ class ViewPager extends React.Component {
   render() {
     if (Platform.OS === 'ios') {
       return this.renderIOS();
-    } else {
+    } else if (Platform.OS === 'android') {
       return this.renderAndroid();
+    } else {
+      return this.renderWindows();
     }
   }
 
@@ -114,6 +116,32 @@ class ViewPager extends React.Component {
     );
   }
 
+  renderWindows() {
+    return (
+      <ScrollView
+        ref="scrollview"
+        contentOffset={{
+          x: this.state.width * this.state.initialSelectedIndex,
+          y: 0,
+        }}
+        style={[styles.scrollview, this.props.style]}
+        horizontal={true}
+        pagingEnabled={true}
+        bounces={!!this.props.bounces}
+        scrollsToTop={false}
+        onScroll={this.handleHorizontalScroll}
+        scrollEventThrottle={100}
+        removeClippedSubviews={true}
+        automaticallyAdjustContentInsets={false}
+        directionalLockEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        onLayout={this.adjustCardSize}>
+        {this.renderContent()}
+      </ScrollView>
+    );
+  }
+
   adjustCardSize(e: any) {
     this.setState({
       width: e.nativeEvent.layout.width,
@@ -123,15 +151,15 @@ class ViewPager extends React.Component {
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.selectedIndex !== this.state.selectedIndex) {
-      if (Platform.OS === 'ios') {
+      if (Platform.OS === 'android') {
+        this.refs.scrollview.setPage(nextProps.selectedIndex);
+        this.setState({selectedIndex: nextProps.selectedIndex});
+      } else {
         this.refs.scrollview.scrollTo({
           x: nextProps.selectedIndex * this.state.width,
           animated: true,
         });
         this.setState({scrollingTo: nextProps.selectedIndex});
-      } else {
-        this.refs.scrollview.setPage(nextProps.selectedIndex);
-        this.setState({selectedIndex: nextProps.selectedIndex});
       }
     }
   }

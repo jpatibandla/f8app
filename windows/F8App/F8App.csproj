@@ -99,7 +99,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppReactPage.cs" />
-    <Compile Include="LinearGradient\LinearGradientContentControl.cs" />
     <Compile Include="LinearGradient\LinearGradientPackage.cs" />
     <Compile Include="LinearGradient\LinearGradientViewManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,6 +139,9 @@
       <Project>{11771e89-c7ba-4dcb-a67b-a21690c2c236}</Project>
       <Name>FacebookSDK</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Share\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
