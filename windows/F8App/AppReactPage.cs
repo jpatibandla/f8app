@@ -1,4 +1,5 @@
 ﻿using BV.LinearGradient;
+using Cl.Json.Share;
 using FacebookSDK;
 using ReactNative;
 using ReactNative.Bridge;
@@ -7,7 +8,6 @@ using ReactNative.Shell;
 using ReactNative.UIManager;
 using System;
 using System.Collections.Generic;
-using Share;
 
 namespace F8App
 {
