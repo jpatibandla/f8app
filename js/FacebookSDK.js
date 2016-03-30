@@ -34,6 +34,9 @@ var {
   GraphRequestManager,
 } = require('react-native-fbsdk');
 
+const {Platform} = require('react-native');
+const FBSDK = require('react-native-fbsdk2');
+
 const emptyFunction = () => {};
 const mapObject = require('fbjs/lib/mapObject');
 
@@ -98,6 +101,8 @@ var FacebookSDK = {
         (error) => callback({error})
       );
     } else {
+      const scope = options.scope || 'public_profile';
+      const permissions = scope.split(',');
       FBSDK.loginWithReadPermissions(permissions).then(
         (result) => handleWindowsLoginCallback(callback, null, result),
         (error) => handleWindowsLoginCallback(callback, error, null),        
@@ -110,7 +115,11 @@ var FacebookSDK = {
   },
 
   logout() {
-    LoginManager.logOut();
+    if (Platform.OS !== 'windows') {
+      LoginManager.logOut();        
+    } else {
+      FBSDK.logOut();
+    }
   },
 
   /**
@@ -166,7 +175,7 @@ var FacebookSDK = {
 
       const request = new GraphRequest(path, {parameters, httpMethod}, processResponse);
       new GraphRequestManager().addRequest(request).start();
-    } else if (Platform.OS === 'windows') {
+    } else {
       FBSDK.makeGraphRequest(path, params, null, httpMethod).then(
         (result) => callback(JSON.parse(result)),
         (error) => callback({error})          

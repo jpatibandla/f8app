@@ -24,12 +24,17 @@
 
 'use strict';
 
+const {Platform} = require('react-native');
 const Parse = require('parse/react-native');
 const {AppEventsLogger} = require('react-native-fbsdk');
 
 import type {Action} from '../actions/types';
 
 function track(action: Action): void {
+  if (Platform.OS === 'windows') {
+    return;
+  }
+  
   switch (action.type) {
     case 'LOGGED_IN':
       AppEventsLogger.logEvent('Login', 1, {source: action.source});
