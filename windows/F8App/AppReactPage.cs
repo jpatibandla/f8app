@@ -7,6 +7,7 @@ using ReactNative.Shell;
 using ReactNative.UIManager;
 using System;
 using System.Collections.Generic;
+using Share;
 
 namespace F8App
 {
@@ -29,6 +30,7 @@ namespace F8App
                     new MainReactPackage(),
                     new F8Package(),
                     new LinearGradientPackage(),
+                    new SharePackage(),
                 };
             }
         }
