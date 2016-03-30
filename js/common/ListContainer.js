@@ -306,7 +306,7 @@ ListContainer.defaultProps = {
 
 ListContainer.contextTypes = {
   openDrawer: React.PropTypes.func,
-  hasUnreadNotifications: React.PropTypes.number,
+  hasUnreadNotifications: React.PropTypes.bool,
 };
 
 var styles = StyleSheet.create({
