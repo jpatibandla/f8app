@@ -112,6 +112,9 @@ var styles = StyleSheet.create({
     android: {
       paddingLeft: 60,
     },
+    windows: {
+      paddingLeft: 60,
+    },
   },
   button: {
     borderColor: 'transparent',
@@ -129,6 +132,12 @@ var styles = StyleSheet.create({
       paddingHorizontal: 10,
       borderBottomWidth: 3,
       marginRight: 10,
+    },
+    windows: {
+      paddingBottom: 6,
+      paddingHorizontal: 10,
+      borderBottomWidth: 3,
+      marginRight: 10, 
     },
   },
   label: {
