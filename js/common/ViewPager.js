@@ -31,6 +31,7 @@ const {
   ScrollView,
   ViewPagerAndroid,
   Platform,
+  Dimensions,
 } = React;
 
 type Props = {
@@ -50,6 +51,8 @@ type State = {
   scrollingTo: ?number;
 };
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 class ViewPager extends React.Component {
   props: Props;
   state: State;
@@ -57,7 +60,7 @@ class ViewPager extends React.Component {
   constructor(props: Props) {
     super(props);
     this.state = {
-      width: 0,
+      width: SCREEN_WIDTH,
       height: 0,
       selectedIndex: this.props.selectedIndex,
       initialSelectedIndex: this.props.selectedIndex,
