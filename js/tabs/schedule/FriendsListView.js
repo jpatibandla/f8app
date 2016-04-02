@@ -30,6 +30,7 @@ var SessionsSectionHeader = require('./SessionsSectionHeader');
 var InviteFriendsButton = require('./InviteFriendsButton');
 var PureListView = require('../../common/PureListView');
 var FriendCell = require('./FriendCell');
+var Platform = require('Platform');
 
 type Friend = any;
 
@@ -92,6 +93,10 @@ class FriendsListView extends React.Component {
   }
 
   renderFooter() {
+    if (Platform.OS === 'windows') {
+      return null;
+    }
+    
     return <InviteFriendsButton style={{margin: 20}} />;
   }
 
