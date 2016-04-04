@@ -31,6 +31,7 @@ const {
   StyleSheet,
   ScrollView,
   ViewPagerAndroid,
+  FlipViewWindows,
   Platform,
   Dimensions,
 } = React;
@@ -112,27 +113,13 @@ class ViewPager extends React.Component {
 
   renderWindows() {
     return (
-      <ScrollView
+      <FlipViewWindows
         ref="scrollview"
-        contentOffset={{
-          x: this.state.width * this.state.initialSelectedIndex,
-          y: 0,
-        }}
-        style={[styles.scrollview, this.props.style]}
-        horizontal={true}
-        pagingEnabled={true}
-        bounces={!!this.props.bounces}
-        scrollsToTop={false}
-        onScroll={this.handleHorizontalScroll}
-        scrollEventThrottle={100}
-        removeClippedSubviews={true}
-        automaticallyAdjustContentInsets={false}
-        directionalLockEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        onLayout={this.adjustCardSize}>
+        initialPage={this.state.initialSelectedIndex}
+        onSelectionChange={this.handleHorizontalScroll}
+        style={styles.container}>
         {this.renderContent()}
-      </ScrollView>
+      </FlipViewWindows>
     );
   }
 
@@ -145,15 +132,15 @@ class ViewPager extends React.Component {
 
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.selectedIndex !== this.state.selectedIndex) {
-      if (Platform.OS === 'android') {
-        this.refs.scrollview.setPage(nextProps.selectedIndex);
-        this.setState({selectedIndex: nextProps.selectedIndex});
-      } else {
+      if (Platform.OS === 'ios') {
         this.refs.scrollview.scrollTo({
           x: nextProps.selectedIndex * this.state.width,
           animated: true,
         });
         this.setState({scrollingTo: nextProps.selectedIndex});
+      } else {
+        this.refs.scrollview.setPage(nextProps.selectedIndex);
+        this.setState({selectedIndex: nextProps.selectedIndex});
       }
     }
   }
