@@ -137,7 +137,6 @@ class ListContainer extends React.Component {
           ? require('./img/hamburger-unread.png')
           : require('./img/hamburger.png'),
         onPress: this.handleShowMenu,
-        layout: 'icon',
       };
     }
 

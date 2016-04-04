@@ -194,8 +194,7 @@ class SessionsCarusel extends React.Component {
   track(index: number) {
     const {id} = this.state.flatSessionsList[index];
     Parse.Analytics.track('view', {id});
-    if (Platform.OS !== 'windows')
-    {
+    if (Platform.OS !== 'windows') {
       AppEventsLogger.logEvent('View Session', 1, {id});        
     }
   }
