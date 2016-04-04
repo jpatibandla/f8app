@@ -193,6 +193,78 @@ class ItemWrapperIOS extends React.Component {
 }
 
 
+class F8HeaderWindows extends React.Component {
+  props: Props;
+
+  render() {
+    const {leftItem, title, rightItem, foreground} = this.props;
+    const titleColor = foreground === 'dark' ? F8Colors.darkText : 'white';
+    const itemsColor = foreground === 'dark' ? F8Colors.lightText : 'white';
+
+    const content = React.Children.count(this.props.children) === 0
+      ? <Text style={[styles.titleText, {color: titleColor}]}>
+          {title}
+        </Text>
+      : this.props.children;
+    return (
+      <View style={[styles.header, this.props.style]}>
+        <View style={styles.leftItem}>
+          <ItemWrapperWindows color={itemsColor} item={leftItem} />
+        </View>
+        <View
+          accessible={true}
+          accessibilityLabel={title}
+          accessibilityTraits="header"
+          style={styles.centerItem}>
+          {content}
+        </View>
+        <View style={styles.rightItem}>
+          <ItemWrapperWindows color={itemsColor} item={rightItem} />
+        </View>
+      </View>
+    );
+  }
+
+}
+
+class ItemWrapperWindows extends React.Component {
+  props: {
+    item: Item;
+    color: string;
+  };
+
+  render() {
+    const {item, color} = this.props;
+    if (!item) {
+      return null;
+    }
+
+    let content;
+    const {title, icon, layout, onPress} = item;
+
+    if (icon) {
+      content = <Image source={icon} />;
+    } else if (title) {
+      content = (
+        <Text style={[styles.itemText, {color}]}>
+          {title.toUpperCase()}
+        </Text>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        accessibilityLabel={title}
+        accessibilityTraits="button"
+        onPress={onPress}
+        style={styles.itemWrapper}>
+        {content}
+      </TouchableOpacity>
+    );
+  }
+}
+
+
 var STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 20 : 25;
 var HEADER_HEIGHT = Platform.OS === 'ios' ? 44 + STATUS_BAR_HEIGHT : 56 + STATUS_BAR_HEIGHT;
 
@@ -238,11 +310,11 @@ var styles = StyleSheet.create({
   },
 });
 
-const Header = Platform.OS === 'ios'
+const Header = Platform.OS === 'ios' 
   ? F8HeaderIOS 
-  : Platform.OS === 'android'
+  : Platform.OS === 'android' 
     ? F8HeaderAndroid
-    : F8HeaderIOS;
+    : F8HeaderWindows;
     
 Header.height = HEADER_HEIGHT;
 
