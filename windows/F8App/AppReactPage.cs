@@ -58,7 +58,10 @@ namespace F8App
             {
                 return new List<INativeModule>
                 {
-                    new FBSDKModule(reactContext),
+                    new FBSDKModule(
+                        reactContext,
+                        "619048868222429",
+                        "s-1-15-2-635873031-2844751771-797608348-1547790894-192744704-951387951-590373624"),
                 };
             }
 
