@@ -14,8 +14,8 @@
   <mp:PhoneIdentity PhoneProductId="7cc2be53-6057-4824-ba24-1f73726e3357" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>F8App</DisplayName>
-    <PublisherDisplayName>ericroz</PublisherDisplayName>
+    <DisplayName>F8</DisplayName>
+    <PublisherDisplayName>Eric Rozell</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

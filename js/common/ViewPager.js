@@ -126,7 +126,7 @@ class ViewPager extends React.Component {
         ref="scrollview"
         initialPage={this.state.initialSelectedIndex}
         onSelectionChange={this.handleHorizontalScroll}
-        style={styles.container}>
+        style={styles.flipcontainer}>
         {this.renderContent()}
       </FlipViewWindows>
     );
@@ -188,6 +188,10 @@ class ViewPager extends React.Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  flipcontainer: {
+    flex: 1,
+    backgroundColor: 'white',
   },
   scrollview: {
     flex: 1,

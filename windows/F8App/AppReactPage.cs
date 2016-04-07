@@ -39,7 +39,11 @@ namespace F8App
         {
             get
             {
+#if DEBUG
                 return true;
+#else
+                return false;
+#endif
             }
         }
 
