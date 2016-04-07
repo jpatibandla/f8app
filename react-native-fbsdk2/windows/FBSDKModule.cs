@@ -14,16 +14,6 @@ namespace FacebookSDK
 {
     public class FBSDKModule : ReactContextNativeModuleBase
     {
-        /// <summary>
-        /// Settings key for Facebook App ID.
-        /// </summary>
-        public const string FBAppIdSettingsKey = "FBSDKModule.FBAppId";
-
-        /// <summary>
-        /// Settings key for Windows App ID configured in Facebook App.
-        /// </summary>
-        public const string WinAppIdSettingsKey = "FBSDKModule.WinAppId";
-
         private const string PublishPermissionPrefix = "publish";
         private const string ManagePermissionPrefix = "manage";
 
@@ -36,13 +26,18 @@ namespace FacebookSDK
 
         private static readonly FBJsonClassFactory s_jsonFactory = new FBJsonClassFactory(s => s);
 
+        private readonly string _fbAppId;
+        private readonly string _winAppId;
+
         /// <summary>
         /// Instantiates a <see cref="FBSDKModule"/>.
         /// </summary>
         /// <param name="context">The context.</param>
-        public FBSDKModule(ReactContext context)
+        public FBSDKModule(ReactContext context, string fbAppId, string winAppId)
             : base(context)
         {
+            _fbAppId = fbAppId;
+            _winAppId = winAppId;
         }
 
         /// <summary>
@@ -129,6 +124,27 @@ namespace FacebookSDK
             }
         }
 
+        private void Login(List<string> permissionsList, IPromise promise)
+        {
+            var session = FBSession.ActiveSession;
+            session.FBAppId = _fbAppId;
+            session.WinAppId = _winAppId;
+            var permissions = new FBPermissions(permissionsList);
+
+            RunOnDispatcher(async () =>
+            {
+                var result = await session.LoginAsync(permissions, SessionLoginBehavior.WebAuth);
+                if (result.Succeeded)
+                {
+                    promise.Resolve(CreateLoginResponse(session));
+                }
+                else
+                {
+                    promise.Reject(result.ErrorInfo.Message);
+                }
+            });
+        }
+
         private static JObject CreateLoginResponse(FBSession session)
         {
             var accessToken = session.AccessTokenData;
@@ -165,39 +181,6 @@ namespace FacebookSDK
                 (permission.StartsWith(PublishPermissionPrefix) ||
                     permission.StartsWith(ManagePermissionPrefix) ||
                     s_otherPublishPermissions.Contains(permission));
-        }
-
-        private static void Login(List<string> permissionsList, IPromise promise)
-        {
-            var fbAppId = ApplicationData.Current.LocalSettings.Values[FBAppIdSettingsKey] as string;
-            if (fbAppId == null)
-            {
-                throw new InvalidOperationException("Facebook AppId has not been set properly in local settings.");
-            }
-
-            var winAppId = ApplicationData.Current.LocalSettings.Values[WinAppIdSettingsKey] as string;
-            if (winAppId == null)
-            {
-                throw new InvalidOperationException("Windows AppId has not been set properly in local settings");
-            }
-
-            var session = FBSession.ActiveSession;
-            session.FBAppId = fbAppId;
-            session.WinAppId = winAppId;
-            var permissions = new FBPermissions(permissionsList);
-
-            RunOnDispatcher(async () =>
-            {
-                var result = await session.LoginAsync(permissions, SessionLoginBehavior.WebAuth);
-                if (result.Succeeded)
-                {
-                    promise.Resolve(CreateLoginResponse(session));
-                }
-                else
-                {
-                    promise.Reject(result.ErrorInfo.Message);
-                }
-            });
         }
 
         private static async void RunOnDispatcher(DispatchedHandler action)
