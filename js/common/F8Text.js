@@ -41,7 +41,8 @@ export function Paragraph({style, ...props}: Object): ReactElement {
   return <ReactNative.Text style={[styles.font, styles.p, style]} {...props} />;
 }
 
-const scale = Dimensions.get('window').width / 375;
+const widthFactor = Dimensions.get('window').width / 375;
+const scale = widthFactor < 2 ? widthFactor : 2;
 
 function normalize(size: number): number {
   return Math.round(scale * size);
