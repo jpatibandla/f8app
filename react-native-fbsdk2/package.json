@@ -4,10 +4,10 @@
   "description": "Use the Facebook SDK in React Native",
   "main": "index.js",
   "files": [
-    "index.js",
+    "index.js"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "facebook",
