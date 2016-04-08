@@ -21,6 +21,16 @@ namespace F8App
             }
         }
 
+#if BUNDLE
+        public override string JavaScriptBundleFile
+        {
+            get
+            {
+                return "ms-appx:///ReactAssets/index.windows.bundle";
+            }
+        }
+#endif
+
         public override List<IReactPackage> Packages
         {
             get
