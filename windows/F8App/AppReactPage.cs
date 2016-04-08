@@ -59,6 +59,9 @@ namespace F8App
 
         private class F8Package : IReactPackage
         {
+            private const string F8AppID = "619048868222429";
+            private const string WinAppID = "s-1-15-2-635873031-2844751771-797608348-1547790894-192744704-951387951-590373624";
+
             public IReadOnlyList<Type> CreateJavaScriptModulesConfig()
             {
                 return new List<Type>(0);
@@ -68,10 +71,7 @@ namespace F8App
             {
                 return new List<INativeModule>
                 {
-                    new FBSDKModule(
-                        reactContext,
-                        "619048868222429",
-                        "s-1-15-2-635873031-2844751771-797608348-1547790894-192744704-951387951-590373624"),
+                    new FBSDKModule(reactContext, F8AppID, WinAppID),
                 };
             }
 
