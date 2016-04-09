@@ -68,7 +68,7 @@ class F8TabsView extends React.Component {
   getChildContext() {
     return {
       openDrawer: this.openPane,
-      hasUnreadNotifications: this.props.notificationsBadge > 0,
+      hasUnreadNotifications: false,
     };
   }
 
@@ -232,7 +232,7 @@ function select(store) {
     tab: store.navigation.tab,
     day: store.navigation.day,
     user: store.user,
-    notificationsBadge: unseenNotificationsCount(store) + store.surveys.length,
+    notificationsBadge: 0,
   };
 }
 
