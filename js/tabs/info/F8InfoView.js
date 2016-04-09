@@ -67,6 +67,10 @@ class F8InfoView extends React.Component {
               <CommonQuestions faqs={this.props.faqs} />
               <LinksList title="Facebook pages" links={pages} />
               <LinksList title="Facebook policies" links={POLICIES_LINKS} />
+              <LinksList title="Third Party Notices" links={[{
+                title: 'Third Party Notices',
+                url: 'https://raw.githubusercontent.com/CatalystCode/ThirdPartyNotices/master/f8_third_party_notices.html',   
+              }]} />
             </View>
           )}
         />
