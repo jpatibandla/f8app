@@ -3,6 +3,7 @@ using Cl.Json.Share;
 using FacebookSDK;
 using ReactNative;
 using ReactNative.Bridge;
+using ReactNative.CodePush;
 using ReactNative.Modules.Core;
 using ReactNative.Shell;
 using ReactNative.UIManager;
@@ -13,6 +14,14 @@ namespace F8App
 {
     class AppReactPage : ReactPage
     {
+        private CodePush codePush;
+
+        public new void OnCreate()
+        {
+            new CodePush("DEPLOYMENT-KEY_HERE", this);
+            base.OnCreate();
+        }
+
         public override string MainComponentName
         {
             get
@@ -26,7 +35,8 @@ namespace F8App
         {
             get
             {
-                return "ms-appx:///ReactAssets/index.windows.bundle";
+                codePush = new CodePush("gaF3YZ2TRSv5zh4qkrrKFLIUfeURVJx1XOClg", this);
+                return CodePush.GetBundleUrl();
             }
         }
 #endif
@@ -41,6 +51,7 @@ namespace F8App
                     new F8Package(),
                     new LinearGradientPackage(),
                     new SharePackage(),
+                    codePush
                 };
             }
         }
