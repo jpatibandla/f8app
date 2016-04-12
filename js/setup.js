@@ -32,7 +32,6 @@ var View = require('View');
 
 var { Provider } = require('react-redux');
 var configureStore = require('./store/configureStore');
-var codePush = require('react-native-code-push');
 
 console.disableYellowBox = true;
 
@@ -93,13 +92,6 @@ function setup(): React.Component {
         isLoading: true,
         store: configureStore(() => this.setState({isLoading: false})),
       };
-    }
-    
-    componentDidMount() {
-      codePush.sync({
-        installMode: codePush.InstallMode.IMMEDIATE,
-        updateDialog: true
-      });
     }
     
     render() {
