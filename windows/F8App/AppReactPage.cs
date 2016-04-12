@@ -16,10 +16,17 @@ namespace F8App
     {
         private CodePush codePush;
 
-        public new void OnCreate()
+        private CodePush CodePushInstance
         {
-            new CodePush("DEPLOYMENT-KEY_HERE", this);
-            base.OnCreate();
+            get
+            {
+                if (codePush == null)
+                {
+                    codePush = new CodePush("deployment-key-here", this);
+                }
+
+                return codePush;
+            }
         }
 
         public override string MainComponentName
@@ -35,8 +42,7 @@ namespace F8App
         {
             get
             {
-                codePush = new CodePush("gaF3YZ2TRSv5zh4qkrrKFLIUfeURVJx1XOClg", this);
-                return CodePush.GetBundleUrl();
+                return CodePushInstance.GetBundleUrl();
             }
         }
 #endif
@@ -51,7 +57,7 @@ namespace F8App
                     new F8Package(),
                     new LinearGradientPackage(),
                     new SharePackage(),
-                    codePush
+                    CodePushInstance
                 };
             }
         }
