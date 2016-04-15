@@ -1,4 +1,4 @@
-# F8 2016 for the Universal Windows Platform
+# F8 2016 for the Universal Windows Platform (UWP)
 
 This is the entire source code of the official [F8](https://fbf8.com/) app of 2016 that appears in the [Windows Store](https://www.microsoft.com/en-us/store/apps/f8-developer-conference/9nblggh4ntvn).  This is several releases behind the current official version, but contains changes required to work on the Universal Windows Platform.
 
