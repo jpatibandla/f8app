@@ -10,6 +10,7 @@ This is the entire source code of the official [F8](https://fbf8.com/) app of 20
 - [Windows 10 SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk): Download the latests
 - [Node.js v5.10.1+](https://nodejs.org/)
 - [NPM v3+](https://www.npmjs.com/)
+- [Python 2.7](https://www.python.org/): Download the latest edition
 - Git Client - For example:
     - [GitHub Desktop for Windows](https://desktop.github.com/)
     - [Git for Windows](https://git-for-windows.github.io/)
