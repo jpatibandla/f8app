@@ -1,4 +1,5 @@
 ﻿using ReactNative.UIManager;
+using ReactNative.UIManager.Annotations;
 using System;
 using System.Collections.Generic;
 using Windows.UI;
@@ -31,7 +32,7 @@ namespace BV.LinearGradient
         /// </summary>
         /// <param name="view">The view instance.</param>
         /// <param name="start">The</param>
-        [ReactProperty("start")]
+        [ReactProp("start")]
         public void SetStart(Border view, double[] start)
         {
             var settings = EnsureSettings(view);
@@ -43,7 +44,7 @@ namespace BV.LinearGradient
         /// </summary>
         /// <param name="view">The view instance.</param>
         /// <param name="end">The</param>
-        [ReactProperty("end")]
+        [ReactProp("end")]
         public void SetEnd(Border view, double[] end)
         {
             var settings = EnsureSettings(view);
@@ -55,7 +56,7 @@ namespace BV.LinearGradient
         /// </summary>
         /// <param name="view">The view instance.</param>
         /// <param name="colors">The</param>
-        [ReactProperty("colors")]
+        [ReactProp("colors")]
         public void SetColors(Border view, uint[] colors)
         {
             var settings = EnsureSettings(view);
@@ -67,7 +68,7 @@ namespace BV.LinearGradient
         /// </summary>
         /// <param name="view">The view instance.</param>
         /// <param name="locations">The</param>
-        [ReactProperty("locations")]
+        [ReactProp("locations")]
         public void SetLocations(Border view, double[] locations)
         {
             var settings = EnsureSettings(view);
