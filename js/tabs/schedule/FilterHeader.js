@@ -79,7 +79,6 @@ var styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignSelf: 'stretch',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
   filters: {
     color: 'rgba(255, 255, 255, 0.65)',
