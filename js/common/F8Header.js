@@ -305,7 +305,6 @@ var styles = StyleSheet.create({
   },
   itemWrapperWindows: {
     padding: 11,
-    backgroundColor: 'transparent',
   },
   itemText: {
     letterSpacing: 1,

@@ -28,8 +28,8 @@
 var React = require('React');
 var AppState = require('AppState');
 var LoginScreen = require('./login/LoginScreen');
-var PushNotificationsController = require('./PushNotificationsController');
 var StyleSheet = require('StyleSheet');
+//var CodePush = require('react-native-code-push');
 var F8Navigator = require('F8Navigator');
 var View = require('View');
 var StatusBar = require('StatusBar');
@@ -71,6 +71,7 @@ var F8App = React.createClass({
       this.props.dispatch(loadSessions());
       this.props.dispatch(loadNotifications());
       this.props.dispatch(loadSurveys());
+      //CodePush.sync({installMode: CodePush.InstallMode.ON_NEXT_RESUME});
     }
   },
 

@@ -166,7 +166,6 @@ var styles = StyleSheet.create({
     right: 0,
     top: 20,
     padding: 15,
-    backgroundColor: 'transparent',
   },
 });
 

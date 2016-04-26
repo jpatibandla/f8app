@@ -79,7 +79,6 @@ var styles = StyleSheet.create({
     height: SIZE,
     borderRadius: SIZE / 2,
     marginRight: 10,
-    backgroundColor: 'transparent',
   },
   title: {
     fontSize: 17,
