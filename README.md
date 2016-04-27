@@ -81,3 +81,7 @@ We've created a series of tutorials at [makeitopen.com](http://makeitopen.com/) 
   ```
   $ react-native run-ios
   ```
+
+8. **Running on Windows:**
+
+  See [windows](windows) folder [README](windows/README.md).
