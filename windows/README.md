@@ -19,7 +19,7 @@ First, clone the repository to your local machine:
 ```bash
 git clone https://github.com/ReactWindows/f8app.git
 cd f8app
-git checkout WindowsStore
+git checkout ReactWindows
 ```
 
 Next, install the NPM dependencies.  Note that this will not work using MSYS such as the Git Bash, so launch a regular command prompt if you do not have Git in your `PATH` environment variable.  This will cause a failure for installing `fsevents` which is not supported on Windows.  If you have Git installed in your `PATH` environment variable and use the command prompt, then it will work properly.
@@ -36,6 +36,7 @@ After the `react-native` module has been removed, install the ReactWindows versi
 ```bash
 git clone https://github.com/ReactWindows/react-native.git node_modules\react-native
 pushd node_modules\react-native
+git checkout f8app
 npm install fbjs promise react-clone-referenced-element
 popd
 ```
