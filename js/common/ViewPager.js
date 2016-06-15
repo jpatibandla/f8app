@@ -23,7 +23,8 @@
  */
 'use strict';
 
-const React = require('react-native');
+const React = require('react');
+const ReactNative = require('react-native');
 
 const {
   View,
@@ -31,7 +32,7 @@ const {
   ScrollView,
   ViewPagerAndroid,
   Platform,
-} = React;
+} = ReactNative;
 
 type Props = {
   count: number;

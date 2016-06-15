@@ -23,13 +23,14 @@
  */
 'use strict';
 
-const React = require('react-native');
+const React = require('react');
+const ReactNative = require('react-native');
 const {
   Text,
   View,
   ToastAndroid,
   Platform,
-} = React;
+} = ReactNative;
 const StyleSheet = require('F8StyleSheet');
 const RatingCard = require('./RatingCard');
 const F8Header = require('F8Header');

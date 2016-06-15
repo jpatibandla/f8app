@@ -47,7 +47,7 @@ class LoginScreen extends React.Component {
   }
 
   componentDidMount() {
-    StatusBarIOS && StatusBarIOS.setStyle('default');
+    StatusBarIOS && StatusBarIOS.setStyle && StatusBarIOS.setStyle('default');
     Animated.timing(this.state.anim, {toValue: 3000, duration: 3000}).start();
   }
 

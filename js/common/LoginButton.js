@@ -23,8 +23,9 @@
  */
 'use strict';
 
-const React = require('react-native');
-const {StyleSheet} = React;
+const React = require('react');
+const ReactNative = require('react-native');
+const {StyleSheet} = ReactNative;
 const F8Button = require('F8Button');
 
 const { logInWithFacebook } = require('../actions');

@@ -23,14 +23,15 @@
  */
 'use strict';
 
-const React = require('react-native');
+const React = require('react');
+const ReactNative = require('react-native');
 const F8Colors = require('F8Colors');
 const {
   Image,
   Text,
   View,
   StyleSheet,
-} = React;
+} = ReactNative;
 
 import type {Session} from '../reducers/sessions';
 
