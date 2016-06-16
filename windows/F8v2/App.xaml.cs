@@ -1,4 +1,4 @@
-﻿using ReactNative;
+using ReactNative;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -7,7 +7,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace F8App
+namespace F8v2
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -22,14 +22,11 @@ namespace F8App
         /// </summary>
         public App()
         {
-            Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
-                Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
-                Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             this.Resuming += OnResuming;
 
-            _reactPage = new AppReactPage();
+            _reactPage = new MainPage();
         }
 
         /// <summary>

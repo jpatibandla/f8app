@@ -1,5 +1,6 @@
-﻿using BV.LinearGradient;
+using BV.LinearGradient;
 using Cl.Json.Share;
+using CodePush.ReactNative;
 using FacebookSDK;
 using ReactNative;
 using ReactNative.Bridge;
@@ -8,11 +9,14 @@ using ReactNative.Shell;
 using ReactNative.UIManager;
 using System;
 using System.Collections.Generic;
+using Windows.Security.Authentication.Web;
 
-namespace F8App
+namespace F8v2
 {
-    class AppReactPage : ReactPage
+    class MainPage : ReactPage
     {
+        private CodePushReactPackage codePush;
+
         public override string MainComponentName
         {
             get
@@ -21,12 +25,25 @@ namespace F8App
             }
         }
 
+        private CodePushReactPackage CodePushInstance
+        {
+            get
+            {
+                if (codePush == null)
+                {
+                    codePush = new CodePushReactPackage("deployment-key-here", this);
+                }
+
+                return codePush;
+            }
+        }
+
 #if BUNDLE
         public override string JavaScriptBundleFile
         {
             get
             {
-                return "ms-appx:///ReactAssets/index.windows.bundle";
+                return CodePushInstance.GetJavaScriptBundleFile();
             }
         }
 #endif
@@ -41,6 +58,7 @@ namespace F8App
                     new F8Package(),
                     new LinearGradientPackage(),
                     new SharePackage(),
+                    CodePushInstance,
                 };
             }
         }
@@ -49,18 +67,19 @@ namespace F8App
         {
             get
             {
-#if DEBUG
                 return true;
-#else
-                return false;
-#endif
             }
         }
 
         private class F8Package : IReactPackage
         {
+#if !PRODFBAPP
+            private const string F8AppID = "100794426989995";
+            private const string WinAppID = "s-1-15-2-1021559226-2231154958-934963822-372647946-3828823154-3101400036-3758457008";
+#else
             private const string F8AppID = "619048868222429";
-            private const string WinAppID = "s-1-15-2-635873031-2844751771-797608348-1547790894-192744704-951387951-590373624";
+            private const string WinAppID = "s-1-15-2-1021559226-2231154958-934963822-372647946-3828823154-3101400036-3758457008";
+#endif
 
             public IReadOnlyList<Type> CreateJavaScriptModulesConfig()
             {
